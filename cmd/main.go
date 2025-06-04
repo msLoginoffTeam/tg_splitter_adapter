@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	token := "8018660243:AAGXMxdXVHARdjZSp6ym5zYSpTL4ohYB-hk"
+	token := ""
 	if token == "" {
 		log.Fatal("TELEGRAM_BOT_TOKEN is not set")
 	}
