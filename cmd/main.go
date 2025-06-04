@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	token := ""
+	token := "8018660243:AAGXMxdXVHARdjZSp6ym5zYSpTL4ohYB-hk"
 	if token == "" {
 		log.Fatal("TELEGRAM_BOT_TOKEN is not set")
 	}
@@ -18,7 +18,7 @@ func main() {
 		log.Panic(err)
 	}
 
-	bot.Debug = true // отключи на проде
+	bot.Debug = true
 
 	log.Printf("Authorized on account %s", bot.Self.UserName)
 
@@ -33,16 +33,15 @@ func main() {
 	}
 
 	updateConfig := tgbotapi.NewUpdate(0)
-	updateConfig.Timeout = 5
+	updateConfig.Timeout = 30
 
 	updates := bot.GetUpdatesChan(updateConfig)
 
 	for update := range updates {
 		if update.Message == nil || !update.Message.IsCommand() {
-			continue // обрабатываем только команды
+			continue
 		}
 
-		// Обрабатываем команды только из чатов (не приватных)
 		if update.Message.Chat.IsGroup() || update.Message.Chat.IsSuperGroup() {
 			log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
