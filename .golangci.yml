@@ -1,0 +1,26 @@
+run:
+  timeout: 2m
+
+linters:
+  enable:
+    - govet
+    - staticcheck
+    - errcheck
+    - gosimple
+    - typecheck
+    - unused
+    - gosec
+    - lll
+    - revive
+
+  disable:
+    - gocyclo
+    - dupl
+    - funlen
+    - godot
+    - gocritic
+    - nakedret
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
