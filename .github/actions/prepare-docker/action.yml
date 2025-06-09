@@ -1,0 +1,31 @@
+name: "Prepare docker"
+description: "Added source and login docker"
+inputs:
+  username:
+    description: 'The username to use for authentication'
+    required: true
+  password:
+    description: 'The password to use for authentication'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to Docker Hub
+      env:
+        USERNAME: ${{ inputs.username }}
+        PASSWORD: ${{ inputs.password }}
+      run: |
+        echo "$PASSWORD" | docker login --username "$USERNAME" --password-stdin
+      shell: bash
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+
+    - name: Install Docker Compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install docker-compose
+      shell: bash
