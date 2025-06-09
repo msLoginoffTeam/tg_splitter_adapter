@@ -44,10 +44,15 @@ jobs:
   deploy:
     runs-on: self-hosted
     needs: build-and-push
+    env:
+      DOCKER_IMAGE: ${{ secrets.DOCKER_USER }}/tg_splitter_adapter-app:latest
     steps:
-      - name: Pull and run container
-        run: |
-          docker pull ${{ secrets.DOCKER_USER }}/tg_splitter_adapter-app:latest
-          docker stop tg_splitter_adapter-app || true
-          docker rm tg_splitter_adapter-app || true
-          docker run -d --name tg_splitter_adapter-app -p 8081:8081 -e BOT_TOKEN=${{ secrets.BOT_TOKEN }} ${{ secrets.DOCKER_USER }}/tg_splitter_adapter-app:latest
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Make deploy.sh executable
+        run: chmod +x deploy.sh
+
+      - name: Run deployment
+        run: ./deploy.sh "${{ secrets.BOT_TOKEN }}"
+        shell: bash
