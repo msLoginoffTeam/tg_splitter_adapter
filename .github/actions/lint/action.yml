@@ -1,0 +1,14 @@
+name: "Lint Check"
+description: "Runs lint checks using Gradle."
+runs:
+  using: "composite"
+  steps:
+    - name: Install lint
+      run: |
+        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.56.2
+          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+      shell: bash
+
+    - name: Run linter
+      run: golangci-lint run --timeout 5m -v
+      shell: bash
