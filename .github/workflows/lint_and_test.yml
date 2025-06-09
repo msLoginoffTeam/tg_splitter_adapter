@@ -1,0 +1,28 @@
+name: Lint and test
+
+on: [ push, pull_request ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Prepare repository
+        uses: ./.github/actions/prepare-repo
+
+      - name: Run Lint Check
+        uses: ./.github/actions/lint
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Prepare repository
+        uses: ./.github/actions/prepare-repo
+
+      - name: Run Test Check
+        uses: ./.github/actions/test

@@ -2,13 +2,14 @@ package main
 
 import (
 	"log"
+	"os"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/msLoginoffTeam/tg_splitter_adapter/handles"
 )
 
 func main() {
-	token := ""
+	token := os.Getenv("BOT_TOKEN")
 	if token == "" {
 		log.Fatal("TELEGRAM_BOT_TOKEN is not set")
 	}
