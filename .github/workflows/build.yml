@@ -4,9 +4,6 @@ on:
   push:
     branches: [ main ]
 
-env:
-  BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -34,6 +31,7 @@ jobs:
             ${{ secrets.DOCKER_USER }}/tg_splitter_adapter-app:${{ github.sha }}
           build-args: |
             BOT_TOKEN=${{ secrets.BOT_TOKEN }}
+            BACKEND_URL=${{ secrets.BACKEND_URL }}
           labels: |
             org.opencontainers.image.source=${{ github.repositoryUrl }}
             org.opencontainers.image.revision=${{ github.sha }}
@@ -54,5 +52,5 @@ jobs:
         run: chmod +x deploy.sh
 
       - name: Run deployment
-        run: ./deploy.sh "${{ secrets.BOT_TOKEN }}" "${{ secrets.BACKEND_URL }}"
+        run: ./deploy.sh "${{ secrets.BOT_TOKEN }}"
         shell: bash
