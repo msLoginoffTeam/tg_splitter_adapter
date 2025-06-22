@@ -54,5 +54,5 @@ jobs:
         run: chmod +x deploy.sh
 
       - name: Run deployment
-        run: ./deploy.sh "${{ secrets.BOT_TOKEN }}"
+        run: ./deploy.sh "${{ secrets.BOT_TOKEN }}" "${{ secrets.BACKEND_URL }}"
         shell: bash
