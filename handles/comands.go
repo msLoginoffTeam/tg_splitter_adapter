@@ -2,19 +2,17 @@ package handles
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	tgutils "github.com/msLoginoffTeam/tg_splitter_adapter/handles/tg_utils"
 	client "github.com/msLoginoffTeam/tg_splitter_adapter/swagger"
 )
 
-func HandleCommand(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *client.ClientWithResponses) {
+func HandleCommand(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *client.ClientWithResponses, adapter *tgutils.CommandAdapter) {
 
 	baseUrl := os.Getenv("BACKEND_URL")
 
@@ -40,36 +38,9 @@ func HandleCommand(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *client.Cl
 		}
 
 	case "addtogroup":
-		getGroupsParams := client.GetApiGroupsParams{
-			UserTelegramId: &update.Message.From.ID,
-		}
-		groups, err := api.GetApiGroups(context.Background(), &getGroupsParams)
-		if err != nil {
-			log.Printf("Ошибка при получении групп: %v", err)
-			msg.Text = "Не удалось загрузить список групп. Попробуйте позже."
-			break
-		}
-
-		if groups == nil {
-			log.Println("Ответ от сервера пустой")
-			msg.Text = "Не удалось получить ответ от сервера"
-			break
-		}
-		defer groups.Body.Close()
-
-		if groups.StatusCode != http.StatusOK {
-			body, _ := io.ReadAll(groups.Body)
-			log.Printf("Сервер вернул ошибку: %d, тело: %s", groups.StatusCode, string(body))
-			msg.Text = "Сервер вернул ошибку"
-			break
-		}
-
-		var groupList []client.GroupOverviewResponseDto
-		if err := json.NewDecoder(groups.Body).Decode(&groupList); err != nil {
-			log.Printf("Ошибка при декодировании JSON: %v", err)
-			msg.Text = "Ошибка при обработке данных групп"
-			break
-		}
+		//adaptergetGroupsParams := client.GetApiGroupsParams{
+		//adapter	UserTelegramId: &update.Message.From.ID,
+		//adapter}
 
 	case "users":
 		resp, err := http.Get(baseUrl + "/api/users")

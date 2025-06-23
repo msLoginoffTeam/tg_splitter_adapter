@@ -6,6 +6,7 @@ import (
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/msLoginoffTeam/tg_splitter_adapter/handles"
+	tgutils "github.com/msLoginoffTeam/tg_splitter_adapter/handles/tg_utils"
 	client "github.com/msLoginoffTeam/tg_splitter_adapter/swagger"
 )
 
@@ -28,7 +29,7 @@ func main() {
 
 	commands := []tgbotapi.BotCommand{
 		{Command: "creategroup", Description: "Создать новую группу"},
-		{Command: "addtogroup", Description: "Добавить участника в группу (тегнуть людей)"},
+		{Command: "addtogroup", Description: "Добавить меня в группу ( /команда {id группы} )"},
 		{Command: "help", Description: "Список команд"},
 		{Command: "getusersbymention", Description: "Список упомянутых"},
 	}
@@ -41,11 +42,19 @@ func main() {
 	updates := bot.GetUpdatesChan(updateConfig)
 
 	//создание клиента для обращения к апишке
-	baseUrl := "http://82.202.128.192:5050" //os.Getenv("BACKEND_URL")
+
+	baseUrl := os.Getenv("BACKEND_URL")
+	log.Println("API URL:", baseUrl)
+	if baseUrl == "" {
+		log.Fatal("BACKEND_URL is not set")
+	}
+
 	apiClient, err := client.NewClientWithResponses(baseUrl)
 	if err != nil {
 		log.Panicf("Error creating API client: %v", err)
 	}
+
+	adapter := tgutils.NewCommandAdapter(tgutils.SimpleSplitter{})
 
 	for update := range updates {
 		if update.Message == nil || !update.Message.IsCommand() {
@@ -55,7 +64,7 @@ func main() {
 		if update.Message.Chat.IsGroup() || update.Message.Chat.IsSuperGroup() {
 			log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
-			handles.HandleCommand(&update, bot, apiClient)
+			handles.HandleCommand(&update, bot, apiClient, adapter)
 		}
 	}
 }
