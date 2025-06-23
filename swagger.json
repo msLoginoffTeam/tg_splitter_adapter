@@ -1406,6 +1406,55 @@
           }
         }
       }
+    },
+    "/api/users/find": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Retrieves detailed information for a specific user by nickname or userTelegramId.",
+        "parameters": [
+          {
+            "name": "nickname",
+            "in": "query",
+            "description": "of the user.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userTelegramId",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1784,10 +1833,6 @@
       "UserCreateRequestDto": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
           "telegramId": {
             "type": "integer",
             "format": "int64"

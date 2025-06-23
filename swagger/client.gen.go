@@ -215,6 +215,9 @@ type ClientInterface interface {
 
 	PostApiUsers(ctx context.Context, body PostApiUsersJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// GetApiUsersFind request
+	GetApiUsersFind(ctx context.Context, params *GetApiUsersFindParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetApiUsersUserId request
 	GetApiUsersUserId(ctx context.Context, userId openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -804,6 +807,18 @@ func (c *Client) PostApiUsersWithApplicationWildcardPlusJSONBody(ctx context.Con
 
 func (c *Client) PostApiUsers(ctx context.Context, body PostApiUsersJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostApiUsersRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetApiUsersFind(ctx context.Context, params *GetApiUsersFindParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetApiUsersFindRequest(c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -2166,6 +2181,71 @@ func NewPostApiUsersRequestWithBody(server string, contentType string, body io.R
 	return req, nil
 }
 
+// NewGetApiUsersFindRequest generates requests for GetApiUsersFind
+func NewGetApiUsersFindRequest(server string, params *GetApiUsersFindParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/users/find")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.Nickname != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "nickname", runtime.ParamLocationQuery, *params.Nickname); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.UserTelegramId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "userTelegramId", runtime.ParamLocationQuery, *params.UserTelegramId); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewGetApiUsersUserIdRequest generates requests for GetApiUsersUserId
 func NewGetApiUsersUserIdRequest(server string, userId openapi_types.UUID) (*http.Request, error) {
 	var err error
@@ -2425,6 +2505,9 @@ type ClientWithResponsesInterface interface {
 	PostApiUsersWithApplicationWildcardPlusJSONBodyWithResponse(ctx context.Context, body PostApiUsersApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiUsersResponse, error)
 
 	PostApiUsersWithResponse(ctx context.Context, body PostApiUsersJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiUsersResponse, error)
+
+	// GetApiUsersFindWithResponse request
+	GetApiUsersFindWithResponse(ctx context.Context, params *GetApiUsersFindParams, reqEditors ...RequestEditorFn) (*GetApiUsersFindResponse, error)
 
 	// GetApiUsersUserIdWithResponse request
 	GetApiUsersUserIdWithResponse(ctx context.Context, userId openapi_types.UUID, reqEditors ...RequestEditorFn) (*GetApiUsersUserIdResponse, error)
@@ -3020,6 +3103,28 @@ func (r PostApiUsersResponse) StatusCode() int {
 	return 0
 }
 
+type GetApiUsersFindResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *UserResponseDto
+}
+
+// Status returns HTTPResponse.Status
+func (r GetApiUsersFindResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetApiUsersFindResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 type GetApiUsersUserIdResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -3480,6 +3585,15 @@ func (c *ClientWithResponses) PostApiUsersWithResponse(ctx context.Context, body
 		return nil, err
 	}
 	return ParsePostApiUsersResponse(rsp)
+}
+
+// GetApiUsersFindWithResponse request returning *GetApiUsersFindResponse
+func (c *ClientWithResponses) GetApiUsersFindWithResponse(ctx context.Context, params *GetApiUsersFindParams, reqEditors ...RequestEditorFn) (*GetApiUsersFindResponse, error) {
+	rsp, err := c.GetApiUsersFind(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetApiUsersFindResponse(rsp)
 }
 
 // GetApiUsersUserIdWithResponse request returning *GetApiUsersUserIdResponse
@@ -4143,6 +4257,35 @@ func ParsePostApiUsersResponse(rsp *http.Response) (*PostApiUsersResponse, error
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest openapi_types.UUID
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case rsp.StatusCode == 200:
+		// Content-type (text/plain) unsupported
+
+	}
+
+	return response, nil
+}
+
+// ParseGetApiUsersFindResponse parses an HTTP response from a GetApiUsersFindWithResponse call
+func ParseGetApiUsersFindResponse(rsp *http.Response) (*GetApiUsersFindResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetApiUsersFindResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest UserResponseDto
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}

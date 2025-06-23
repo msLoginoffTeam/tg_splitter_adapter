@@ -1,0 +1,20 @@
+{
+    // Используйте IntelliSense, чтобы узнать о возможных атрибутах.
+    // Наведите указатель мыши, чтобы просмотреть описания существующих атрибутов.
+    // Для получения дополнительной информации посетите: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+       
+        {
+            "name": "Launch Package",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${fileDirname}",
+            "env": {
+                "BOT_TOKEN": "8040525669:AAFt-SadYqedrnuCZ5kaeQLRZjmpGLDhyco",
+                "BACKEND_URL": "http://31.128.47.226:5050"
+            }
+        }
+    ]
+}

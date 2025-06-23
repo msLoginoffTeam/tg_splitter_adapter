@@ -28,10 +28,12 @@ func main() {
 	log.Printf("Authorized on account %s", bot.Self.UserName)
 
 	commands := []tgbotapi.BotCommand{
+		{Command: "start", Description: "Начни работу с ботом"},
+		{Command: "register", Description: "Зарегистрироваться в системе"},
 		{Command: "creategroup", Description: "Создать новую группу"},
 		{Command: "addtogroup", Description: "Добавить меня в группу ( /команда {id группы} )"},
+		{Command: "groupdetails", Description: "Получает полную информацию о группе вместе с участниками"},
 		{Command: "help", Description: "Список команд"},
-		{Command: "getusersbymention", Description: "Список упомянутых"},
 	}
 	if _, err := bot.Request(tgbotapi.NewSetMyCommands(commands...)); err != nil {
 		log.Printf("Ошибка установки команд: %v", err)
