@@ -42,7 +42,6 @@ func main() {
 	updates := bot.GetUpdatesChan(updateConfig)
 
 	//создание клиента для обращения к апишке
-
 	baseUrl := os.Getenv("BACKEND_URL")
 	log.Println("API URL:", baseUrl)
 	if baseUrl == "" {
