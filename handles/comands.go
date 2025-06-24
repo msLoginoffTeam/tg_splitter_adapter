@@ -124,6 +124,8 @@ func HandleCommand(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *client.Cl
 
 		msg.Text = "Пользователь успешно добавлен"
 
+	case "renamegroup":
+		msg.Text = "Еще не добавлено!"
 	case "groupdetails":
 		_, args := adapter.ParseCommand(update.Message.Text)
 		if len(args) < 1 {

@@ -31,8 +31,9 @@ func main() {
 		{Command: "start", Description: "Начни работу с ботом"},
 		{Command: "register", Description: "Зарегистрироваться в системе"},
 		{Command: "creategroup", Description: "Создать новую группу"},
-		{Command: "addtogroup", Description: "Добавить меня в группу ( /команда {id группы} )"},
-		{Command: "groupdetails", Description: "Получает полную информацию о группе вместе с участниками"},
+		{Command: "addtogroup", Description: "Добавить меня в группу: /команда id_группы"},
+		{Command: "groupdetails", Description: "Информация о группе: /команда id_группы"},
+		{Command: "renamegroup", Description: "Переименовать группу: /команда новое_название группы"},
 		{Command: "help", Description: "Список команд"},
 	}
 	if _, err := bot.Request(tgbotapi.NewSetMyCommands(commands...)); err != nil {
@@ -43,8 +44,7 @@ func main() {
 	updateConfig.Timeout = 30
 	updates := bot.GetUpdatesChan(updateConfig)
 
-	//создание клиента для обращения к апишке
-
+	// создание клиента для обращения к апишке
 	baseUrl := os.Getenv("BACKEND_URL")
 	log.Println("API URL:", baseUrl)
 	if baseUrl == "" {
@@ -58,14 +58,27 @@ func main() {
 
 	adapter := tgutils.NewCommandAdapter(tgutils.SimpleSplitter{})
 
+	// Хранилище состояний пользователей
+	userStates := make(map[int64]string)
+
 	for update := range updates {
-		if update.Message == nil || !update.Message.IsCommand() {
+		//if update.CallbackQuery != nil {
+		//	// Обрабатываем callback-запросы
+		//	handles.HandleCallbackQuery(bot, update.CallbackQuery, userStates, apiClient)
+		//	continue
+		//}
+
+		if update.Message == nil {
 			continue
 		}
 
-		if update.Message.Chat.IsGroup() || update.Message.Chat.IsSuperGroup() {
+		if update.Message.Chat.IsPrivate() {
+			//лс
 			log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
-
+			handles.HandleDirectMessages(&update, bot, apiClient, adapter, userStates)
+		} else if update.Message.Chat.IsGroup() || update.Message.Chat.IsSuperGroup() {
+			log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
+			//чат
 			handles.HandleCommand(&update, bot, apiClient, adapter)
 		}
 	}
