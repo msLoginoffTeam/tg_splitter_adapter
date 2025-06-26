@@ -5,6 +5,7 @@ import (
 	"os"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/google/uuid"
 	"github.com/msLoginoffTeam/tg_splitter_adapter/handles"
 	tgutils "github.com/msLoginoffTeam/tg_splitter_adapter/handles/tg_utils"
 	client "github.com/msLoginoffTeam/tg_splitter_adapter/swagger"
@@ -60,6 +61,9 @@ func main() {
 
 	// Хранилище состояний пользователей
 	userStates := make(map[int64]string)
+	userChoiceState := make(map[int64]uuid.UUID)
+	userChoiceTitleState := make(map[int64]string)
+	userExpenceCreated := make(map[int64]uuid.UUID)
 
 	for update := range updates {
 		//if update.CallbackQuery != nil {
@@ -75,7 +79,7 @@ func main() {
 		if update.Message.Chat.IsPrivate() {
 			//лс
 			log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
-			handles.HandleDirectMessages(&update, bot, apiClient, adapter, userStates)
+			handles.HandleDirectMessages(&update, bot, apiClient, adapter, userStates, userChoiceState, userChoiceTitleState, userExpenceCreated)
 		} else if update.Message.Chat.IsGroup() || update.Message.Chat.IsSuperGroup() {
 			log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 			//чат
