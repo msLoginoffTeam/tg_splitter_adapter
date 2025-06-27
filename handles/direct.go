@@ -150,6 +150,45 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			bot.Send(msg)
 
 		case "Изменить трату":
+			userStates[userID] = "waiting_expense_selection"
+			msg := tgbotapi.NewMessage(chatID, "")
+
+			resp, err := api.GetApiGroupsGroupIdExpenses(context.Background(), userChoiceState[userID], nil)
+			if err != nil {
+				msg.Text = "API недоступно"
+				bot.Send(msg)
+				break
+			}
+			defer resp.Body.Close()
+
+			if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
+				body, _ := io.ReadAll(resp.Body)
+				fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
+				msg.Text = "Не удалось получить ответ от сервера"
+				bot.Send(msg)
+				break
+			}
+
+			var result []swagger.ExpenseResponseDto
+			if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+				fmt.Errorf("failed to decode response: %w", err)
+				msg.Text = "Не удалось расшифровать ответ"
+				bot.Send(msg)
+				break
+			}
+			msg.Text = "Список трат:\n"
+			for i, expense := range result {
+				msg.Text += strconv.Itoa(i) + ".\n"
+				msg.Text += "Название группы: " + *expense.Title + "\n"
+				msg.Text += "Общая сумма: " + strconv.Itoa(int(*expense.TotalAmount)) + "\n"
+				msg.Text += "Id_траты: " + expense.Id.String() + "\n"
+			}
+			bot.Send(msg)
+		case "Изменить название траты":
+		case "Изменить сумму траты":
+		case "Добавить участников":
+		case "Удалить трату":
+
 		default:
 			//обработка состояний
 			if state, ok := userStates[userID]; ok {
@@ -233,7 +272,65 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					msg.ReplyMarkup = mainMenu
 					bot.Send(msg)
 				case "waiting_expense_selection":
-					//выбор траты
+					msg := tgbotapi.NewMessage(chatID, "")
+					expenseId, err := stringToUUID(update.Message.Text)
+					if err != nil {
+						msg.Text = "Не получилось обработать id"
+						break
+					}
+
+					resp, err := api.GetApiGroupsGroupIdExpensesExpenseId(context.Background(), userChoiceState[userID], expenseId)
+					if err != nil {
+						msg.Text = "API недоступно"
+						break
+					}
+					defer resp.Body.Close()
+
+					if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
+						body, _ := io.ReadAll(resp.Body)
+						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
+						msg.Text = "Не удалось получить ответ от сервера"
+						break
+					}
+
+					var result swagger.ExpenseResponseDto
+					if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+						fmt.Errorf("failed to decode response: %w", err)
+						msg.Text = "Не удалось расшифровать ответ"
+						break
+					}
+
+					userExpenceCreated[userID] = expenseId
+
+					menuExpenseEdit := tgbotapi.NewReplyKeyboard(
+						tgbotapi.NewKeyboardButtonRow(
+							tgbotapi.NewKeyboardButton("Изменить название траты"),
+							tgbotapi.NewKeyboardButton("Изменить сумму траты"),
+						),
+						tgbotapi.NewKeyboardButtonRow(
+							tgbotapi.NewKeyboardButton("Добавить участников"),
+							tgbotapi.NewKeyboardButton("Удалить трату"),
+						),
+						tgbotapi.NewKeyboardButtonRow(
+							tgbotapi.NewKeyboardButton("Вернуться в меню"),
+						),
+					)
+					msg = tgbotapi.NewMessage(chatID, "Подробная информация о трате: \n")
+					msg.Text += "Название траты: " + *result.Title + "\n"
+					msg.Text += "Id_траты: " + result.Id.String() + "\n"
+					total_amount := int(*result.TotalAmount)
+					msg.Text += "Сумма траты: " + strconv.Itoa(total_amount) + "\n"
+					msg.Text += "Пользователи: \n"
+
+					for i, user := range *result.Shares {
+						msg.Text += strconv.Itoa(i+1) + ": \n"
+						msg.Text += "Id человека: " + user.UserId.String() + "\n"
+						msg.Text += "Сколько должен: " + strconv.Itoa(int(*user.Amount)) + "\n"
+					}
+					msg.Text += "\n" + "Выберите действие с тратами:"
+					msg.ReplyMarkup = menuExpenseEdit
+					bot.Send(msg)
+
 				case "waiting_expense_title":
 					userChoiceTitleState[userID] = update.Message.Text
 					userStates[userID] = "waiting_expense_amount"
