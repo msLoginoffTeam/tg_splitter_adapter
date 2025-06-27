@@ -4,7 +4,7 @@
     // Для получения дополнительной информации посетите: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        
+       
         {
             "name": "Launch Package",
             "type": "go",
@@ -12,8 +12,8 @@
             "mode": "auto",
             "program": "${fileDirname}",
             "env": {
-                "BOT_TOKEN": "8018660243:AAGXMxdXVHARdjZSp6ym5zYSpTL4ohYB-hk",
-                "BACKEND_URL": "http://82.202.128.192:5050"
+                "BOT_TOKEN": "8040525669:AAFt-SadYqedrnuCZ5kaeQLRZjmpGLDhyco",
+                "BACKEND_URL": "http://31.128.47.226:5050"
             }
         }
     ]

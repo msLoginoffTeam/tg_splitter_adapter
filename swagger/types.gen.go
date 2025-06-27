@@ -149,9 +149,8 @@ type UserBalanceResponseDto struct {
 
 // UserCreateRequestDto defines model for UserCreateRequestDto.
 type UserCreateRequestDto struct {
-	DisplayName *string             `json:"displayName"`
-	Id          *openapi_types.UUID `json:"id,omitempty"`
-	TelegramId  *int64              `json:"telegramId,omitempty"`
+	DisplayName *string `json:"displayName"`
+	TelegramId  *int64  `json:"telegramId,omitempty"`
 }
 
 // UserOverviewResponseDto defines model for UserOverviewResponseDto.
@@ -186,6 +185,13 @@ type GetApiGroupsGroupIdTransfersParams struct {
 	// UseNpAlgorithm If true, use the NP-complete optimization algorithm for minimal transactions;
 	// otherwise use the greedy algorithm.
 	UseNpAlgorithm *bool `form:"useNpAlgorithm,omitempty" json:"useNpAlgorithm,omitempty"`
+}
+
+// GetApiUsersFindParams defines parameters for GetApiUsersFind.
+type GetApiUsersFindParams struct {
+	// Nickname of the user.
+	Nickname       *string `form:"nickname,omitempty" json:"nickname,omitempty"`
+	UserTelegramId *int64  `form:"userTelegramId,omitempty" json:"userTelegramId,omitempty"`
 }
 
 // PostApiGroupsApplicationWildcardPlusJSONRequestBody defines body for PostApiGroups for application/*+json ContentType.

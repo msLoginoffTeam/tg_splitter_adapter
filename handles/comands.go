@@ -2,25 +2,61 @@ package handles
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
-	"os"
+	"strconv"
 
+	"github.com/deepmap/oapi-codegen/pkg/types"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/google/uuid"
 	tgutils "github.com/msLoginoffTeam/tg_splitter_adapter/handles/tg_utils"
+	"github.com/msLoginoffTeam/tg_splitter_adapter/swagger"
 	client "github.com/msLoginoffTeam/tg_splitter_adapter/swagger"
 )
 
 func HandleCommand(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *client.ClientWithResponses, adapter *tgutils.CommandAdapter) {
 
-	baseUrl := os.Getenv("BACKEND_URL")
-
 	msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
 	msg.ReplyToMessageID = update.Message.MessageID
+
 	switch update.Message.Command() {
+	case "start":
+		msg.Text = "Тут бы что-то написать"
+	case "register":
+		userId := update.Message.From.ID
+
+		newName := update.Message.From.FirstName + update.Message.From.LastName
+		reqBody := client.UserCreateRequestDto{
+			TelegramId:  &userId,
+			DisplayName: &newName,
+		}
+		resp, err := api.PostApiUsers(context.Background(), reqBody)
+		if err != nil {
+			msg.Text = "Не получилось создать группу "
+			break
+		}
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
+			body, _ := io.ReadAll(resp.Body)
+			fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
+			msg.Text = "Команда не выполнилась из-за ошибки в команде"
+			break
+		}
+
+		var result uuid.UUID
+		if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+			fmt.Errorf("failed to decode response: %w", err)
+			msg.Text = "Не удалось расшифровать ответ"
+			break
+		}
+		msg.Text = "Успешно зарегистрирован пользователь с ником " + newName
+
 	case "getmygroups":
 		msg.Text = "/start — запуск\n/ping — проверка\n/help — помощь"
+
 	case "creategroup":
 		chatId := update.Message.Chat.ID
 		userId := update.Message.From.ID
@@ -30,42 +66,118 @@ func HandleCommand(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *client.Cl
 			TelegramChatId:      &chatId,
 			Title:               &chatTitle,
 		}
-		_, err := api.PostApiGroups(context.Background(), reqBody)
+		resp, err := api.PostApiGroups(context.Background(), reqBody)
 		if err != nil {
-			msg.Text = "Не получилось создать группу " + err.Error()
-		} else {
-			msg.Text = "Группа успешно создана: " + chatTitle
-		}
-
-	case "addtogroup":
-		//adaptergetGroupsParams := client.GetApiGroupsParams{
-		//adapter	UserTelegramId: &update.Message.From.ID,
-		//adapter}
-
-	case "users":
-		resp, err := http.Get(baseUrl + "/api/users")
-		if err != nil {
-			msg.Text = "Ошибка при запросе к серверу: " + err.Error()
+			msg.Text = "Не получилось создать группу "
 			break
 		}
 		defer resp.Body.Close()
 
-		body, err := ioutil.ReadAll(resp.Body)
+		if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
+			body, _ := io.ReadAll(resp.Body)
+			fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
+			msg.Text = "Не удалось получить ответ от сервера"
+			break
+		}
+
+		var result swagger.GroupResponseDto
+		if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+			fmt.Errorf("failed to decode response: %w", err)
+			msg.Text = "Не удалось расшифровать ответ"
+			break
+		}
+		msg.Text = "Группа успешно создана. Id группы:\n" + "Название группы: " + *result.Title + "\n" + "Id группы: " + (*result.Id).String()
+
+	case "addtogroup":
+		_, args := adapter.ParseCommand(update.Message.Text)
+		if len(args) < 1 {
+			msg.Text = "Не введен id группы"
+			break
+		}
+
+		groupUUID, err := stringToUUID(args[0])
 		if err != nil {
-			msg.Text = "Ошибка при чтении ответа: " + err.Error()
+			msg.Text = "Не получилось обработать id"
 			break
 		}
 
-		if resp.StatusCode != http.StatusOK {
-			msg.Text = fmt.Sprintf("Сервер вернул ошибку: %d\n%s", resp.StatusCode, string(body))
+		resp, err := api.PostApiGroupsGroupIdUsers(
+			context.Background(),
+			groupUUID,
+			swagger.AddGroupUserRequestDto{
+				TelegramId: &update.Message.From.ID,
+			},
+		)
+		if err != nil {
+			msg.Text = "Не получилось достучаться до API"
+			fmt.Errorf("API call failed: %w", err)
+			break
+		}
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
+			body, _ := io.ReadAll(resp.Body)
+			msg.Text = "Ошибка при добавлении пользователя, возможно вам надо зарегистрироваться /register"
+			fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
 			break
 		}
 
-		msg.Text = string(body)
+		msg.Text = "Пользователь успешно добавлен"
 
+	case "renamegroup":
+		msg.Text = "Еще не добавлено!"
+	case "groupdetails":
+		_, args := adapter.ParseCommand(update.Message.Text)
+		if len(args) < 1 {
+			msg.Text = "Не введен id группы"
+			break
+		}
+		groupId, err := stringToUUID(args[0])
+		if err != nil {
+			msg.Text = "Не получилось обработать id"
+			break
+		}
+
+		resp, err := api.GetApiGroupsGroupId(context.Background(), groupId)
+		if err != nil {
+			msg.Text = "API недоступно"
+			break
+		}
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
+			body, _ := io.ReadAll(resp.Body)
+			fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
+			msg.Text = "Не удалось получить ответ от сервера"
+			break
+		}
+
+		var result swagger.GroupResponseDto
+		if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+			fmt.Errorf("failed to decode response: %w", err)
+			msg.Text = "Не удалось расшифровать ответ"
+			break
+		}
+
+		msg.Text = fmt.Sprintf("Название группы: %s \n Id группы: %s \n Пользователи: \n", *result.Title, *result.Id)
+
+		for i, member := range *result.Users {
+			msg.Text += strconv.Itoa(i+1) + ". " + "Id: " + member.Id.String() + "\n Имя в системе: " + *member.DisplayName + "\n"
+		}
 	default:
 		msg.Text = fmt.Sprintf("Неизвестная команда: %s", update.Message.Command())
 	}
 	bot.Send(msg)
 
+}
+
+func stringToUUID(s string) (types.UUID, error) {
+	// Парсим строку как UUID
+	parsedUUID, err := uuid.Parse(s)
+	if err != nil {
+		return types.UUID{}, fmt.Errorf("invalid UUID string: %w", err)
+	}
+
+	// Преобразуем в types.UUID
+	return types.UUID(parsedUUID), nil
 }
