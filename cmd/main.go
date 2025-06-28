@@ -64,6 +64,7 @@ func main() {
 	userChoiceState := make(map[int64]uuid.UUID)    //стейт для определения выбранной/созданной группы
 	userChoiceTitleState := make(map[int64]string)  //стейт для определения выбранного названия для группы
 	userExpenceCreated := make(map[int64]uuid.UUID) //стейт для определения выбранной/созданной траты
+	userSysID := make(map[int64]uuid.UUID)          //стейт для сохранения id пользака
 
 	for update := range updates {
 		if update.Message == nil {
@@ -73,7 +74,7 @@ func main() {
 		if update.Message.Chat.IsPrivate() {
 			//лс
 			log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
-			handles.HandleDirectMessages(&update, bot, apiClient, adapter, userStates, userChoiceState, userChoiceTitleState, userExpenceCreated)
+			handles.HandleDirectMessages(&update, bot, apiClient, adapter, userStates, userChoiceState, userChoiceTitleState, userExpenceCreated, userSysID)
 		} else if update.Message.Chat.IsGroup() || update.Message.Chat.IsSuperGroup() {
 			log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 			//чат
