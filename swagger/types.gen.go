@@ -4,6 +4,8 @@
 package swagger
 
 import (
+	"encoding/json"
+	"fmt"
 	"time"
 
 	openapi_types "github.com/oapi-codegen/runtime/types"
@@ -106,6 +108,16 @@ type PaymentResponseDto struct {
 	ToUserId   *openapi_types.UUID `json:"toUserId,omitempty"`
 }
 
+// ProblemDetails defines model for ProblemDetails.
+type ProblemDetails struct {
+	Detail               *string                `json:"detail"`
+	Instance             *string                `json:"instance"`
+	Status               *int32                 `json:"status"`
+	Title                *string                `json:"title"`
+	Type                 *string                `json:"type"`
+	AdditionalProperties map[string]interface{} `json:"-"`
+}
+
 // TransferSuggestionDto defines model for TransferSuggestionDto.
 type TransferSuggestionDto struct {
 	Amount     *float64            `json:"amount,omitempty"`
@@ -116,14 +128,6 @@ type TransferSuggestionDto struct {
 // TransferSuggestionsResponseDto defines model for TransferSuggestionsResponseDto.
 type TransferSuggestionsResponseDto struct {
 	Transfers *[]TransferSuggestionDto `json:"transfers"`
-}
-
-// UpdateExpenseRequestDto defines model for UpdateExpenseRequestDto.
-type UpdateExpenseRequestDto struct {
-	IsDraft     *bool                    `json:"isDraft"`
-	Shares      *[]ExpenseShareCreateDto `json:"shares"`
-	Title       *string                  `json:"title"`
-	TotalAmount *float64                 `json:"totalAmount"`
 }
 
 // UpdateGroupRequestDto defines model for UpdateGroupRequestDto.
@@ -168,16 +172,69 @@ type UserResponseDto struct {
 	TelegramId  *int64              `json:"telegramId,omitempty"`
 }
 
-// GetApiGroupsParams defines parameters for GetApiGroups.
-type GetApiGroupsParams struct {
-	// UserTelegramId Telegram ID of the user.
-	UserTelegramId *int64 `form:"userTelegramId,omitempty" json:"userTelegramId,omitempty"`
-}
-
-// GetApiGroupsGroupIdExpensesParams defines parameters for GetApiGroupsGroupIdExpenses.
-type GetApiGroupsGroupIdExpensesParams struct {
+// GetApiExpensesGroupGroupIdParams defines parameters for GetApiExpensesGroupGroupId.
+type GetApiExpensesGroupGroupIdParams struct {
 	// UserId Optional user ID to filter expenses by payer.
 	UserId *openapi_types.UUID `form:"userId,omitempty" json:"userId,omitempty"`
+}
+
+// DeleteApiExpensesExpenseIdParams defines parameters for DeleteApiExpensesExpenseId.
+type DeleteApiExpensesExpenseIdParams struct {
+	// GroupId ID of the group.
+	GroupId *openapi_types.UUID `form:"groupId,omitempty" json:"groupId,omitempty"`
+}
+
+// GetApiExpensesExpenseIdParams defines parameters for GetApiExpensesExpenseId.
+type GetApiExpensesExpenseIdParams struct {
+	// GroupId ID of the group.
+	GroupId *openapi_types.UUID `form:"groupId,omitempty" json:"groupId,omitempty"`
+}
+
+// GetApiExpensesExpenseIdParticipantsParams defines parameters for GetApiExpensesExpenseIdParticipants.
+type GetApiExpensesExpenseIdParticipantsParams struct {
+	// GroupId ID of the group.
+	GroupId *openapi_types.UUID `form:"groupId,omitempty" json:"groupId,omitempty"`
+}
+
+// PostApiExpensesExpenseIdParticipantsParams defines parameters for PostApiExpensesExpenseIdParticipants.
+type PostApiExpensesExpenseIdParticipantsParams struct {
+	// GroupId ID of the group.
+	GroupId *openapi_types.UUID `form:"groupId,omitempty" json:"groupId,omitempty"`
+}
+
+// PutApiExpensesExpenseIdParticipantsParams defines parameters for PutApiExpensesExpenseIdParticipants.
+type PutApiExpensesExpenseIdParticipantsParams struct {
+	// GroupId ID of the group.
+	GroupId *openapi_types.UUID `form:"groupId,omitempty" json:"groupId,omitempty"`
+}
+
+// DeleteApiExpensesExpenseIdParticipantsUserIdParams defines parameters for DeleteApiExpensesExpenseIdParticipantsUserId.
+type DeleteApiExpensesExpenseIdParticipantsUserIdParams struct {
+	// GroupId ID of the group.
+	GroupId *openapi_types.UUID `form:"groupId,omitempty" json:"groupId,omitempty"`
+}
+
+// PutApiExpensesExpenseIdTitleApplicationWildcardPlusJSONBody defines parameters for PutApiExpensesExpenseIdTitle.
+type PutApiExpensesExpenseIdTitleApplicationWildcardPlusJSONBody = string
+
+// PutApiExpensesExpenseIdTitleJSONBody defines parameters for PutApiExpensesExpenseIdTitle.
+type PutApiExpensesExpenseIdTitleJSONBody = string
+
+// PutApiExpensesExpenseIdTotalAmountApplicationWildcardPlusJSONBody defines parameters for PutApiExpensesExpenseIdTotalAmount.
+type PutApiExpensesExpenseIdTotalAmountApplicationWildcardPlusJSONBody = float64
+
+// PutApiExpensesExpenseIdTotalAmountJSONBody defines parameters for PutApiExpensesExpenseIdTotalAmount.
+type PutApiExpensesExpenseIdTotalAmountJSONBody = float64
+
+// GetApiGroupsParams defines parameters for GetApiGroups.
+type GetApiGroupsParams struct {
+	TelegramChatId *int64 `form:"telegramChatId,omitempty" json:"telegramChatId,omitempty"`
+}
+
+// GetApiGroupsMyParams defines parameters for GetApiGroupsMy.
+type GetApiGroupsMyParams struct {
+	// UserTelegramId Telegram ID of the user.
+	UserTelegramId *int64 `form:"userTelegramId,omitempty" json:"userTelegramId,omitempty"`
 }
 
 // GetApiGroupsGroupIdTransfersParams defines parameters for GetApiGroupsGroupIdTransfers.
@@ -194,6 +251,36 @@ type GetApiUsersFindParams struct {
 	UserTelegramId *int64  `form:"userTelegramId,omitempty" json:"userTelegramId,omitempty"`
 }
 
+// PostApiExpensesGroupGroupIdApplicationWildcardPlusJSONRequestBody defines body for PostApiExpensesGroupGroupId for application/*+json ContentType.
+type PostApiExpensesGroupGroupIdApplicationWildcardPlusJSONRequestBody = CreateExpenseRequestDto
+
+// PostApiExpensesGroupGroupIdJSONRequestBody defines body for PostApiExpensesGroupGroupId for application/json ContentType.
+type PostApiExpensesGroupGroupIdJSONRequestBody = CreateExpenseRequestDto
+
+// PostApiExpensesExpenseIdParticipantsApplicationWildcardPlusJSONRequestBody defines body for PostApiExpensesExpenseIdParticipants for application/*+json ContentType.
+type PostApiExpensesExpenseIdParticipantsApplicationWildcardPlusJSONRequestBody = ExpenseShareCreateDto
+
+// PostApiExpensesExpenseIdParticipantsJSONRequestBody defines body for PostApiExpensesExpenseIdParticipants for application/json ContentType.
+type PostApiExpensesExpenseIdParticipantsJSONRequestBody = ExpenseShareCreateDto
+
+// PutApiExpensesExpenseIdParticipantsApplicationWildcardPlusJSONRequestBody defines body for PutApiExpensesExpenseIdParticipants for application/*+json ContentType.
+type PutApiExpensesExpenseIdParticipantsApplicationWildcardPlusJSONRequestBody = ExpenseShareCreateDto
+
+// PutApiExpensesExpenseIdParticipantsJSONRequestBody defines body for PutApiExpensesExpenseIdParticipants for application/json ContentType.
+type PutApiExpensesExpenseIdParticipantsJSONRequestBody = ExpenseShareCreateDto
+
+// PutApiExpensesExpenseIdTitleApplicationWildcardPlusJSONRequestBody defines body for PutApiExpensesExpenseIdTitle for application/*+json ContentType.
+type PutApiExpensesExpenseIdTitleApplicationWildcardPlusJSONRequestBody = PutApiExpensesExpenseIdTitleApplicationWildcardPlusJSONBody
+
+// PutApiExpensesExpenseIdTitleJSONRequestBody defines body for PutApiExpensesExpenseIdTitle for application/json ContentType.
+type PutApiExpensesExpenseIdTitleJSONRequestBody = PutApiExpensesExpenseIdTitleJSONBody
+
+// PutApiExpensesExpenseIdTotalAmountApplicationWildcardPlusJSONRequestBody defines body for PutApiExpensesExpenseIdTotalAmount for application/*+json ContentType.
+type PutApiExpensesExpenseIdTotalAmountApplicationWildcardPlusJSONRequestBody = PutApiExpensesExpenseIdTotalAmountApplicationWildcardPlusJSONBody
+
+// PutApiExpensesExpenseIdTotalAmountJSONRequestBody defines body for PutApiExpensesExpenseIdTotalAmount for application/json ContentType.
+type PutApiExpensesExpenseIdTotalAmountJSONRequestBody = PutApiExpensesExpenseIdTotalAmountJSONBody
+
 // PostApiGroupsApplicationWildcardPlusJSONRequestBody defines body for PostApiGroups for application/*+json ContentType.
 type PostApiGroupsApplicationWildcardPlusJSONRequestBody = CreateGroupRequestDto
 
@@ -205,30 +292,6 @@ type PutApiGroupsGroupIdApplicationWildcardPlusJSONRequestBody = UpdateGroupRequ
 
 // PutApiGroupsGroupIdJSONRequestBody defines body for PutApiGroupsGroupId for application/json ContentType.
 type PutApiGroupsGroupIdJSONRequestBody = UpdateGroupRequestDto
-
-// PostApiGroupsGroupIdExpensesApplicationWildcardPlusJSONRequestBody defines body for PostApiGroupsGroupIdExpenses for application/*+json ContentType.
-type PostApiGroupsGroupIdExpensesApplicationWildcardPlusJSONRequestBody = CreateExpenseRequestDto
-
-// PostApiGroupsGroupIdExpensesJSONRequestBody defines body for PostApiGroupsGroupIdExpenses for application/json ContentType.
-type PostApiGroupsGroupIdExpensesJSONRequestBody = CreateExpenseRequestDto
-
-// PutApiGroupsGroupIdExpensesExpenseIdApplicationWildcardPlusJSONRequestBody defines body for PutApiGroupsGroupIdExpensesExpenseId for application/*+json ContentType.
-type PutApiGroupsGroupIdExpensesExpenseIdApplicationWildcardPlusJSONRequestBody = UpdateExpenseRequestDto
-
-// PutApiGroupsGroupIdExpensesExpenseIdJSONRequestBody defines body for PutApiGroupsGroupIdExpensesExpenseId for application/json ContentType.
-type PutApiGroupsGroupIdExpensesExpenseIdJSONRequestBody = UpdateExpenseRequestDto
-
-// PostApiGroupsGroupIdExpensesExpenseIdParticipantsApplicationWildcardPlusJSONRequestBody defines body for PostApiGroupsGroupIdExpensesExpenseIdParticipants for application/*+json ContentType.
-type PostApiGroupsGroupIdExpensesExpenseIdParticipantsApplicationWildcardPlusJSONRequestBody = ExpenseShareCreateDto
-
-// PostApiGroupsGroupIdExpensesExpenseIdParticipantsJSONRequestBody defines body for PostApiGroupsGroupIdExpensesExpenseIdParticipants for application/json ContentType.
-type PostApiGroupsGroupIdExpensesExpenseIdParticipantsJSONRequestBody = ExpenseShareCreateDto
-
-// PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdApplicationWildcardPlusJSONRequestBody defines body for PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserId for application/*+json ContentType.
-type PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdApplicationWildcardPlusJSONRequestBody = ExpenseShareCreateDto
-
-// PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdJSONRequestBody defines body for PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserId for application/json ContentType.
-type PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdJSONRequestBody = ExpenseShareCreateDto
 
 // PostApiGroupsGroupIdPaymentsDirectApplicationWildcardPlusJSONRequestBody defines body for PostApiGroupsGroupIdPaymentsDirect for application/*+json ContentType.
 type PostApiGroupsGroupIdPaymentsDirectApplicationWildcardPlusJSONRequestBody = CreateDirectPaymentRequestDto
@@ -265,3 +328,131 @@ type PutApiUsersUserIdApplicationWildcardPlusJSONRequestBody = UpdateUserRequest
 
 // PutApiUsersUserIdJSONRequestBody defines body for PutApiUsersUserId for application/json ContentType.
 type PutApiUsersUserIdJSONRequestBody = UpdateUserRequestDto
+
+// Getter for additional properties for ProblemDetails. Returns the specified
+// element and whether it was found
+func (a ProblemDetails) Get(fieldName string) (value interface{}, found bool) {
+	if a.AdditionalProperties != nil {
+		value, found = a.AdditionalProperties[fieldName]
+	}
+	return
+}
+
+// Setter for additional properties for ProblemDetails
+func (a *ProblemDetails) Set(fieldName string, value interface{}) {
+	if a.AdditionalProperties == nil {
+		a.AdditionalProperties = make(map[string]interface{})
+	}
+	a.AdditionalProperties[fieldName] = value
+}
+
+// Override default JSON handling for ProblemDetails to handle AdditionalProperties
+func (a *ProblemDetails) UnmarshalJSON(b []byte) error {
+	object := make(map[string]json.RawMessage)
+	err := json.Unmarshal(b, &object)
+	if err != nil {
+		return err
+	}
+
+	if raw, found := object["detail"]; found {
+		err = json.Unmarshal(raw, &a.Detail)
+		if err != nil {
+			return fmt.Errorf("error reading 'detail': %w", err)
+		}
+		delete(object, "detail")
+	}
+
+	if raw, found := object["instance"]; found {
+		err = json.Unmarshal(raw, &a.Instance)
+		if err != nil {
+			return fmt.Errorf("error reading 'instance': %w", err)
+		}
+		delete(object, "instance")
+	}
+
+	if raw, found := object["status"]; found {
+		err = json.Unmarshal(raw, &a.Status)
+		if err != nil {
+			return fmt.Errorf("error reading 'status': %w", err)
+		}
+		delete(object, "status")
+	}
+
+	if raw, found := object["title"]; found {
+		err = json.Unmarshal(raw, &a.Title)
+		if err != nil {
+			return fmt.Errorf("error reading 'title': %w", err)
+		}
+		delete(object, "title")
+	}
+
+	if raw, found := object["type"]; found {
+		err = json.Unmarshal(raw, &a.Type)
+		if err != nil {
+			return fmt.Errorf("error reading 'type': %w", err)
+		}
+		delete(object, "type")
+	}
+
+	if len(object) != 0 {
+		a.AdditionalProperties = make(map[string]interface{})
+		for fieldName, fieldBuf := range object {
+			var fieldVal interface{}
+			err := json.Unmarshal(fieldBuf, &fieldVal)
+			if err != nil {
+				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+			}
+			a.AdditionalProperties[fieldName] = fieldVal
+		}
+	}
+	return nil
+}
+
+// Override default JSON handling for ProblemDetails to handle AdditionalProperties
+func (a ProblemDetails) MarshalJSON() ([]byte, error) {
+	var err error
+	object := make(map[string]json.RawMessage)
+
+	if a.Detail != nil {
+		object["detail"], err = json.Marshal(a.Detail)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'detail': %w", err)
+		}
+	}
+
+	if a.Instance != nil {
+		object["instance"], err = json.Marshal(a.Instance)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'instance': %w", err)
+		}
+	}
+
+	if a.Status != nil {
+		object["status"], err = json.Marshal(a.Status)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'status': %w", err)
+		}
+	}
+
+	if a.Title != nil {
+		object["title"], err = json.Marshal(a.Title)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'title': %w", err)
+		}
+	}
+
+	if a.Type != nil {
+		object["type"], err = json.Marshal(a.Type)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'type': %w", err)
+		}
+	}
+
+	for fieldName, field := range a.AdditionalProperties {
+		object[fieldName], err = json.Marshal(field)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling '%s': %w", fieldName, err)
+		}
+	}
+	return json.Marshal(object)
+}

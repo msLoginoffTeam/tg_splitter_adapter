@@ -34,7 +34,7 @@ func main() {
 		{Command: "creategroup", Description: "Создать новую группу"},
 		{Command: "addtogroup", Description: "Добавить меня в группу: /команда id_группы"},
 		{Command: "groupdetails", Description: "Информация о группе: /команда id_группы"},
-		{Command: "renamegroup", Description: "Переименовать группу: /команда новое_название группы"},
+		{Command: "getchatgroups", Description: "Получение всех групп привязанных к чату"},
 		{Command: "help", Description: "Список команд"},
 	}
 	if _, err := bot.Request(tgbotapi.NewSetMyCommands(commands...)); err != nil {
@@ -60,18 +60,12 @@ func main() {
 	adapter := tgutils.NewCommandAdapter(tgutils.SimpleSplitter{})
 
 	// Хранилище состояний пользователей
-	userStates := make(map[int64]string)
-	userChoiceState := make(map[int64]uuid.UUID)
-	userChoiceTitleState := make(map[int64]string)
-	userExpenceCreated := make(map[int64]uuid.UUID)
+	userStates := make(map[int64]string)            //стейт для определения на каком этапе находится человек
+	userChoiceState := make(map[int64]uuid.UUID)    //стейт для определения выбранной/созданной группы
+	userChoiceTitleState := make(map[int64]string)  //стейт для определения выбранного названия для группы
+	userExpenceCreated := make(map[int64]uuid.UUID) //стейт для определения выбранной/созданной траты
 
 	for update := range updates {
-		//if update.CallbackQuery != nil {
-		//	// Обрабатываем callback-запросы
-		//	handles.HandleCallbackQuery(bot, update.CallbackQuery, userStates, apiClient)
-		//	continue
-		//}
-
 		if update.Message == nil {
 			continue
 		}

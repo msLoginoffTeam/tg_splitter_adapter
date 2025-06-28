@@ -20,7 +20,9 @@ func HandleCommand(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *client.Cl
 
 	msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
 	msg.ReplyToMessageID = update.Message.MessageID
-
+	if !update.Message.IsCommand() {
+		return
+	}
 	switch update.Message.Command() {
 	case "start":
 		msg.Text = "Тут бы что-то написать"
@@ -123,9 +125,45 @@ func HandleCommand(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *client.Cl
 		}
 
 		msg.Text = "Пользователь успешно добавлен"
+	case "getchatgroups":
+		tgChatId := update.Message.Chat.ID
+		params := client.GetApiGroupsParams{
+			TelegramChatId: &tgChatId,
+		}
+		resp, err := api.GetApiGroups(context.Background(), &params)
+		if err != nil {
+			msg.Text = "API недоступно"
+			bot.Send(msg)
+			break
+		}
+		defer resp.Body.Close()
 
-	case "renamegroup":
-		msg.Text = "Еще не добавлено!"
+		if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
+			body, _ := io.ReadAll(resp.Body)
+			fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
+			msg.Text = "Не удалось получить ответ от сервера"
+			bot.Send(msg)
+			break
+		}
+
+		var result []swagger.GroupOverviewResponseDto
+		if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+			fmt.Errorf("failed to decode response: %w", err)
+			msg.Text = "Не удалось расшифровать ответ"
+			bot.Send(msg)
+			break
+		}
+		if len(result) == 0 {
+			msg.Text = "Нет групп привязанных к чату"
+			break
+		}
+		msg.Text = "Группы, привязанные к чату: \n"
+		for i, group := range result {
+			msg.Text += strconv.Itoa(i+1) + ": \n"
+			msg.Text += "Id_группы: " + group.Id.String() + "\n"
+			msg.Text += "Название группы: " + *group.Title + "\n"
+		}
+
 	case "groupdetails":
 		_, args := adapter.ParseCommand(update.Message.Text)
 		if len(args) < 1 {
