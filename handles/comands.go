@@ -44,7 +44,7 @@ func HandleCommand(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *client.Cl
 		if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
 			body, _ := io.ReadAll(resp.Body)
 			fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-			msg.Text = "Команда не выполнилась из-за ошибки в команде"
+			msg.Text = "Вы уже зарегистрированы"
 			break
 		}
 
