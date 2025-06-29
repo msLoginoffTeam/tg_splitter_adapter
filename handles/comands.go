@@ -25,7 +25,7 @@ func HandleCommand(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *client.Cl
 	}
 	switch update.Message.Command() {
 	case "start":
-		msg.Text = "Тут бы что-то написать"
+		msg.Text = "Для начала работы с ботом зайдите к нему в личные сообщения"
 	case "register":
 		userId := update.Message.From.ID
 
@@ -160,10 +160,11 @@ func HandleCommand(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *client.Cl
 		msg.Text = "Группы, привязанные к чату: \n"
 		for i, group := range result {
 			msg.Text += strconv.Itoa(i+1) + ": \n"
-			msg.Text += "Id_группы: " + group.Id.String() + "\n"
+			msg.Text += "Id_группы: `" + group.Id.String() + "`\n"
 			msg.Text += "Название группы: " + *group.Title + "\n"
 		}
-
+		msg.ParseMode = "MarkdownV2"
+		msg.Text = escapeMarkdown(msg.Text)
 	case "groupdetails":
 		_, args := adapter.ParseCommand(update.Message.Text)
 		if len(args) < 1 {
