@@ -2268,6 +2268,10 @@
             "type": "string",
             "format": "uuid"
           },
+          "createdByName": {
+            "type": "string",
+            "nullable": true
+          },
           "createdAt": {
             "type": "string",
             "format": "date-time"
@@ -2305,6 +2309,10 @@
           "userId": {
             "type": "string",
             "format": "uuid"
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
           },
           "amount": {
             "type": "number",
@@ -2398,9 +2406,17 @@
             "type": "string",
             "format": "uuid"
           },
+          "fromUserName": {
+            "type": "string",
+            "nullable": true
+          },
           "toUserId": {
             "type": "string",
             "format": "uuid"
+          },
+          "toUserName": {
+            "type": "string",
+            "nullable": true
           },
           "amount": {
             "type": "number",
@@ -2447,9 +2463,17 @@
             "type": "string",
             "format": "uuid"
           },
+          "fromUserName": {
+            "type": "string",
+            "nullable": true
+          },
           "toUserId": {
             "type": "string",
             "format": "uuid"
+          },
+          "toUserName": {
+            "type": "string",
+            "nullable": true
           },
           "amount": {
             "type": "number",
@@ -2511,6 +2535,10 @@
           "balance": {
             "type": "number",
             "format": "double"
+          },
+          "displayName": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

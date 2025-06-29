@@ -53,13 +53,14 @@ type CreatePaymentForExpenseRequestDto struct {
 
 // ExpenseResponseDto defines model for ExpenseResponseDto.
 type ExpenseResponseDto struct {
-	CreatedAt   *time.Time                 `json:"createdAt,omitempty"`
-	CreatedById *openapi_types.UUID        `json:"createdById,omitempty"`
-	Id          *openapi_types.UUID        `json:"id,omitempty"`
-	IsDraft     *bool                      `json:"isDraft,omitempty"`
-	Shares      *[]ExpenseShareResponseDto `json:"shares"`
-	Title       *string                    `json:"title"`
-	TotalAmount *float64                   `json:"totalAmount,omitempty"`
+	CreatedAt     *time.Time                 `json:"createdAt,omitempty"`
+	CreatedById   *openapi_types.UUID        `json:"createdById,omitempty"`
+	CreatedByName *string                    `json:"createdByName"`
+	Id            *openapi_types.UUID        `json:"id,omitempty"`
+	IsDraft       *bool                      `json:"isDraft,omitempty"`
+	Shares        *[]ExpenseShareResponseDto `json:"shares"`
+	Title         *string                    `json:"title"`
+	TotalAmount   *float64                   `json:"totalAmount,omitempty"`
 }
 
 // ExpenseShareCreateDto defines model for ExpenseShareCreateDto.
@@ -70,9 +71,10 @@ type ExpenseShareCreateDto struct {
 
 // ExpenseShareResponseDto defines model for ExpenseShareResponseDto.
 type ExpenseShareResponseDto struct {
-	Amount *float64            `json:"amount,omitempty"`
-	IsPaid *bool               `json:"isPaid,omitempty"`
-	UserId *openapi_types.UUID `json:"userId,omitempty"`
+	Amount   *float64            `json:"amount,omitempty"`
+	IsPaid   *bool               `json:"isPaid,omitempty"`
+	UserId   *openapi_types.UUID `json:"userId,omitempty"`
+	UserName *string             `json:"userName"`
 }
 
 // GroupOverviewResponseDto defines model for GroupOverviewResponseDto.
@@ -100,12 +102,14 @@ type OperationHistoryResponseDto struct {
 
 // PaymentResponseDto defines model for PaymentResponseDto.
 type PaymentResponseDto struct {
-	Amount     *float64            `json:"amount,omitempty"`
-	ExpenseId  *openapi_types.UUID `json:"expenseId"`
-	FromUserId *openapi_types.UUID `json:"fromUserId,omitempty"`
-	Id         *openapi_types.UUID `json:"id,omitempty"`
-	Timestamp  *time.Time          `json:"timestamp,omitempty"`
-	ToUserId   *openapi_types.UUID `json:"toUserId,omitempty"`
+	Amount       *float64            `json:"amount,omitempty"`
+	ExpenseId    *openapi_types.UUID `json:"expenseId"`
+	FromUserId   *openapi_types.UUID `json:"fromUserId,omitempty"`
+	FromUserName *string             `json:"fromUserName"`
+	Id           *openapi_types.UUID `json:"id,omitempty"`
+	Timestamp    *time.Time          `json:"timestamp,omitempty"`
+	ToUserId     *openapi_types.UUID `json:"toUserId,omitempty"`
+	ToUserName   *string             `json:"toUserName"`
 }
 
 // ProblemDetails defines model for ProblemDetails.
@@ -120,9 +124,11 @@ type ProblemDetails struct {
 
 // TransferSuggestionDto defines model for TransferSuggestionDto.
 type TransferSuggestionDto struct {
-	Amount     *float64            `json:"amount,omitempty"`
-	FromUserId *openapi_types.UUID `json:"fromUserId,omitempty"`
-	ToUserId   *openapi_types.UUID `json:"toUserId,omitempty"`
+	Amount       *float64            `json:"amount,omitempty"`
+	FromUserId   *openapi_types.UUID `json:"fromUserId,omitempty"`
+	FromUserName *string             `json:"fromUserName"`
+	ToUserId     *openapi_types.UUID `json:"toUserId,omitempty"`
+	ToUserName   *string             `json:"toUserName"`
 }
 
 // TransferSuggestionsResponseDto defines model for TransferSuggestionsResponseDto.
@@ -147,8 +153,9 @@ type UpdateUserRequestDto struct {
 
 // UserBalanceResponseDto defines model for UserBalanceResponseDto.
 type UserBalanceResponseDto struct {
-	Balance *float64            `json:"balance,omitempty"`
-	UserId  *openapi_types.UUID `json:"userId,omitempty"`
+	Balance     *float64            `json:"balance,omitempty"`
+	DisplayName *string             `json:"displayName"`
+	UserId      *openapi_types.UUID `json:"userId,omitempty"`
 }
 
 // UserCreateRequestDto defines model for UserCreateRequestDto.

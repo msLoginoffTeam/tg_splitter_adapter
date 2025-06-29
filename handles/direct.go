@@ -17,7 +17,7 @@ import (
 	openapi_types "github.com/oapi-codegen/runtime/types"
 )
 
-func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *client.ClientWithResponses, adapter *tgutils.CommandAdapter, userStates map[int64]string, userChoiceState map[int64]uuid.UUID, userChoiceTitleState map[int64]string, userExpenceCreated map[int64]uuid.UUID, userSysID map[int64]uuid.UUID) {
+func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *client.ClientWithResponses, adapter *tgutils.CommandAdapter, userStates map[int64]string, userChoiceState map[int64]uuid.UUID, userChoiceTitleState map[int64]string, userExpenceCreated map[int64]uuid.UUID, userSysID map[int64]uuid.UUID, userPaymentID map[int64]uuid.UUID) {
 	chatID := update.Message.Chat.ID
 	userID := update.Message.From.ID
 	mainMenu := tgbotapi.NewReplyKeyboard(
@@ -27,6 +27,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 		),
 		tgbotapi.NewKeyboardButtonRow(
 			tgbotapi.NewKeyboardButton("Справка о тратах"),
+			tgbotapi.NewKeyboardButton("Платежи"),
 		),
 		tgbotapi.NewKeyboardButtonRow(
 			tgbotapi.NewKeyboardButton("Траты в группе"),
@@ -139,9 +140,6 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					tgbotapi.NewKeyboardButton("Трансферы"),
 				),
 				tgbotapi.NewKeyboardButtonRow(
-					tgbotapi.NewKeyboardButton("История"),
-				),
-				tgbotapi.NewKeyboardButtonRow(
 					tgbotapi.NewKeyboardButton("Вернуться в меню"),
 				),
 			)
@@ -153,29 +151,8 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			userStates[userID] = "waiting__balance_group_selection"
 			msg := tgbotapi.NewMessage(chatID, "")
 
-			reqParams := client.GetApiGroupsMyParams{
-				UserTelegramId: &userID,
-			}
-			resp, err := api.GetApiGroupsMy(context.Background(), &reqParams)
-			if err != nil {
-				msg.Text = "API недоступно"
-				bot.Send(msg)
-				break
-			}
-			defer resp.Body.Close()
-
-			if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-				body, _ := io.ReadAll(resp.Body)
-				fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-				msg.Text = "Не удалось получить ответ от сервера"
-				bot.Send(msg)
-				break
-			}
-
-			var result []swagger.GroupOverviewResponseDto
-			if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-				fmt.Errorf("failed to decode response: %w", err)
-				msg.Text = "Не удалось расшифровать ответ"
+			result := client.GetGroupByUseridUtil(api, userID, msg)
+			if msg.Text != "" {
 				bot.Send(msg)
 				break
 			}
@@ -195,29 +172,8 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			userStates[userID] = "waiting_transfer_group_selection"
 			msg := tgbotapi.NewMessage(chatID, "")
 
-			reqParams := client.GetApiGroupsMyParams{
-				UserTelegramId: &userID,
-			}
-			resp, err := api.GetApiGroupsMy(context.Background(), &reqParams)
-			if err != nil {
-				msg.Text = "API недоступно"
-				bot.Send(msg)
-				break
-			}
-			defer resp.Body.Close()
-
-			if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-				body, _ := io.ReadAll(resp.Body)
-				fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-				msg.Text = "Не удалось получить ответ от сервера"
-				bot.Send(msg)
-				break
-			}
-
-			var result []swagger.GroupOverviewResponseDto
-			if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-				fmt.Errorf("failed to decode response: %w", err)
-				msg.Text = "Не удалось расшифровать ответ"
+			result := client.GetGroupByUseridUtil(api, userID, msg)
+			if msg.Text != "" {
 				bot.Send(msg)
 				break
 			}
@@ -226,83 +182,44 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 				break
 			}
 
-			msg.Text = "Выберите группу для работы с тратами:\n"
+			msg.Text = "Выберите группу для получения трансферов:\n"
 
 			for i, group := range result {
 				msg.Text += strconv.Itoa(i+1) + ". Название: " + *group.Title + " \nId группы: " + group.Id.String() + "\n"
 			}
 
 			bot.Send(msg)
-		case "История":
-			userStates[userID] = "waiting_history_group_selection"
+		case "Платежи":
+			userStates[userID] = "waiting_payments_group_selection"
+
 			msg := tgbotapi.NewMessage(chatID, "")
 
-			reqParams := client.GetApiGroupsMyParams{
-				UserTelegramId: &userID,
-			}
-			resp, err := api.GetApiGroupsMy(context.Background(), &reqParams)
-			if err != nil {
-				msg.Text = "API недоступно"
-				bot.Send(msg)
-				break
-			}
-			defer resp.Body.Close()
-
-			if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-				body, _ := io.ReadAll(resp.Body)
-				fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-				msg.Text = "Не удалось получить ответ от сервера"
-				bot.Send(msg)
-				break
-			}
-
-			var result []swagger.GroupOverviewResponseDto
-			if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-				fmt.Errorf("failed to decode response: %w", err)
-				msg.Text = "Не удалось расшифровать ответ"
+			result := client.GetGroupByUseridUtil(api, userID, msg)
+			if msg.Text != "" {
 				bot.Send(msg)
 				break
 			}
 			if len(result) == 0 {
 				msg.Text = "Группы не найдены - создайте!!"
+				bot.Send(msg)
 				break
 			}
 
-			msg.Text = "Выберите группу для работы с тратами:\n"
+			msg.Text = "Выберите группу для работы с переводами:\n"
 
 			for i, group := range result {
 				msg.Text += strconv.Itoa(i+1) + ". Название: " + *group.Title + " \nId группы: " + group.Id.String() + "\n"
 			}
 
 			bot.Send(msg)
+
 		case "Группы пользователя":
 			userStates[userID] = "waiting_group_selection"
 
 			msg := tgbotapi.NewMessage(chatID, "")
 
-			reqParams := client.GetApiGroupsMyParams{
-				UserTelegramId: &userID,
-			}
-			resp, err := api.GetApiGroupsMy(context.Background(), &reqParams)
-			if err != nil {
-				msg.Text = "API недоступно"
-				bot.Send(msg)
-				break
-			}
-			defer resp.Body.Close()
-
-			if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-				body, _ := io.ReadAll(resp.Body)
-				fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-				msg.Text = "Не удалось получить ответ от сервера"
-				bot.Send(msg)
-				break
-			}
-
-			var result []swagger.GroupOverviewResponseDto
-			if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-				fmt.Errorf("failed to decode response: %w", err)
-				msg.Text = "Не удалось расшифровать ответ"
+			result := client.GetGroupByUseridUtil(api, userID, msg)
+			if msg.Text != "" {
 				bot.Send(msg)
 				break
 			}
@@ -322,32 +239,12 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			userStates[userID] = "waiting_expense_group_selection"
 			msg := tgbotapi.NewMessage(chatID, "")
 
-			reqParams := client.GetApiGroupsMyParams{
-				UserTelegramId: &userID,
-			}
-			resp, err := api.GetApiGroupsMy(context.Background(), &reqParams)
-			if err != nil {
-				msg.Text = "API недоступно"
-				bot.Send(msg)
-				break
-			}
-			defer resp.Body.Close()
-
-			if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-				body, _ := io.ReadAll(resp.Body)
-				fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-				msg.Text = "Не удалось получить ответ от сервера"
+			result := client.GetGroupByUseridUtil(api, userID, msg)
+			if msg.Text != "" {
 				bot.Send(msg)
 				break
 			}
 
-			var result []swagger.GroupOverviewResponseDto
-			if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-				fmt.Errorf("failed to decode response: %w", err)
-				msg.Text = "Не удалось расшифровать ответ"
-				bot.Send(msg)
-				break
-			}
 			if len(result) == 0 {
 				msg.Text = "Группы не найдены - создайте!!"
 				break
@@ -369,26 +266,8 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			userStates[userID] = "waiting_expense_selection"
 			msg := tgbotapi.NewMessage(chatID, "")
 
-			resp, err := api.GetApiExpensesGroupGroupId(context.Background(), userChoiceState[userID], nil)
-			if err != nil {
-				msg.Text = "API недоступно"
-				bot.Send(msg)
-				break
-			}
-			defer resp.Body.Close()
-
-			if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-				body, _ := io.ReadAll(resp.Body)
-				fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-				msg.Text = "Не удалось получить ответ от сервера"
-				bot.Send(msg)
-				break
-			}
-
-			var result []swagger.ExpenseResponseDto
-			if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-				fmt.Errorf("failed to decode response: %w", err)
-				msg.Text = "Не удалось расшифровать ответ"
+			result := client.GetAllExpensesByGroupUtil(api, userID, msg, userChoiceState)
+			if msg.Text != "" {
 				bot.Send(msg)
 				break
 			}
@@ -426,6 +305,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 				body, _ := io.ReadAll(respGroups.Body)
 				fmt.Errorf("unexpected status code: %d, body: %s", respGroups.StatusCode, string(body))
 				msg.Text = "Не удалось получить ответ от сервера"
+				bot.Send(msg)
 				break
 			}
 
@@ -433,6 +313,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			if err := json.NewDecoder(respGroups.Body).Decode(&resultGroups); err != nil {
 				fmt.Errorf("failed to decode response: %w", err)
 				msg.Text = "Не удалось расшифровать ответ"
+				bot.Send(msg)
 				break
 			}
 
@@ -465,6 +346,146 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			}
 
 			msg.Text = "Трата успешно удалена"
+			bot.Send(msg)
+		case "Создать оплату":
+			msg := tgbotapi.NewMessage(chatID, "")
+			expenseMenu := tgbotapi.NewReplyKeyboard(
+				tgbotapi.NewKeyboardButtonRow(
+					tgbotapi.NewKeyboardButton("Привязанный перевод"),
+				),
+				tgbotapi.NewKeyboardButtonRow(
+					tgbotapi.NewKeyboardButton("Свободный перевод"),
+				),
+				tgbotapi.NewKeyboardButtonRow(
+					tgbotapi.NewKeyboardButton("Вернуться в меню"),
+				),
+			)
+			msg = tgbotapi.NewMessage(chatID, "Привязать перевод к трате или нет:")
+			msg.ReplyMarkup = expenseMenu
+			bot.Send(msg)
+		case "Привязанный перевод":
+			msg := tgbotapi.NewMessage(chatID, "")
+			result := client.GetAllExpensesByGroupUtil(api, userID, msg, userChoiceState)
+			if msg.Text != "" {
+				bot.Send(msg)
+				break
+			}
+			if len(result) == 0 {
+				msg.Text = "Траты не найдены - создайте!!"
+				break
+			}
+			msg.Text = "Список трат:\n"
+			for i, expense := range result {
+				msg.Text += strconv.Itoa(i) + ".\n"
+				msg.Text += "Название траты: " + *expense.Title + "\n"
+				msg.Text += "Общая сумма: " + strconv.Itoa(int(*expense.TotalAmount)) + "\n"
+				msg.Text += "Id_траты: " + expense.Id.String() + "\n"
+			}
+			msg.Text += "\n\nВведите id траты:"
+			userStates[userID] = "waiting_payment_expense_users"
+			bot.Send(msg)
+
+		case "Свободный перевод":
+			msg := tgbotapi.NewMessage(chatID, "")
+			respGroups, err := api.GetApiGroupsGroupId(context.Background(), userChoiceState[userID])
+			if err != nil {
+				msg.Text = "API недоступно"
+				bot.Send(msg)
+				break
+			}
+			defer respGroups.Body.Close()
+
+			if respGroups.StatusCode != http.StatusOK && respGroups.StatusCode != http.StatusCreated {
+				body, _ := io.ReadAll(respGroups.Body)
+				fmt.Errorf("unexpected status code: %d, body: %s", respGroups.StatusCode, string(body))
+				msg.Text = "Не удалось получить ответ от сервера"
+				bot.Send(msg)
+				break
+			}
+
+			var resultGroups swagger.GroupResponseDto
+			if err := json.NewDecoder(respGroups.Body).Decode(&resultGroups); err != nil {
+				fmt.Errorf("failed to decode response: %w", err)
+				msg.Text = "Не удалось расшифровать ответ"
+				bot.Send(msg)
+				break
+			}
+
+			msg.Text = "Пользователи: \n\n"
+
+			for i, member := range *resultGroups.Users {
+				msg.Text += strconv.Itoa(i+1) + ". " + "Id: " + member.Id.String() + "\n Имя в системе: " + *member.DisplayName + "\n\n"
+			}
+			msg.Text += "\n\nВведите id человека, которому будете переводить деньги:"
+			userStates[userID] = "waiting_payment_user_users"
+			bot.Send(msg)
+		case "Изменить оплату":
+			msg := tgbotapi.NewMessage(chatID, "")
+			result := client.GetPaymentsByGroupIdUtil(api, userChoiceState[userID], msg)
+
+			msg.Text = "Платежи: \n\n"
+
+			for i, payment := range result {
+				msg.Text += strconv.Itoa(i+1) + ":\n"
+				msg.Text += "Id_траты: " + payment.Id.String() + "\n"
+				if payment.ExpenseId != nil {
+					msg.Text += "От кого: " + payment.ExpenseId.String() + "\n"
+				}
+				if payment.FromUserName != nil {
+					msg.Text += "От кого: " + *payment.FromUserName + "\n"
+				}
+				if payment.ToUserName != nil {
+					msg.Text += "Кому: " + *payment.ToUserName + "\n"
+				}
+				msg.Text += "Сумма: " + strconv.Itoa(int(*payment.Amount)) + "\n"
+			}
+			msg.Text += "\n\nВведите id перевода который котите редактировать:"
+			userStates[userID] = "waiting_payment"
+			bot.Send(msg)
+		case "Удалить оплату":
+			msg := tgbotapi.NewMessage(chatID, "")
+			result := client.GetPaymentsByGroupIdUtil(api, userChoiceState[userID], msg)
+
+			msg.Text = "Платежи: \n\n"
+
+			for i, payment := range result {
+				msg.Text += strconv.Itoa(i+1) + ":\n"
+				msg.Text += "Id_траты: " + payment.Id.String() + "\n"
+				if payment.ExpenseId != nil {
+					msg.Text += "От кого: " + payment.ExpenseId.String() + "\n"
+				}
+				if payment.FromUserName != nil {
+					msg.Text += "От кого: " + *payment.FromUserName + "\n"
+				}
+				if payment.ToUserName != nil {
+					msg.Text += "Кому: " + *payment.ToUserName + "\n"
+				}
+				msg.Text += "Сумма: " + strconv.Itoa(int(*payment.Amount)) + "\n"
+			}
+			msg.Text += "\n\nВведите id перевода который котите редактировать:"
+			userStates[userID] = "waiting_payment_to_delete"
+			bot.Send(msg)
+		case "Получить список оплат":
+			msg := tgbotapi.NewMessage(chatID, "")
+			result := client.GetPaymentsByGroupIdUtil(api, userChoiceState[userID], msg)
+
+			msg.Text = "Платежи: \n\n"
+
+			for i, payment := range result {
+				msg.Text += strconv.Itoa(i+1) + ":\n"
+				msg.Text += "Id_траты: " + payment.Id.String() + "\n"
+				if payment.ExpenseId != nil {
+					msg.Text += "От кого: " + payment.ExpenseId.String() + "\n"
+				}
+				if payment.FromUserName != nil {
+					msg.Text += "От кого: " + *payment.FromUserName + "\n"
+				}
+				if payment.ToUserName != nil {
+					msg.Text += "Кому: " + *payment.ToUserName + "\n"
+				}
+				msg.Text += "Сумма: " + strconv.Itoa(int(*payment.Amount)) + "\n"
+			}
+			msg.ReplyMarkup = mainMenu
 			bot.Send(msg)
 
 		default:
@@ -541,7 +562,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 
 					for i, balance := range *result.Balances {
 						msg.Text += strconv.Itoa(i+1) + ": \n"
-						msg.Text += "Id юзера: " + balance.UserId.String() + "\n"
+						msg.Text += "Id юзера: " + *balance.DisplayName + "\n"
 						msg.Text += "Баланс: " + strconv.Itoa(int(*balance.Balance)) + "\n\n"
 					}
 					bot.Send(msg)
@@ -583,56 +604,11 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 
 					for i, transfer := range *result.Transfers {
 						msg.Text += strconv.Itoa(i+1) + ": \n"
-						msg.Text += "Id юзера отправителя: " + transfer.FromUserId.String() + "\n"
-						msg.Text += "Id юзера получателя: " + transfer.ToUserId.String() + "\n"
+						msg.Text += "Имя отправителя: " + *transfer.FromUserName + "\n"
+						msg.Text += "Имя получателя: " + *transfer.ToUserName + "\n"
 						msg.Text += "Баланс: " + strconv.Itoa(int(*transfer.Amount)) + "\n\n"
 					}
 					bot.Send(msg)
-				case "waiting_history_group_selection":
-					msg := tgbotapi.NewMessage(chatID, "")
-					groupId, err := stringToUUID(update.Message.Text)
-					if err != nil {
-						msg.Text = "Не получилось обработать id"
-						bot.Send(msg)
-						break
-					}
-
-					resp, err := api.GetApiGroupsGroupIdHistory(context.Background(), groupId)
-					if err != nil {
-						msg.Text = "API недоступно"
-						bot.Send(msg)
-						break
-					}
-					defer resp.Body.Close()
-
-					if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-						body, _ := io.ReadAll(resp.Body)
-						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-						msg.Text = "Не удалось получить ответ от сервера"
-						bot.Send(msg)
-						break
-					}
-
-					var result []swagger.OperationHistoryResponseDto
-					if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-						fmt.Errorf("failed to decode response: %w", err)
-						msg.Text = "Не удалось расшифровать ответ"
-						bot.Send(msg)
-						break
-					}
-					if len(result) == 0 {
-						msg.Text = "Нет истории переводов"
-						bot.Send(msg)
-						break
-					}
-
-					for i, history := range result {
-						msg.Text += strconv.Itoa(i+1) + ": \n"
-						msg.Text += "Id юзера: " + *history.Type + "\n"
-						msg.Text += "Id юзера: " + *history.Description + "\n"
-					}
-					bot.Send(msg)
-
 				case "waiting_expense_group_selection":
 					msg := tgbotapi.NewMessage(chatID, "")
 					groupId, err := stringToUUID(update.Message.Text)
@@ -684,30 +660,8 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 						bot.Send(msg)
 						break
 					}
-					idGroup := openapi_types.UUID(userChoiceState[userID])
-					paramsExpense := client.GetApiExpensesExpenseIdParams{
-						GroupId: &idGroup,
-					}
-					resp, err := api.GetApiExpensesExpenseId(context.Background(), expenseId, &paramsExpense)
-					if err != nil {
-						msg.Text = "API недоступно"
-						bot.Send(msg)
-						break
-					}
-					defer resp.Body.Close()
-
-					if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-						body, _ := io.ReadAll(resp.Body)
-						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-						msg.Text = "Не удалось получить ответ от сервера"
-						bot.Send(msg)
-						break
-					}
-
-					var result swagger.ExpenseResponseDto
-					if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-						fmt.Errorf("failed to decode response: %w", err)
-						msg.Text = "Не удалось расшифровать ответ"
+					result := client.GetExpenseByIdUtil(api, userID, expenseId, msg, userChoiceState)
+					if msg.Text != "" {
 						bot.Send(msg)
 						break
 					}
@@ -751,8 +705,8 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 				case "waiting_expense_amount":
 
 					msg := tgbotapi.NewMessage(chatID, "")
-					creatorId, err := swagger.GetUserUUIDbyid(api, userID, msg)
-					if err != nil {
+					creatorId := client.GetUserUUIDbyid(api, userID, msg)
+					if msg.Text != "" {
 						bot.Send(msg)
 						break
 					}
@@ -935,6 +889,255 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					}
 
 					msg.Text = "Имя успешно изменено"
+					bot.Send(msg)
+
+				case "waiting_payment_to_delete":
+					msg := tgbotapi.NewMessage(chatID, "")
+					paymentId, err := stringToUUID(update.Message.Text)
+					if err != nil {
+						msg.Text = "Не получилось обработать id"
+						bot.Send(msg)
+						break
+					}
+					respGroups, err := api.DeleteApiGroupsGroupIdPaymentsPaymentId(context.Background(), userChoiceState[userID], paymentId)
+					if err != nil {
+						msg.Text = "API недоступно"
+						bot.Send(msg)
+						break
+					}
+					defer respGroups.Body.Close()
+
+					if respGroups.StatusCode != http.StatusOK && respGroups.StatusCode != http.StatusCreated {
+						body, _ := io.ReadAll(respGroups.Body)
+						fmt.Errorf("unexpected status code: %d, body: %s", respGroups.StatusCode, string(body))
+						msg.Text = "Не удалось получить ответ от сервера"
+						bot.Send(msg)
+						break
+					}
+
+					msg.Text = "Платеж успешно удален!"
+					msg.ReplyMarkup = mainMenu
+					bot.Send(msg)
+				case "waiting_payment":
+					msg := tgbotapi.NewMessage(chatID, "")
+					paymentId, err := stringToUUID(update.Message.Text)
+					if err != nil {
+						msg.Text = "Не получилось обработать id"
+						bot.Send(msg)
+						break
+					}
+
+					userPaymentID[userID] = paymentId
+					msg.Text = "Введите новую сумму платежа"
+					bot.Send(msg)
+					userStates[userID] = "waiting_payment_amount_edit"
+
+				case "waiting_payment_amount_edit":
+					msg := tgbotapi.NewMessage(chatID, "")
+					amount, err := strconv.ParseFloat(update.Message.Text, 64)
+					if err != nil {
+						msg.Text = "Некорректный ввод, попробуйте заново"
+						bot.Send(msg)
+						break
+					}
+					reqBody := client.UpdatePaymentRequestDto{
+						Amount: &amount,
+					}
+					respGroups, err := api.PutApiGroupsGroupIdPaymentsPaymentId(context.Background(), userChoiceState[userID], userPaymentID[userID], reqBody)
+					if err != nil {
+						msg.Text = "API недоступно"
+						bot.Send(msg)
+						break
+					}
+					defer respGroups.Body.Close()
+
+					if respGroups.StatusCode != http.StatusOK && respGroups.StatusCode != http.StatusCreated {
+						body, _ := io.ReadAll(respGroups.Body)
+						fmt.Errorf("unexpected status code: %d, body: %s", respGroups.StatusCode, string(body))
+						msg.Text = "Не удалось получить ответ от сервера"
+						bot.Send(msg)
+						break
+					}
+
+					msg.Text = "Платеж успешно изменен!"
+					msg.ReplyMarkup = mainMenu
+					bot.Send(msg)
+
+				case "waiting_payment_user_users":
+					msg := tgbotapi.NewMessage(chatID, "")
+					userId, err := stringToUUID(update.Message.Text)
+					if err != nil {
+						msg.Text = "Не получилось обработать id"
+						bot.Send(msg)
+						break
+					}
+
+					userSysID[userID] = userId
+					msg.Text = "Введите сумму платежа"
+					bot.Send(msg)
+					userStates[userID] = "waiting_payment_amount_users"
+
+				case "waiting_payment_amount_users":
+					msg := tgbotapi.NewMessage(chatID, "")
+					amount, err := strconv.ParseFloat(update.Message.Text, 64)
+					if err != nil {
+						msg.Text = "Некорректный ввод, попробуйте заново"
+						bot.Send(msg)
+						break
+					}
+
+					userSysId := client.GetUserUUIDbyid(api, userID, msg)
+					if msg.Text != "" {
+						bot.Send(msg)
+						break
+					}
+					toUserId := userSysID[userID]
+					reqBody := client.CreateDirectPaymentRequestDto{
+						Amount:     &amount,
+						FromUserId: userSysId,
+						ToUserId:   &toUserId,
+					}
+					respGroups, err := api.PostApiGroupsGroupIdPaymentsDirect(context.Background(), userChoiceState[userID], reqBody)
+					if err != nil {
+						msg.Text = "API недоступно"
+						bot.Send(msg)
+						break
+					}
+					defer respGroups.Body.Close()
+
+					if respGroups.StatusCode != http.StatusOK && respGroups.StatusCode != http.StatusCreated {
+						body, _ := io.ReadAll(respGroups.Body)
+						fmt.Errorf("unexpected status code: %d, body: %s", respGroups.StatusCode, string(body))
+						msg.Text = "Не удалось получить ответ от сервера"
+						bot.Send(msg)
+						break
+					}
+
+					var resultGroups swagger.PaymentResponseDto
+					if err := json.NewDecoder(respGroups.Body).Decode(&resultGroups); err != nil {
+						fmt.Errorf("failed to decode response: %w", err)
+						msg.Text = "Не удалось расшифровать ответ"
+						bot.Send(msg)
+						break
+					}
+
+					msg.Text = "Платеж успешно создан!"
+					msg.ReplyMarkup = mainMenu
+					bot.Send(msg)
+				case "waiting_payment_expense_users":
+					msg := tgbotapi.NewMessage(chatID, "")
+					expenseId, err := stringToUUID(update.Message.Text)
+					if err != nil {
+						msg.Text = "Не получилось обработать id"
+						bot.Send(msg)
+						break
+					}
+					_ = client.GetExpenseByIdUtil(api, userID, expenseId, msg, userChoiceState)
+					if msg.Text != "" {
+						bot.Send(msg)
+						break
+					}
+
+					userExpenceCreated[userID] = expenseId
+					msg.Text = "Введите сумму платежа"
+					bot.Send(msg)
+					userStates[userID] = "waiting_payment_expense_amount_users"
+
+				case "waiting_payment_expense_amount_users":
+					msg := tgbotapi.NewMessage(chatID, "")
+					amount, err := strconv.ParseFloat(update.Message.Text, 64)
+					if err != nil {
+						msg.Text = "Некорректный ввод суммы траты, попробуйте заново"
+						bot.Send(msg)
+						break
+					}
+
+					userSysId := client.GetUserUUIDbyid(api, userID, msg)
+					if msg.Text != "" {
+						bot.Send(msg)
+						break
+					}
+
+					expenseId := userExpenceCreated[userID]
+					reqBody := client.CreatePaymentForExpenseRequestDto{
+						Amount:     &amount,
+						ExpenseId:  &expenseId,
+						FromUserId: userSysId,
+					}
+					respGroups, err := api.PostApiGroupsGroupIdPaymentsExpense(context.Background(), userChoiceState[userID], reqBody)
+					if err != nil {
+						msg.Text = "API недоступно"
+						bot.Send(msg)
+						break
+					}
+					defer respGroups.Body.Close()
+
+					if respGroups.StatusCode != http.StatusOK && respGroups.StatusCode != http.StatusCreated {
+						body, _ := io.ReadAll(respGroups.Body)
+						fmt.Errorf("unexpected status code: %d, body: %s", respGroups.StatusCode, string(body))
+						msg.Text = "Не удалось получить ответ от сервера"
+						bot.Send(msg)
+						break
+					}
+
+					var resultGroups swagger.PaymentResponseDto
+					if err := json.NewDecoder(respGroups.Body).Decode(&resultGroups); err != nil {
+						fmt.Errorf("failed to decode response: %w", err)
+						msg.Text = "Не удалось расшифровать ответ"
+						bot.Send(msg)
+						break
+					}
+
+					msg.Text = "Платеж успешно создан!"
+					msg.ReplyMarkup = mainMenu
+					bot.Send(msg)
+
+				case "waiting_payments_group_selection":
+					msg := tgbotapi.NewMessage(chatID, "")
+					groupId, err := stringToUUID(update.Message.Text)
+					if err != nil {
+						msg.Text = "Не получилось обработать id"
+						break
+					}
+
+					resp, err := api.GetApiGroupsGroupId(context.Background(), groupId)
+					if err != nil {
+						msg.Text = "API недоступно"
+						break
+					}
+					defer resp.Body.Close()
+
+					if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
+						body, _ := io.ReadAll(resp.Body)
+						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
+						msg.Text = "Не удалось получить ответ от сервера"
+						break
+					}
+
+					var result swagger.GroupResponseDto
+					if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+						fmt.Errorf("failed to decode response: %w", err)
+						msg.Text = "Не удалось расшифровать ответ"
+						break
+					}
+
+					userChoiceState[userID] = groupId
+
+					paymentMenu := tgbotapi.NewReplyKeyboard(
+						tgbotapi.NewKeyboardButtonRow(
+							tgbotapi.NewKeyboardButton("Создать оплату"),
+							tgbotapi.NewKeyboardButton("Изменить оплату"),
+						),
+						tgbotapi.NewKeyboardButtonRow(
+							tgbotapi.NewKeyboardButton("Получить список оплат"),
+							tgbotapi.NewKeyboardButton("Удалить оплату"),
+						),
+						tgbotapi.NewKeyboardButtonRow(
+							tgbotapi.NewKeyboardButton("Вернуться в меню"),
+						),
+					)
+					msg = tgbotapi.NewMessage(chatID, "Выберите действие с переводами:")
+					msg.ReplyMarkup = paymentMenu
 					bot.Send(msg)
 
 				case "waiting_new_expense_title_users":
