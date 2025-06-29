@@ -147,7 +147,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			msg = tgbotapi.NewMessage(
 				chatID,
 				fmt.Sprintf(
-					"Информация о вашем профиле:\n"+
+					"*Информация о вашем профиле:*\n\n"+
 						"Имя: %s\n"+
 						"ID юзера: `%s`", // UUID в code-блоке
 					*result.DisplayName,
@@ -187,10 +187,10 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 				break
 			}
 
-			msg.Text = "Выберите группу:\n"
+			msg.Text = "*Выберите группу:*\n\n"
 
 			for i, group := range result {
-				msg.Text += strconv.Itoa(i+1) + "\\. Название: " + *group.Title + " \nId группы: `" + group.Id.String() + "`\n"
+				msg.Text += strconv.Itoa(i+1) + "\\. Название: " + *group.Title + " \nId группы: `" + group.Id.String() + "`\n\n"
 			}
 			msg.ParseMode = "MarkdownV2"
 			userStates[userID] = "waiting_balance_group_selection"
@@ -210,10 +210,10 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 				break
 			}
 
-			msg.Text = "Выберите группу:\n"
+			msg.Text = "*Выберите группу:*\n\n"
 
 			for i, group := range result {
-				msg.Text += strconv.Itoa(i+1) + "\\. Название: " + *group.Title + " \nId группы: `" + group.Id.String() + "`\n"
+				msg.Text += strconv.Itoa(i+1) + "\\. Название: " + *group.Title + " \nId группы: `" + group.Id.String() + "`\n\n"
 			}
 			msg.ParseMode = "MarkdownV2"
 
@@ -234,10 +234,10 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 				break
 			}
 
-			msg.Text = "Выберите группу:\n"
+			msg.Text = "*Выберите группу:*\n\n"
 
 			for i, group := range result {
-				msg.Text += strconv.Itoa(i+1) + "\\. Название: " + *group.Title + " \nId группы: `" + group.Id.String() + "`\n"
+				msg.Text += strconv.Itoa(i+1) + "\\. Название: " + *group.Title + " \nId группы: `" + group.Id.String() + "`\n\n"
 			}
 			msg.ParseMode = "MarkdownV2"
 
@@ -259,10 +259,10 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 				break
 			}
 
-			msg.Text = "Выберите группу:\n"
+			msg.Text = "*Выберите группу:*\n\n"
 
 			for i, group := range result {
-				msg.Text += strconv.Itoa(i+1) + "\\. Название: " + *group.Title + " \nId группы: `" + group.Id.String() + "`\n"
+				msg.Text += strconv.Itoa(i+1) + "\\. Название: " + *group.Title + " \nId группы: `" + group.Id.String() + "`\n\n"
 			}
 			msg.ParseMode = "MarkdownV2"
 
@@ -290,10 +290,10 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 				break
 			}
 
-			msg.Text = "Выберите группу:\n"
+			msg.Text = "*Выберите группу:*\n\n"
 
 			for i, group := range result {
-				msg.Text += strconv.Itoa(i+1) + "\\. Название: " + *group.Title + " \nId группы: `" + group.Id.String() + "`\n"
+				msg.Text += strconv.Itoa(i+1) + "\\. Название: " + *group.Title + " \nId группы: `" + group.Id.String() + "`\n\n"
 			}
 			msg.ParseMode = "MarkdownV2"
 
@@ -313,10 +313,10 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 				break
 			}
 
-			msg.Text = "Выберите группу:\n"
+			msg.Text = "*Выберите группу:*\n\n"
 
 			for i, group := range result {
-				msg.Text += strconv.Itoa(i+1) + "\\. Название: " + *group.Title + " \nId группы: `" + group.Id.String() + "`\n"
+				msg.Text += strconv.Itoa(i+1) + "\\. Название: " + *group.Title + " \nId группы: `" + group.Id.String() + "`\n\n"
 			}
 			msg.ParseMode = "MarkdownV2"
 
@@ -368,10 +368,10 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 				break
 			}
 
-			msg.Text = "Выберите группу:\n"
+			msg.Text = "*Выберите группу:*\n\n"
 
 			for i, group := range result {
-				msg.Text += strconv.Itoa(i+1) + "\\. Название: " + *group.Title + " \nId группы: `" + group.Id.String() + "`\n"
+				msg.Text += strconv.Itoa(i+1) + "\\. Название: " + *group.Title + " \nId группы: `" + group.Id.String() + "`\n\n"
 			}
 			msg.ParseMode = "MarkdownV2"
 
@@ -406,12 +406,12 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 				break
 			}
 
-			msg.Text = fmt.Sprintf("Название группы: %s \n Id группы: `%s` \n Пользователи: \n", *resultGroups.Title, *resultGroups.Id)
+			msg.Text = fmt.Sprintf("Название группы: %s \n\n Пользователи: \n", *resultGroups.Title)
 
 			for i, member := range *resultGroups.Users {
 				msg.Text += strconv.Itoa(i+1) + ". " + "Id: `" + member.Id.String() + "`\n Имя в системе: " + *member.DisplayName + "\n\n"
 			}
-			msg.Text += "Введите id пользователя от имени которого будет создаваться трата:"
+			msg.Text += "*Введите id пользователя от имени которого будет создаваться трата:*"
 			msg.ParseMode = "MarkdownV2"
 			msg.Text = escapeMarkdown(msg.Text)
 			userStates[userID] = "waiting_3rd_person_expense_user"
@@ -445,7 +445,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 				bot.Send(msg)
 				break
 			}
-			msg.Text = "Список трат:\n"
+			msg.Text = "*Список трат:*\n\n"
 
 			for i, expense := range result {
 				msg.Text += strconv.Itoa(i+1) + ".\n"
@@ -492,7 +492,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 				break
 			}
 
-			msg.Text = fmt.Sprintf("Название группы: %s \nПользователи: \n", *resultGroups.Title)
+			msg.Text = fmt.Sprintf("*Название группы:* %s \n*Пользователи:* \n\n", *resultGroups.Title)
 
 			for i, member := range *resultGroups.Users {
 				msg.Text += strconv.Itoa(i+1) + ". " + "Id: `" + member.Id.String() + "`\n Имя в системе: " + *member.DisplayName + "\n\n"
@@ -500,7 +500,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			msg.ParseMode = "MarkdownV2"
 			msg.Text = escapeMarkdown(msg.Text)
 			userStates[userID] = "waiting_expense_users"
-			msg.Text += "Введите через пробел сумму которую должен человек и id человека"
+			msg.Text += "*Введите через пробел сумму которую должен человек и id человека*"
 			bot.Send(msg)
 
 		case "Удалить трату":
@@ -558,14 +558,14 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					"%d\\.\n"+
 						"Название траты: %s\n"+
 						"Общая сумма: %d\n"+
-						"ID траты: `%s`\n",
+						"ID траты: `%s`\n\n",
 					i+1,
 					*expense.Title,
 					int(*expense.TotalAmount),
 					expense.Id.String(),
 				)
 			}
-			msg.Text += "\n\nВведите ID траты:"
+			msg.Text += "*Введите ID траты:*"
 			userStates[userID] = "waiting_payment_expense_users"
 			bot.Send(msg)
 
@@ -595,12 +595,12 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 				break
 			}
 
-			msg.Text = "Пользователи: \n\n"
+			msg.Text = "*Пользователи:* \n\n"
 
 			for i, member := range *resultGroups.Users {
 				msg.Text += strconv.Itoa(i+1) + ". " + "Id: `" + member.Id.String() + "`\n Имя в системе: " + *member.DisplayName + "\n\n"
 			}
-			msg.Text += "\n\nВведите id человека, которому будете переводить деньги:"
+			msg.Text += "*Введите id человека, которому будете переводить деньги:*"
 			userStates[userID] = "waiting_payment_user_users"
 			msg.ParseMode = "MarkdownV2"
 			msg.Text = escapeMarkdown(msg.Text)
@@ -614,10 +614,10 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 				break
 			}
 
-			msg.Text = "Платежи: \n\n"
+			msg.Text = "*Платежи:* \n\n"
 
 			for i, payment := range result {
-				msg.Text += strconv.Itoa(i+1) + ":\n"
+				msg.Text += strconv.Itoa(i+1) + ":"
 				msg.Text += "Id_перевода: `" + payment.Id.String() + "`\n"
 				if payment.ExpenseId != nil {
 					msg.Text += "От кого: " + payment.ExpenseId.String() + "\n"
@@ -628,9 +628,9 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 				if payment.ToUserName != nil {
 					msg.Text += "Кому: " + *payment.ToUserName + "\n"
 				}
-				msg.Text += "Сумма: " + strconv.Itoa(int(*payment.Amount)) + "\n"
+				msg.Text += "Сумма: " + strconv.Itoa(int(*payment.Amount)) + "\n\n"
 			}
-			msg.Text += "\n\nВведите id перевода который котите редактировать:"
+			msg.Text += "*Введите id перевода который котите редактировать:*"
 			userStates[userID] = "waiting_payment"
 			msg.ParseMode = "MarkdownV2"
 			msg.Text = escapeMarkdown(msg.Text)
@@ -639,10 +639,10 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			msg := tgbotapi.NewMessage(chatID, "")
 			result := client.GetPaymentsByGroupIdUtil(api, userChoiceState[userID], msg)
 
-			msg.Text = "Платежи: \n\n"
+			msg.Text = "*Платежи:* \n\n"
 
 			for i, payment := range result {
-				msg.Text += strconv.Itoa(i+1) + ":\n"
+				msg.Text += strconv.Itoa(i+1) + ". "
 				msg.Text += "Id_траты: `" + payment.Id.String() + "`\n"
 				if payment.ExpenseId != nil {
 					msg.Text += "От кого: " + payment.ExpenseId.String() + "\n"
@@ -653,9 +653,9 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 				if payment.ToUserName != nil {
 					msg.Text += "Кому: " + *payment.ToUserName + "\n"
 				}
-				msg.Text += "Сумма: " + strconv.Itoa(int(*payment.Amount)) + "\n"
+				msg.Text += "Сумма: " + strconv.Itoa(int(*payment.Amount)) + "\n\n"
 			}
-			msg.Text += "\n\nВведите id перевода который котите редактировать:"
+			msg.Text += "*Введите id перевода который котите редактировать:*"
 			userStates[userID] = "waiting_payment_to_delete"
 			msg.ParseMode = "MarkdownV2"
 			msg.Text = escapeMarkdown(msg.Text)
@@ -664,10 +664,10 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			msg := tgbotapi.NewMessage(chatID, "")
 			result := client.GetPaymentsByGroupIdUtil(api, userChoiceState[userID], msg)
 
-			msg.Text = "Платежи: \n\n"
+			msg.Text = "*Платежи:* \n\n"
 
 			for i, payment := range result {
-				msg.Text += strconv.Itoa(i+1) + ":\n"
+				msg.Text += strconv.Itoa(i+1) + ". "
 				msg.Text += "Id_траты: `" + payment.Id.String() + "`\n"
 				if payment.ExpenseId != nil {
 					msg.Text += "От кого: " + payment.ExpenseId.String() + "\n"
@@ -678,7 +678,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 				if payment.ToUserName != nil {
 					msg.Text += "Кому: " + *payment.ToUserName + "\n"
 				}
-				msg.Text += "Сумма: " + strconv.Itoa(int(*payment.Amount)) + "\n"
+				msg.Text += "Сумма: " + strconv.Itoa(int(*payment.Amount)) + "\n\n"
 			}
 			msg.ReplyMarkup = mainMenu
 			msg.ParseMode = "MarkdownV2"
@@ -722,10 +722,10 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 						break
 					}
 
-					msg.Text = fmt.Sprintf("Название группы: %s \nПользователи: \n", *result.Title)
+					msg.Text = fmt.Sprintf("*Название группы:* %s \n*Пользователи:* \n\n", *result.Title)
 
 					for i, member := range *result.Users {
-						msg.Text += strconv.Itoa(i+1) + ". " + "Id: `" + member.Id.String() + "`\n Имя в системе: " + *member.DisplayName + "\n"
+						msg.Text += strconv.Itoa(i+1) + ". " + "Id: `" + member.Id.String() + "`\n Имя в системе: " + *member.DisplayName + "\n\n"
 					}
 					msg.ParseMode = "MarkdownV2"
 					msg.Text = escapeMarkdown(msg.Text)
@@ -770,7 +770,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					}
 
 					for i, balance := range *result.Balances {
-						msg.Text += strconv.Itoa(i+1) + ": \n"
+						msg.Text += strconv.Itoa(i+1) + ":"
 						msg.Text += "Id юзера: `" + *balance.DisplayName + "`\n"
 						msg.Text += "Баланс: " + strconv.Itoa(int(*balance.Balance)) + "\n\n"
 					}
@@ -819,7 +819,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					}
 
 					for i, transfer := range *result.Transfers {
-						msg.Text += strconv.Itoa(i+1) + ": \n"
+						msg.Text += strconv.Itoa(i+1) + ": "
 						msg.Text += "Имя отправителя: " + *transfer.FromUserName + "\n"
 						msg.Text += "Имя получателя: " + *transfer.ToUserName + "\n"
 						msg.Text += "Баланс: " + strconv.Itoa(int(*transfer.Amount)) + "\n\n"
@@ -903,19 +903,19 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 							tgbotapi.NewKeyboardButton("Вернуться в меню"),
 						),
 					)
-					msg = tgbotapi.NewMessage(chatID, "Подробная информация о трате: \n")
-					msg.Text += "Название траты: " + *result.Title + "\n"
-					msg.Text += "Создатель траты: " + *result.CreatedByName + "\n"
+					msg = tgbotapi.NewMessage(chatID, "*Подробная информация о трате:* \n")
+					msg.Text += "*Название траты:* " + *result.Title + "\n"
+					msg.Text += "*Создатель траты:* " + *result.CreatedByName + "\n"
 					total_amount := int(*result.TotalAmount)
-					msg.Text += "Сумма траты: " + strconv.Itoa(total_amount) + "\n"
-					msg.Text += "Пользователи: \n"
+					msg.Text += "*Сумма траты:* " + strconv.Itoa(total_amount) + "\n\n"
+					msg.Text += "*Пользователи:* \n"
 
 					for i, user := range *result.Shares {
-						msg.Text += strconv.Itoa(i+1) + ": \n"
+						msg.Text += strconv.Itoa(i+1) + ": "
 						msg.Text += "Имя: `" + *user.UserName + "`\n"
-						msg.Text += "Сколько должен: " + strconv.Itoa(int(*user.Amount)) + "\n"
+						msg.Text += "Сколько должен: " + strconv.Itoa(int(*user.Amount)) + "\n\n"
 					}
-					msg.Text += "\n" + "Выберите действие с тратами:"
+					msg.Text += "*Выберите действие с тратами:*"
 					msg.ReplyMarkup = menuExpenseEdit
 					msg.ParseMode = "MarkdownV2"
 					msg.Text = escapeMarkdown(msg.Text)
@@ -938,7 +938,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					Title := userChoiceTitleState[userID]
 					TotalAmount, err := strconv.Atoi(update.Message.Text)
 					if err != nil {
-						bot.Send(tgbotapi.NewMessage(chatID, "Неприавльно введена сумма, попробуйте заново"))
+						bot.Send(tgbotapi.NewMessage(chatID, "Неправильно введена сумма, попробуйте заново"))
 						break
 					}
 					TotalAmountFloat := float64(TotalAmount)
@@ -1005,12 +1005,12 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 						break
 					}
 
-					msg.Text = fmt.Sprintf("Название группы: %s \n Id группы: `%s` \n Пользователи: \n", *resultGroups.Title, *resultGroups.Id)
+					msg.Text = fmt.Sprintf("*Название группы:* %s \n*Пользователи:* \n\n", *resultGroups.Title)
 
 					for i, member := range *resultGroups.Users {
 						msg.Text += strconv.Itoa(i+1) + ". " + "Id: `" + member.Id.String() + "`\n Имя в системе: " + *member.DisplayName + "\n\n"
 					}
-					msg.Text += "Введите через пробел сумму которую должен человек и id человека:"
+					msg.Text += "*Введите через пробел сумму которую должен человек и id человека:*"
 					msg.ParseMode = "MarkdownV2"
 					msg.Text = escapeMarkdown(msg.Text)
 					bot.Send(msg)
@@ -1487,12 +1487,12 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 						break
 					}
 
-					msg.Text = fmt.Sprintf("Название группы: %s \n Id группы: `%s` \n Пользователи: \n", *resultGroups.Title, *resultGroups.Id)
+					msg.Text = fmt.Sprintf("*Название группы:* %s \n *Id группы:* `%s` \n\n Пользователи: \n", *resultGroups.Title, *resultGroups.Id)
 
 					for i, member := range *resultGroups.Users {
 						msg.Text += strconv.Itoa(i+1) + ". " + "Id: `" + member.Id.String() + "`\n Имя в системе: " + *member.DisplayName + "\n\n"
 					}
-					msg.Text += "Введите через пробел сумму которую должен человек и id человека:"
+					msg.Text += "*Введите через пробел сумму которую должен человек и id человека:*"
 					msg.ParseMode = "MarkdownV2"
 					msg.Text = escapeMarkdown(msg.Text)
 					bot.Send(msg)
@@ -1645,7 +1645,7 @@ func stringToOpenapiUUIDPtr(uuidStr string) (*openapi_types.UUID, error) {
 }
 
 func escapeMarkdown(text string) string {
-	escapeChars := []string{"_", "*", "[", "]", "(", ")", "~", ">", "#", "+", "-", "=", "|", "{", "}", ".", "!"}
+	escapeChars := []string{"_", "[", "]", "(", ")", "~", ">", "#", "+", "-", "=", "|", "{", "}", ".", "!"}
 	for _, char := range escapeChars {
 		text = strings.ReplaceAll(text, char, "\\"+char)
 	}
