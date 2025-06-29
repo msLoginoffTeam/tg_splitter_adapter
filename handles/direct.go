@@ -448,7 +448,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			msg.Text = "*Список трат:*\n\n"
 
 			for i, expense := range result {
-				msg.Text += strconv.Itoa(i+1) + ".\n"
+				msg.Text += strconv.Itoa(i+1) + ". "
 				msg.Text += "Название траты: " + *expense.Title + "\n"
 				msg.Text += "Создатель траты: " + *expense.CreatedByName + "\n"
 				msg.Text += "Общая сумма: " + strconv.Itoa(int(*expense.TotalAmount)) + "\n"
@@ -555,7 +555,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			msg.ParseMode = "MarkdownV2"
 			for i, expense := range result {
 				msg.Text += fmt.Sprintf(
-					"%d\\.\n"+
+					"%d\\. "+
 						"Название траты: %s\n"+
 						"Общая сумма: %d\n"+
 						"ID траты: `%s`\n\n",
