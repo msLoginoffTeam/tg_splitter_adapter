@@ -255,6 +255,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			}
 			if len(result) == 0 {
 				msg.Text = "Группы не найдены - создайте!!"
+				bot.Send(msg)
 				break
 			}
 
@@ -308,6 +309,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			}
 			if len(result) == 0 {
 				msg.Text = "Группы не найдены - создайте!!"
+				bot.Send(msg)
 				break
 			}
 
@@ -362,6 +364,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 
 			if len(result) == 0 {
 				msg.Text = "Группы не найдены - создайте!!"
+				bot.Send(msg)
 				break
 			}
 
