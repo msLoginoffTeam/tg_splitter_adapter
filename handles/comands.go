@@ -203,7 +203,10 @@ func HandleCommand(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *client.Cl
 			msg.Text += strconv.Itoa(i+1) + ". " + "Id: " + member.Id.String() + "\n Имя в системе: " + *member.DisplayName + "\n"
 		}
 	default:
-		msg.Text = fmt.Sprintf("Неизвестная команда: %s", update.Message.Command())
+		if update.Message.Command() != "" {
+			msg.Text = fmt.Sprintf("Неизвестная команда: %s", update.Message.Command())
+		}
+
 	}
 	bot.Send(msg)
 
