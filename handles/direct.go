@@ -47,7 +47,8 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 		//		}
 		//	}()
 		//
-		//	b, err := io.ReadAll(file)
+		//	b, err := io.ReadAll
+		// (file)
 		//	if err != nil {
 		//		log.Fatal(err)
 		//	}
@@ -449,6 +450,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			for i, expense := range result {
 				msg.Text += strconv.Itoa(i+1) + ".\n"
 				msg.Text += "Название траты: " + *expense.Title + "\n"
+				msg.Text += "Создатель траты: " + *expense.CreatedByName + "\n"
 				msg.Text += "Общая сумма: " + strconv.Itoa(int(*expense.TotalAmount)) + "\n"
 				msg.Text += "Id траты: `" + expense.Id.String() + "`\n\n"
 			}
@@ -892,13 +894,14 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					)
 					msg = tgbotapi.NewMessage(chatID, "Подробная информация о трате: \n")
 					msg.Text += "Название траты: " + *result.Title + "\n"
+					msg.Text += "Создатель траты: " + *result.CreatedByName + "\n"
 					total_amount := int(*result.TotalAmount)
 					msg.Text += "Сумма траты: " + strconv.Itoa(total_amount) + "\n"
 					msg.Text += "Пользователи: \n"
 
 					for i, user := range *result.Shares {
 						msg.Text += strconv.Itoa(i+1) + ": \n"
-						msg.Text += "Имя человека: `" + *user.UserName + "`\n"
+						msg.Text += "Имя: `" + *user.UserName + "`\n"
 						msg.Text += "Сколько должен: " + strconv.Itoa(int(*user.Amount)) + "\n"
 					}
 					msg.Text += "\n" + "Выберите действие с тратами:"
