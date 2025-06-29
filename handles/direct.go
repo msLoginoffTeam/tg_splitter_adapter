@@ -763,6 +763,12 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 						break
 					}
 
+					if len(*result.Balances) == 0 {
+						msg.Text = "Нет доступных данных о балансе - добавьте траты!"
+						bot.Send(msg)
+						break
+					}
+
 					for i, balance := range *result.Balances {
 						msg.Text += strconv.Itoa(i+1) + ": \n"
 						msg.Text += "Id юзера: `" + *balance.DisplayName + "`\n"
@@ -803,6 +809,11 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 						fmt.Errorf("failed to decode response: %w", err)
 						msg.Text = "Не удалось расшифровать ответ"
+						bot.Send(msg)
+						break
+					}
+					if len(*result.Transfers) == 0 {
+						msg.Text = "Нет доступных трансферов - добавьте траты!"
 						bot.Send(msg)
 						break
 					}
@@ -1142,7 +1153,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					}
 					userChoiceState[userID] = groupId
 					userStates[userID] = "waiting_group_edit_name_selection"
-					msg.Text = "Выбирите название для группы"
+					msg.Text = "Выберите название для группы"
 					bot.Send(msg)
 				case "waiting_group_delete_selection":
 					msg := tgbotapi.NewMessage(chatID, "")
