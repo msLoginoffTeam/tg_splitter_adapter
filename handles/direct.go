@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 
@@ -37,6 +39,25 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 	if update.Message.IsCommand() {
 		switch update.Message.Command() {
 		case "start":
+			file, err := os.Open("C:/Projects/tg_splitter_adapter/introduce.txt")
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer func() {
+				if err = file.Close(); err != nil {
+					log.Fatal(err)
+				}
+			}()
+
+			b, err := io.ReadAll(file)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			text := string(b)
+			msg := tgbotapi.NewMessage(chatID, text)
+			bot.Send(msg)
+		case "register":
 			// регистрация при начале общения с ботом
 			msg := tgbotapi.NewMessage(chatID, "Добро пожаловать! Вы зарегистрированы.")
 			newName := update.Message.From.FirstName + update.Message.From.LastName
@@ -72,7 +93,6 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 
 			msg.ReplyMarkup = mainMenu
 			bot.Send(msg)
-
 		default:
 			msg := tgbotapi.NewMessage(chatID, "Эта команда доступна только в чате")
 			bot.Send(msg)
