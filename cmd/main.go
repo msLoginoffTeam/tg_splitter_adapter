@@ -5,6 +5,7 @@ import (
 	"os"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/google/uuid"
 	"github.com/msLoginoffTeam/tg_splitter_adapter/handles"
 	tgutils "github.com/msLoginoffTeam/tg_splitter_adapter/handles/tg_utils"
 	client "github.com/msLoginoffTeam/tg_splitter_adapter/swagger"
@@ -28,10 +29,13 @@ func main() {
 	log.Printf("Authorized on account %s", bot.Self.UserName)
 
 	commands := []tgbotapi.BotCommand{
+		{Command: "start", Description: "Начни работу с ботом"},
+		{Command: "register", Description: "Зарегистрироваться в системе"},
 		{Command: "creategroup", Description: "Создать новую группу"},
-		{Command: "addtogroup", Description: "Добавить меня в группу ( /команда {id группы} )"},
+		{Command: "addtogroup", Description: "Добавить меня в группу: /команда id_группы"},
+		{Command: "groupdetails", Description: "Информация о группе: /команда id_группы"},
+		{Command: "getchatgroups", Description: "Получение всех групп привязанных к чату"},
 		{Command: "help", Description: "Список команд"},
-		{Command: "getusersbymention", Description: "Список упомянутых"},
 	}
 	if _, err := bot.Request(tgbotapi.NewSetMyCommands(commands...)); err != nil {
 		log.Printf("Ошибка установки команд: %v", err)
@@ -41,8 +45,7 @@ func main() {
 	updateConfig.Timeout = 30
 	updates := bot.GetUpdatesChan(updateConfig)
 
-	//создание клиента для обращения к апишке
-
+	// создание клиента для обращения к апишке
 	baseUrl := os.Getenv("BACKEND_URL")
 	log.Println("API URL:", baseUrl)
 	if baseUrl == "" {
@@ -56,14 +59,26 @@ func main() {
 
 	adapter := tgutils.NewCommandAdapter(tgutils.SimpleSplitter{})
 
+	// Хранилище состояний пользователей
+	userStates := make(map[int64]string)            //стейт для определения на каком этапе находится человек
+	userChoiceState := make(map[int64]uuid.UUID)    //стейт для определения выбранной/созданной группы
+	userChoiceTitleState := make(map[int64]string)  //стейт для определения выбранного названия для группы
+	userExpenceCreated := make(map[int64]uuid.UUID) //стейт для определения выбранной/созданной траты
+	userSysID := make(map[int64]uuid.UUID)          //стейт для сохранения id пользака
+	userPaymentID := make(map[int64]uuid.UUID)      //стейт для сохранения id пользака
+
 	for update := range updates {
-		if update.Message == nil || !update.Message.IsCommand() {
+		if update.Message == nil {
 			continue
 		}
 
-		if update.Message.Chat.IsGroup() || update.Message.Chat.IsSuperGroup() {
+		if update.Message.Chat.IsPrivate() {
+			//лс
 			log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
-
+			handles.HandleDirectMessages(&update, bot, apiClient, adapter, userStates, userChoiceState, userChoiceTitleState, userExpenceCreated, userSysID, userPaymentID)
+		} else if update.Message.Chat.IsGroup() || update.Message.Chat.IsSuperGroup() {
+			log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
+			//чат
 			handles.HandleCommand(&update, bot, apiClient, adapter)
 		}
 	}

@@ -5,19 +5,18 @@ import (
 	"strings"
 )
 
-// Splitter интерфейс для различных стратегий разделения
+//адаптер для команд, разбивает команду на Навание команды и Аргументы...
+
 type Splitter interface {
 	Split(text string) []string
 }
 
-// SimpleSplitter - разделение по пробелам
 type SimpleSplitter struct{}
 
 func (s SimpleSplitter) Split(text string) []string {
 	return strings.Fields(text)
 }
 
-// RegexSplitter - разделение по регулярному выражению
 type RegexSplitter struct {
 	pattern string
 }
@@ -27,7 +26,6 @@ func (r RegexSplitter) Split(text string) []string {
 	return re.FindAllString(text, -1)
 }
 
-// CommandAdapter - адаптер для обработки команд
 type CommandAdapter struct {
 	splitter Splitter
 }
@@ -36,7 +34,6 @@ func NewCommandAdapter(splitter Splitter) *CommandAdapter {
 	return &CommandAdapter{splitter: splitter}
 }
 
-// ParseCommand разбирает команду и возвращает название и аргументы
 func (ca *CommandAdapter) ParseCommand(text string) (string, []string) {
 	if !strings.HasPrefix(text, "/") {
 		return "", nil

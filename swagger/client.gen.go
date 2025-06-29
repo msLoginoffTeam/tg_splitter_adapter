@@ -90,6 +90,56 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 
 // The interface specification for the client above.
 type ClientInterface interface {
+	// GetApiExpensesGroupGroupId request
+	GetApiExpensesGroupGroupId(ctx context.Context, groupId openapi_types.UUID, params *GetApiExpensesGroupGroupIdParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostApiExpensesGroupGroupIdWithBody request with any body
+	PostApiExpensesGroupGroupIdWithBody(ctx context.Context, groupId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PostApiExpensesGroupGroupIdWithApplicationWildcardPlusJSONBody(ctx context.Context, groupId openapi_types.UUID, body PostApiExpensesGroupGroupIdApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PostApiExpensesGroupGroupId(ctx context.Context, groupId openapi_types.UUID, body PostApiExpensesGroupGroupIdJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteApiExpensesExpenseId request
+	DeleteApiExpensesExpenseId(ctx context.Context, expenseId openapi_types.UUID, params *DeleteApiExpensesExpenseIdParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetApiExpensesExpenseId request
+	GetApiExpensesExpenseId(ctx context.Context, expenseId openapi_types.UUID, params *GetApiExpensesExpenseIdParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetApiExpensesExpenseIdParticipants request
+	GetApiExpensesExpenseIdParticipants(ctx context.Context, expenseId openapi_types.UUID, params *GetApiExpensesExpenseIdParticipantsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostApiExpensesExpenseIdParticipantsWithBody request with any body
+	PostApiExpensesExpenseIdParticipantsWithBody(ctx context.Context, expenseId openapi_types.UUID, params *PostApiExpensesExpenseIdParticipantsParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PostApiExpensesExpenseIdParticipantsWithApplicationWildcardPlusJSONBody(ctx context.Context, expenseId openapi_types.UUID, params *PostApiExpensesExpenseIdParticipantsParams, body PostApiExpensesExpenseIdParticipantsApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PostApiExpensesExpenseIdParticipants(ctx context.Context, expenseId openapi_types.UUID, params *PostApiExpensesExpenseIdParticipantsParams, body PostApiExpensesExpenseIdParticipantsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PutApiExpensesExpenseIdParticipantsWithBody request with any body
+	PutApiExpensesExpenseIdParticipantsWithBody(ctx context.Context, expenseId openapi_types.UUID, params *PutApiExpensesExpenseIdParticipantsParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PutApiExpensesExpenseIdParticipantsWithApplicationWildcardPlusJSONBody(ctx context.Context, expenseId openapi_types.UUID, params *PutApiExpensesExpenseIdParticipantsParams, body PutApiExpensesExpenseIdParticipantsApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PutApiExpensesExpenseIdParticipants(ctx context.Context, expenseId openapi_types.UUID, params *PutApiExpensesExpenseIdParticipantsParams, body PutApiExpensesExpenseIdParticipantsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteApiExpensesExpenseIdParticipantsUserId request
+	DeleteApiExpensesExpenseIdParticipantsUserId(ctx context.Context, expenseId openapi_types.UUID, userId openapi_types.UUID, params *DeleteApiExpensesExpenseIdParticipantsUserIdParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PutApiExpensesExpenseIdTitleWithBody request with any body
+	PutApiExpensesExpenseIdTitleWithBody(ctx context.Context, expenseId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PutApiExpensesExpenseIdTitleWithApplicationWildcardPlusJSONBody(ctx context.Context, expenseId openapi_types.UUID, body PutApiExpensesExpenseIdTitleApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PutApiExpensesExpenseIdTitle(ctx context.Context, expenseId openapi_types.UUID, body PutApiExpensesExpenseIdTitleJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PutApiExpensesExpenseIdTotalAmountWithBody request with any body
+	PutApiExpensesExpenseIdTotalAmountWithBody(ctx context.Context, expenseId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PutApiExpensesExpenseIdTotalAmountWithApplicationWildcardPlusJSONBody(ctx context.Context, expenseId openapi_types.UUID, body PutApiExpensesExpenseIdTotalAmountApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PutApiExpensesExpenseIdTotalAmount(ctx context.Context, expenseId openapi_types.UUID, body PutApiExpensesExpenseIdTotalAmountJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetApiGroups request
 	GetApiGroups(ctx context.Context, params *GetApiGroupsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -99,6 +149,9 @@ type ClientInterface interface {
 	PostApiGroupsWithApplicationWildcardPlusJSONBody(ctx context.Context, body PostApiGroupsApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	PostApiGroups(ctx context.Context, body PostApiGroupsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetApiGroupsMy request
+	GetApiGroupsMy(ctx context.Context, params *GetApiGroupsMyParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// DeleteApiGroupsGroupId request
 	DeleteApiGroupsGroupId(ctx context.Context, groupId openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -115,52 +168,6 @@ type ClientInterface interface {
 
 	// GetApiGroupsGroupIdBalance request
 	GetApiGroupsGroupIdBalance(ctx context.Context, groupId openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// GetApiGroupsGroupIdExpenses request
-	GetApiGroupsGroupIdExpenses(ctx context.Context, groupId openapi_types.UUID, params *GetApiGroupsGroupIdExpensesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// PostApiGroupsGroupIdExpensesWithBody request with any body
-	PostApiGroupsGroupIdExpensesWithBody(ctx context.Context, groupId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	PostApiGroupsGroupIdExpensesWithApplicationWildcardPlusJSONBody(ctx context.Context, groupId openapi_types.UUID, body PostApiGroupsGroupIdExpensesApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	PostApiGroupsGroupIdExpenses(ctx context.Context, groupId openapi_types.UUID, body PostApiGroupsGroupIdExpensesJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// GetApiGroupsGroupIdExpensesDrafts request
-	GetApiGroupsGroupIdExpensesDrafts(ctx context.Context, groupId openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// DeleteApiGroupsGroupIdExpensesExpenseId request
-	DeleteApiGroupsGroupIdExpensesExpenseId(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// GetApiGroupsGroupIdExpensesExpenseId request
-	GetApiGroupsGroupIdExpensesExpenseId(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// PutApiGroupsGroupIdExpensesExpenseIdWithBody request with any body
-	PutApiGroupsGroupIdExpensesExpenseIdWithBody(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	PutApiGroupsGroupIdExpensesExpenseIdWithApplicationWildcardPlusJSONBody(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, body PutApiGroupsGroupIdExpensesExpenseIdApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	PutApiGroupsGroupIdExpensesExpenseId(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, body PutApiGroupsGroupIdExpensesExpenseIdJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// GetApiGroupsGroupIdExpensesExpenseIdParticipants request
-	GetApiGroupsGroupIdExpensesExpenseIdParticipants(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// PostApiGroupsGroupIdExpensesExpenseIdParticipantsWithBody request with any body
-	PostApiGroupsGroupIdExpensesExpenseIdParticipantsWithBody(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	PostApiGroupsGroupIdExpensesExpenseIdParticipantsWithApplicationWildcardPlusJSONBody(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, body PostApiGroupsGroupIdExpensesExpenseIdParticipantsApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	PostApiGroupsGroupIdExpensesExpenseIdParticipants(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, body PostApiGroupsGroupIdExpensesExpenseIdParticipantsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// DeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserId request
-	DeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserId(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, userId openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdWithBody request with any body
-	PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdWithBody(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, userId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdWithApplicationWildcardPlusJSONBody(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, userId string, body PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserId(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, userId string, body PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetApiGroupsGroupIdHistory request
 	GetApiGroupsGroupIdHistory(ctx context.Context, groupId openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -215,6 +222,9 @@ type ClientInterface interface {
 
 	PostApiUsers(ctx context.Context, body PostApiUsersJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// GetApiUsersFind request
+	GetApiUsersFind(ctx context.Context, params *GetApiUsersFindParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetApiUsersUserId request
 	GetApiUsersUserId(ctx context.Context, userId openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -224,6 +234,246 @@ type ClientInterface interface {
 	PutApiUsersUserIdWithApplicationWildcardPlusJSONBody(ctx context.Context, userId openapi_types.UUID, body PutApiUsersUserIdApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	PutApiUsersUserId(ctx context.Context, userId openapi_types.UUID, body PutApiUsersUserIdJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+}
+
+func (c *Client) GetApiExpensesGroupGroupId(ctx context.Context, groupId openapi_types.UUID, params *GetApiExpensesGroupGroupIdParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetApiExpensesGroupGroupIdRequest(c.Server, groupId, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostApiExpensesGroupGroupIdWithBody(ctx context.Context, groupId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostApiExpensesGroupGroupIdRequestWithBody(c.Server, groupId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostApiExpensesGroupGroupIdWithApplicationWildcardPlusJSONBody(ctx context.Context, groupId openapi_types.UUID, body PostApiExpensesGroupGroupIdApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostApiExpensesGroupGroupIdRequestWithApplicationWildcardPlusJSONBody(c.Server, groupId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostApiExpensesGroupGroupId(ctx context.Context, groupId openapi_types.UUID, body PostApiExpensesGroupGroupIdJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostApiExpensesGroupGroupIdRequest(c.Server, groupId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeleteApiExpensesExpenseId(ctx context.Context, expenseId openapi_types.UUID, params *DeleteApiExpensesExpenseIdParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteApiExpensesExpenseIdRequest(c.Server, expenseId, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetApiExpensesExpenseId(ctx context.Context, expenseId openapi_types.UUID, params *GetApiExpensesExpenseIdParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetApiExpensesExpenseIdRequest(c.Server, expenseId, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetApiExpensesExpenseIdParticipants(ctx context.Context, expenseId openapi_types.UUID, params *GetApiExpensesExpenseIdParticipantsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetApiExpensesExpenseIdParticipantsRequest(c.Server, expenseId, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostApiExpensesExpenseIdParticipantsWithBody(ctx context.Context, expenseId openapi_types.UUID, params *PostApiExpensesExpenseIdParticipantsParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostApiExpensesExpenseIdParticipantsRequestWithBody(c.Server, expenseId, params, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostApiExpensesExpenseIdParticipantsWithApplicationWildcardPlusJSONBody(ctx context.Context, expenseId openapi_types.UUID, params *PostApiExpensesExpenseIdParticipantsParams, body PostApiExpensesExpenseIdParticipantsApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostApiExpensesExpenseIdParticipantsRequestWithApplicationWildcardPlusJSONBody(c.Server, expenseId, params, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostApiExpensesExpenseIdParticipants(ctx context.Context, expenseId openapi_types.UUID, params *PostApiExpensesExpenseIdParticipantsParams, body PostApiExpensesExpenseIdParticipantsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostApiExpensesExpenseIdParticipantsRequest(c.Server, expenseId, params, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PutApiExpensesExpenseIdParticipantsWithBody(ctx context.Context, expenseId openapi_types.UUID, params *PutApiExpensesExpenseIdParticipantsParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPutApiExpensesExpenseIdParticipantsRequestWithBody(c.Server, expenseId, params, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PutApiExpensesExpenseIdParticipantsWithApplicationWildcardPlusJSONBody(ctx context.Context, expenseId openapi_types.UUID, params *PutApiExpensesExpenseIdParticipantsParams, body PutApiExpensesExpenseIdParticipantsApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPutApiExpensesExpenseIdParticipantsRequestWithApplicationWildcardPlusJSONBody(c.Server, expenseId, params, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PutApiExpensesExpenseIdParticipants(ctx context.Context, expenseId openapi_types.UUID, params *PutApiExpensesExpenseIdParticipantsParams, body PutApiExpensesExpenseIdParticipantsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPutApiExpensesExpenseIdParticipantsRequest(c.Server, expenseId, params, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeleteApiExpensesExpenseIdParticipantsUserId(ctx context.Context, expenseId openapi_types.UUID, userId openapi_types.UUID, params *DeleteApiExpensesExpenseIdParticipantsUserIdParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteApiExpensesExpenseIdParticipantsUserIdRequest(c.Server, expenseId, userId, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PutApiExpensesExpenseIdTitleWithBody(ctx context.Context, expenseId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPutApiExpensesExpenseIdTitleRequestWithBody(c.Server, expenseId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PutApiExpensesExpenseIdTitleWithApplicationWildcardPlusJSONBody(ctx context.Context, expenseId openapi_types.UUID, body PutApiExpensesExpenseIdTitleApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPutApiExpensesExpenseIdTitleRequestWithApplicationWildcardPlusJSONBody(c.Server, expenseId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PutApiExpensesExpenseIdTitle(ctx context.Context, expenseId openapi_types.UUID, body PutApiExpensesExpenseIdTitleJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPutApiExpensesExpenseIdTitleRequest(c.Server, expenseId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PutApiExpensesExpenseIdTotalAmountWithBody(ctx context.Context, expenseId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPutApiExpensesExpenseIdTotalAmountRequestWithBody(c.Server, expenseId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PutApiExpensesExpenseIdTotalAmountWithApplicationWildcardPlusJSONBody(ctx context.Context, expenseId openapi_types.UUID, body PutApiExpensesExpenseIdTotalAmountApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPutApiExpensesExpenseIdTotalAmountRequestWithApplicationWildcardPlusJSONBody(c.Server, expenseId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PutApiExpensesExpenseIdTotalAmount(ctx context.Context, expenseId openapi_types.UUID, body PutApiExpensesExpenseIdTotalAmountJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPutApiExpensesExpenseIdTotalAmountRequest(c.Server, expenseId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
 }
 
 func (c *Client) GetApiGroups(ctx context.Context, params *GetApiGroupsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -264,6 +514,18 @@ func (c *Client) PostApiGroupsWithApplicationWildcardPlusJSONBody(ctx context.Co
 
 func (c *Client) PostApiGroups(ctx context.Context, body PostApiGroupsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostApiGroupsRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetApiGroupsMy(ctx context.Context, params *GetApiGroupsMyParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetApiGroupsMyRequest(c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -336,222 +598,6 @@ func (c *Client) PutApiGroupsGroupId(ctx context.Context, groupId openapi_types.
 
 func (c *Client) GetApiGroupsGroupIdBalance(ctx context.Context, groupId openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetApiGroupsGroupIdBalanceRequest(c.Server, groupId)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) GetApiGroupsGroupIdExpenses(ctx context.Context, groupId openapi_types.UUID, params *GetApiGroupsGroupIdExpensesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewGetApiGroupsGroupIdExpensesRequest(c.Server, groupId, params)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) PostApiGroupsGroupIdExpensesWithBody(ctx context.Context, groupId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPostApiGroupsGroupIdExpensesRequestWithBody(c.Server, groupId, contentType, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) PostApiGroupsGroupIdExpensesWithApplicationWildcardPlusJSONBody(ctx context.Context, groupId openapi_types.UUID, body PostApiGroupsGroupIdExpensesApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPostApiGroupsGroupIdExpensesRequestWithApplicationWildcardPlusJSONBody(c.Server, groupId, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) PostApiGroupsGroupIdExpenses(ctx context.Context, groupId openapi_types.UUID, body PostApiGroupsGroupIdExpensesJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPostApiGroupsGroupIdExpensesRequest(c.Server, groupId, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) GetApiGroupsGroupIdExpensesDrafts(ctx context.Context, groupId openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewGetApiGroupsGroupIdExpensesDraftsRequest(c.Server, groupId)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) DeleteApiGroupsGroupIdExpensesExpenseId(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewDeleteApiGroupsGroupIdExpensesExpenseIdRequest(c.Server, groupId, expenseId)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) GetApiGroupsGroupIdExpensesExpenseId(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewGetApiGroupsGroupIdExpensesExpenseIdRequest(c.Server, groupId, expenseId)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) PutApiGroupsGroupIdExpensesExpenseIdWithBody(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPutApiGroupsGroupIdExpensesExpenseIdRequestWithBody(c.Server, groupId, expenseId, contentType, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) PutApiGroupsGroupIdExpensesExpenseIdWithApplicationWildcardPlusJSONBody(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, body PutApiGroupsGroupIdExpensesExpenseIdApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPutApiGroupsGroupIdExpensesExpenseIdRequestWithApplicationWildcardPlusJSONBody(c.Server, groupId, expenseId, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) PutApiGroupsGroupIdExpensesExpenseId(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, body PutApiGroupsGroupIdExpensesExpenseIdJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPutApiGroupsGroupIdExpensesExpenseIdRequest(c.Server, groupId, expenseId, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) GetApiGroupsGroupIdExpensesExpenseIdParticipants(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewGetApiGroupsGroupIdExpensesExpenseIdParticipantsRequest(c.Server, groupId, expenseId)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) PostApiGroupsGroupIdExpensesExpenseIdParticipantsWithBody(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPostApiGroupsGroupIdExpensesExpenseIdParticipantsRequestWithBody(c.Server, groupId, expenseId, contentType, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) PostApiGroupsGroupIdExpensesExpenseIdParticipantsWithApplicationWildcardPlusJSONBody(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, body PostApiGroupsGroupIdExpensesExpenseIdParticipantsApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPostApiGroupsGroupIdExpensesExpenseIdParticipantsRequestWithApplicationWildcardPlusJSONBody(c.Server, groupId, expenseId, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) PostApiGroupsGroupIdExpensesExpenseIdParticipants(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, body PostApiGroupsGroupIdExpensesExpenseIdParticipantsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPostApiGroupsGroupIdExpensesExpenseIdParticipantsRequest(c.Server, groupId, expenseId, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) DeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserId(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, userId openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewDeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdRequest(c.Server, groupId, expenseId, userId)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdWithBody(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, userId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdRequestWithBody(c.Server, groupId, expenseId, userId, contentType, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdWithApplicationWildcardPlusJSONBody(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, userId string, body PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdRequestWithApplicationWildcardPlusJSONBody(c.Server, groupId, expenseId, userId, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserId(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, userId string, body PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdRequest(c.Server, groupId, expenseId, userId, body)
 	if err != nil {
 		return nil, err
 	}
@@ -814,6 +860,18 @@ func (c *Client) PostApiUsers(ctx context.Context, body PostApiUsersJSONRequestB
 	return c.Client.Do(req)
 }
 
+func (c *Client) GetApiUsersFind(ctx context.Context, params *GetApiUsersFindParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetApiUsersFindRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 func (c *Client) GetApiUsersUserId(ctx context.Context, userId openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetApiUsersUserIdRequest(c.Server, userId)
 	if err != nil {
@@ -862,6 +920,627 @@ func (c *Client) PutApiUsersUserId(ctx context.Context, userId openapi_types.UUI
 	return c.Client.Do(req)
 }
 
+// NewGetApiExpensesGroupGroupIdRequest generates requests for GetApiExpensesGroupGroupId
+func NewGetApiExpensesGroupGroupIdRequest(server string, groupId openapi_types.UUID, params *GetApiExpensesGroupGroupIdParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "groupId", runtime.ParamLocationPath, groupId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/expenses/group/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.UserId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "userId", runtime.ParamLocationQuery, *params.UserId); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewPostApiExpensesGroupGroupIdRequestWithApplicationWildcardPlusJSONBody calls the generic PostApiExpensesGroupGroupId builder with application/*+json body
+func NewPostApiExpensesGroupGroupIdRequestWithApplicationWildcardPlusJSONBody(server string, groupId openapi_types.UUID, body PostApiExpensesGroupGroupIdApplicationWildcardPlusJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostApiExpensesGroupGroupIdRequestWithBody(server, groupId, "application/*+json", bodyReader)
+}
+
+// NewPostApiExpensesGroupGroupIdRequest calls the generic PostApiExpensesGroupGroupId builder with application/json body
+func NewPostApiExpensesGroupGroupIdRequest(server string, groupId openapi_types.UUID, body PostApiExpensesGroupGroupIdJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostApiExpensesGroupGroupIdRequestWithBody(server, groupId, "application/json", bodyReader)
+}
+
+// NewPostApiExpensesGroupGroupIdRequestWithBody generates requests for PostApiExpensesGroupGroupId with any type of body
+func NewPostApiExpensesGroupGroupIdRequestWithBody(server string, groupId openapi_types.UUID, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "groupId", runtime.ParamLocationPath, groupId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/expenses/group/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteApiExpensesExpenseIdRequest generates requests for DeleteApiExpensesExpenseId
+func NewDeleteApiExpensesExpenseIdRequest(server string, expenseId openapi_types.UUID, params *DeleteApiExpensesExpenseIdParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "expenseId", runtime.ParamLocationPath, expenseId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/expenses/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.GroupId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "groupId", runtime.ParamLocationQuery, *params.GroupId); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetApiExpensesExpenseIdRequest generates requests for GetApiExpensesExpenseId
+func NewGetApiExpensesExpenseIdRequest(server string, expenseId openapi_types.UUID, params *GetApiExpensesExpenseIdParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "expenseId", runtime.ParamLocationPath, expenseId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/expenses/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.GroupId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "groupId", runtime.ParamLocationQuery, *params.GroupId); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetApiExpensesExpenseIdParticipantsRequest generates requests for GetApiExpensesExpenseIdParticipants
+func NewGetApiExpensesExpenseIdParticipantsRequest(server string, expenseId openapi_types.UUID, params *GetApiExpensesExpenseIdParticipantsParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "expenseId", runtime.ParamLocationPath, expenseId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/expenses/%s/participants", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.GroupId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "groupId", runtime.ParamLocationQuery, *params.GroupId); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewPostApiExpensesExpenseIdParticipantsRequestWithApplicationWildcardPlusJSONBody calls the generic PostApiExpensesExpenseIdParticipants builder with application/*+json body
+func NewPostApiExpensesExpenseIdParticipantsRequestWithApplicationWildcardPlusJSONBody(server string, expenseId openapi_types.UUID, params *PostApiExpensesExpenseIdParticipantsParams, body PostApiExpensesExpenseIdParticipantsApplicationWildcardPlusJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostApiExpensesExpenseIdParticipantsRequestWithBody(server, expenseId, params, "application/*+json", bodyReader)
+}
+
+// NewPostApiExpensesExpenseIdParticipantsRequest calls the generic PostApiExpensesExpenseIdParticipants builder with application/json body
+func NewPostApiExpensesExpenseIdParticipantsRequest(server string, expenseId openapi_types.UUID, params *PostApiExpensesExpenseIdParticipantsParams, body PostApiExpensesExpenseIdParticipantsJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostApiExpensesExpenseIdParticipantsRequestWithBody(server, expenseId, params, "application/json", bodyReader)
+}
+
+// NewPostApiExpensesExpenseIdParticipantsRequestWithBody generates requests for PostApiExpensesExpenseIdParticipants with any type of body
+func NewPostApiExpensesExpenseIdParticipantsRequestWithBody(server string, expenseId openapi_types.UUID, params *PostApiExpensesExpenseIdParticipantsParams, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "expenseId", runtime.ParamLocationPath, expenseId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/expenses/%s/participants", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.GroupId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "groupId", runtime.ParamLocationQuery, *params.GroupId); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewPutApiExpensesExpenseIdParticipantsRequestWithApplicationWildcardPlusJSONBody calls the generic PutApiExpensesExpenseIdParticipants builder with application/*+json body
+func NewPutApiExpensesExpenseIdParticipantsRequestWithApplicationWildcardPlusJSONBody(server string, expenseId openapi_types.UUID, params *PutApiExpensesExpenseIdParticipantsParams, body PutApiExpensesExpenseIdParticipantsApplicationWildcardPlusJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPutApiExpensesExpenseIdParticipantsRequestWithBody(server, expenseId, params, "application/*+json", bodyReader)
+}
+
+// NewPutApiExpensesExpenseIdParticipantsRequest calls the generic PutApiExpensesExpenseIdParticipants builder with application/json body
+func NewPutApiExpensesExpenseIdParticipantsRequest(server string, expenseId openapi_types.UUID, params *PutApiExpensesExpenseIdParticipantsParams, body PutApiExpensesExpenseIdParticipantsJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPutApiExpensesExpenseIdParticipantsRequestWithBody(server, expenseId, params, "application/json", bodyReader)
+}
+
+// NewPutApiExpensesExpenseIdParticipantsRequestWithBody generates requests for PutApiExpensesExpenseIdParticipants with any type of body
+func NewPutApiExpensesExpenseIdParticipantsRequestWithBody(server string, expenseId openapi_types.UUID, params *PutApiExpensesExpenseIdParticipantsParams, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "expenseId", runtime.ParamLocationPath, expenseId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/expenses/%s/participants", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.GroupId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "groupId", runtime.ParamLocationQuery, *params.GroupId); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("PUT", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteApiExpensesExpenseIdParticipantsUserIdRequest generates requests for DeleteApiExpensesExpenseIdParticipantsUserId
+func NewDeleteApiExpensesExpenseIdParticipantsUserIdRequest(server string, expenseId openapi_types.UUID, userId openapi_types.UUID, params *DeleteApiExpensesExpenseIdParticipantsUserIdParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "expenseId", runtime.ParamLocationPath, expenseId)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "userId", runtime.ParamLocationPath, userId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/expenses/%s/participants/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.GroupId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "groupId", runtime.ParamLocationQuery, *params.GroupId); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewPutApiExpensesExpenseIdTitleRequestWithApplicationWildcardPlusJSONBody calls the generic PutApiExpensesExpenseIdTitle builder with application/*+json body
+func NewPutApiExpensesExpenseIdTitleRequestWithApplicationWildcardPlusJSONBody(server string, expenseId openapi_types.UUID, body PutApiExpensesExpenseIdTitleApplicationWildcardPlusJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPutApiExpensesExpenseIdTitleRequestWithBody(server, expenseId, "application/*+json", bodyReader)
+}
+
+// NewPutApiExpensesExpenseIdTitleRequest calls the generic PutApiExpensesExpenseIdTitle builder with application/json body
+func NewPutApiExpensesExpenseIdTitleRequest(server string, expenseId openapi_types.UUID, body PutApiExpensesExpenseIdTitleJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPutApiExpensesExpenseIdTitleRequestWithBody(server, expenseId, "application/json", bodyReader)
+}
+
+// NewPutApiExpensesExpenseIdTitleRequestWithBody generates requests for PutApiExpensesExpenseIdTitle with any type of body
+func NewPutApiExpensesExpenseIdTitleRequestWithBody(server string, expenseId openapi_types.UUID, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "expenseId", runtime.ParamLocationPath, expenseId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/expenses/%s/title", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PUT", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewPutApiExpensesExpenseIdTotalAmountRequestWithApplicationWildcardPlusJSONBody calls the generic PutApiExpensesExpenseIdTotalAmount builder with application/*+json body
+func NewPutApiExpensesExpenseIdTotalAmountRequestWithApplicationWildcardPlusJSONBody(server string, expenseId openapi_types.UUID, body PutApiExpensesExpenseIdTotalAmountApplicationWildcardPlusJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPutApiExpensesExpenseIdTotalAmountRequestWithBody(server, expenseId, "application/*+json", bodyReader)
+}
+
+// NewPutApiExpensesExpenseIdTotalAmountRequest calls the generic PutApiExpensesExpenseIdTotalAmount builder with application/json body
+func NewPutApiExpensesExpenseIdTotalAmountRequest(server string, expenseId openapi_types.UUID, body PutApiExpensesExpenseIdTotalAmountJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPutApiExpensesExpenseIdTotalAmountRequestWithBody(server, expenseId, "application/json", bodyReader)
+}
+
+// NewPutApiExpensesExpenseIdTotalAmountRequestWithBody generates requests for PutApiExpensesExpenseIdTotalAmount with any type of body
+func NewPutApiExpensesExpenseIdTotalAmountRequestWithBody(server string, expenseId openapi_types.UUID, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "expenseId", runtime.ParamLocationPath, expenseId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/expenses/%s/totalAmount", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PUT", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 // NewGetApiGroupsRequest generates requests for GetApiGroups
 func NewGetApiGroupsRequest(server string, params *GetApiGroupsParams) (*http.Request, error) {
 	var err error
@@ -884,9 +1563,9 @@ func NewGetApiGroupsRequest(server string, params *GetApiGroupsParams) (*http.Re
 	if params != nil {
 		queryValues := queryURL.Query()
 
-		if params.UserTelegramId != nil {
+		if params.TelegramChatId != nil {
 
-			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "userTelegramId", runtime.ParamLocationQuery, *params.UserTelegramId); err != nil {
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "telegramChatId", runtime.ParamLocationQuery, *params.TelegramChatId); err != nil {
 				return nil, err
 			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
 				return nil, err
@@ -958,6 +1637,55 @@ func NewPostApiGroupsRequestWithBody(server string, contentType string, body io.
 	}
 
 	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetApiGroupsMyRequest generates requests for GetApiGroupsMy
+func NewGetApiGroupsMyRequest(server string, params *GetApiGroupsMyParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/groups/my")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.UserTelegramId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "userTelegramId", runtime.ParamLocationQuery, *params.UserTelegramId); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
 
 	return req, nil
 }
@@ -1118,527 +1846,6 @@ func NewGetApiGroupsGroupIdBalanceRequest(server string, groupId openapi_types.U
 	if err != nil {
 		return nil, err
 	}
-
-	return req, nil
-}
-
-// NewGetApiGroupsGroupIdExpensesRequest generates requests for GetApiGroupsGroupIdExpenses
-func NewGetApiGroupsGroupIdExpensesRequest(server string, groupId openapi_types.UUID, params *GetApiGroupsGroupIdExpensesParams) (*http.Request, error) {
-	var err error
-
-	var pathParam0 string
-
-	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "groupId", runtime.ParamLocationPath, groupId)
-	if err != nil {
-		return nil, err
-	}
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/api/groups/%s/expenses", pathParam0)
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	if params != nil {
-		queryValues := queryURL.Query()
-
-		if params.UserId != nil {
-
-			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "userId", runtime.ParamLocationQuery, *params.UserId); err != nil {
-				return nil, err
-			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-				return nil, err
-			} else {
-				for k, v := range parsed {
-					for _, v2 := range v {
-						queryValues.Add(k, v2)
-					}
-				}
-			}
-
-		}
-
-		queryURL.RawQuery = queryValues.Encode()
-	}
-
-	req, err := http.NewRequest("GET", queryURL.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return req, nil
-}
-
-// NewPostApiGroupsGroupIdExpensesRequestWithApplicationWildcardPlusJSONBody calls the generic PostApiGroupsGroupIdExpenses builder with application/*+json body
-func NewPostApiGroupsGroupIdExpensesRequestWithApplicationWildcardPlusJSONBody(server string, groupId openapi_types.UUID, body PostApiGroupsGroupIdExpensesApplicationWildcardPlusJSONRequestBody) (*http.Request, error) {
-	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-	bodyReader = bytes.NewReader(buf)
-	return NewPostApiGroupsGroupIdExpensesRequestWithBody(server, groupId, "application/*+json", bodyReader)
-}
-
-// NewPostApiGroupsGroupIdExpensesRequest calls the generic PostApiGroupsGroupIdExpenses builder with application/json body
-func NewPostApiGroupsGroupIdExpensesRequest(server string, groupId openapi_types.UUID, body PostApiGroupsGroupIdExpensesJSONRequestBody) (*http.Request, error) {
-	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-	bodyReader = bytes.NewReader(buf)
-	return NewPostApiGroupsGroupIdExpensesRequestWithBody(server, groupId, "application/json", bodyReader)
-}
-
-// NewPostApiGroupsGroupIdExpensesRequestWithBody generates requests for PostApiGroupsGroupIdExpenses with any type of body
-func NewPostApiGroupsGroupIdExpensesRequestWithBody(server string, groupId openapi_types.UUID, contentType string, body io.Reader) (*http.Request, error) {
-	var err error
-
-	var pathParam0 string
-
-	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "groupId", runtime.ParamLocationPath, groupId)
-	if err != nil {
-		return nil, err
-	}
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/api/groups/%s/expenses", pathParam0)
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("POST", queryURL.String(), body)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", contentType)
-
-	return req, nil
-}
-
-// NewGetApiGroupsGroupIdExpensesDraftsRequest generates requests for GetApiGroupsGroupIdExpensesDrafts
-func NewGetApiGroupsGroupIdExpensesDraftsRequest(server string, groupId openapi_types.UUID) (*http.Request, error) {
-	var err error
-
-	var pathParam0 string
-
-	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "groupId", runtime.ParamLocationPath, groupId)
-	if err != nil {
-		return nil, err
-	}
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/api/groups/%s/expenses/drafts", pathParam0)
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("GET", queryURL.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return req, nil
-}
-
-// NewDeleteApiGroupsGroupIdExpensesExpenseIdRequest generates requests for DeleteApiGroupsGroupIdExpensesExpenseId
-func NewDeleteApiGroupsGroupIdExpensesExpenseIdRequest(server string, groupId openapi_types.UUID, expenseId openapi_types.UUID) (*http.Request, error) {
-	var err error
-
-	var pathParam0 string
-
-	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "groupId", runtime.ParamLocationPath, groupId)
-	if err != nil {
-		return nil, err
-	}
-
-	var pathParam1 string
-
-	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "expenseId", runtime.ParamLocationPath, expenseId)
-	if err != nil {
-		return nil, err
-	}
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/api/groups/%s/expenses/%s", pathParam0, pathParam1)
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return req, nil
-}
-
-// NewGetApiGroupsGroupIdExpensesExpenseIdRequest generates requests for GetApiGroupsGroupIdExpensesExpenseId
-func NewGetApiGroupsGroupIdExpensesExpenseIdRequest(server string, groupId openapi_types.UUID, expenseId openapi_types.UUID) (*http.Request, error) {
-	var err error
-
-	var pathParam0 string
-
-	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "groupId", runtime.ParamLocationPath, groupId)
-	if err != nil {
-		return nil, err
-	}
-
-	var pathParam1 string
-
-	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "expenseId", runtime.ParamLocationPath, expenseId)
-	if err != nil {
-		return nil, err
-	}
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/api/groups/%s/expenses/%s", pathParam0, pathParam1)
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("GET", queryURL.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return req, nil
-}
-
-// NewPutApiGroupsGroupIdExpensesExpenseIdRequestWithApplicationWildcardPlusJSONBody calls the generic PutApiGroupsGroupIdExpensesExpenseId builder with application/*+json body
-func NewPutApiGroupsGroupIdExpensesExpenseIdRequestWithApplicationWildcardPlusJSONBody(server string, groupId openapi_types.UUID, expenseId openapi_types.UUID, body PutApiGroupsGroupIdExpensesExpenseIdApplicationWildcardPlusJSONRequestBody) (*http.Request, error) {
-	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-	bodyReader = bytes.NewReader(buf)
-	return NewPutApiGroupsGroupIdExpensesExpenseIdRequestWithBody(server, groupId, expenseId, "application/*+json", bodyReader)
-}
-
-// NewPutApiGroupsGroupIdExpensesExpenseIdRequest calls the generic PutApiGroupsGroupIdExpensesExpenseId builder with application/json body
-func NewPutApiGroupsGroupIdExpensesExpenseIdRequest(server string, groupId openapi_types.UUID, expenseId openapi_types.UUID, body PutApiGroupsGroupIdExpensesExpenseIdJSONRequestBody) (*http.Request, error) {
-	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-	bodyReader = bytes.NewReader(buf)
-	return NewPutApiGroupsGroupIdExpensesExpenseIdRequestWithBody(server, groupId, expenseId, "application/json", bodyReader)
-}
-
-// NewPutApiGroupsGroupIdExpensesExpenseIdRequestWithBody generates requests for PutApiGroupsGroupIdExpensesExpenseId with any type of body
-func NewPutApiGroupsGroupIdExpensesExpenseIdRequestWithBody(server string, groupId openapi_types.UUID, expenseId openapi_types.UUID, contentType string, body io.Reader) (*http.Request, error) {
-	var err error
-
-	var pathParam0 string
-
-	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "groupId", runtime.ParamLocationPath, groupId)
-	if err != nil {
-		return nil, err
-	}
-
-	var pathParam1 string
-
-	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "expenseId", runtime.ParamLocationPath, expenseId)
-	if err != nil {
-		return nil, err
-	}
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/api/groups/%s/expenses/%s", pathParam0, pathParam1)
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("PUT", queryURL.String(), body)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", contentType)
-
-	return req, nil
-}
-
-// NewGetApiGroupsGroupIdExpensesExpenseIdParticipantsRequest generates requests for GetApiGroupsGroupIdExpensesExpenseIdParticipants
-func NewGetApiGroupsGroupIdExpensesExpenseIdParticipantsRequest(server string, groupId openapi_types.UUID, expenseId openapi_types.UUID) (*http.Request, error) {
-	var err error
-
-	var pathParam0 string
-
-	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "groupId", runtime.ParamLocationPath, groupId)
-	if err != nil {
-		return nil, err
-	}
-
-	var pathParam1 string
-
-	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "expenseId", runtime.ParamLocationPath, expenseId)
-	if err != nil {
-		return nil, err
-	}
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/api/groups/%s/expenses/%s/participants", pathParam0, pathParam1)
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("GET", queryURL.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return req, nil
-}
-
-// NewPostApiGroupsGroupIdExpensesExpenseIdParticipantsRequestWithApplicationWildcardPlusJSONBody calls the generic PostApiGroupsGroupIdExpensesExpenseIdParticipants builder with application/*+json body
-func NewPostApiGroupsGroupIdExpensesExpenseIdParticipantsRequestWithApplicationWildcardPlusJSONBody(server string, groupId openapi_types.UUID, expenseId openapi_types.UUID, body PostApiGroupsGroupIdExpensesExpenseIdParticipantsApplicationWildcardPlusJSONRequestBody) (*http.Request, error) {
-	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-	bodyReader = bytes.NewReader(buf)
-	return NewPostApiGroupsGroupIdExpensesExpenseIdParticipantsRequestWithBody(server, groupId, expenseId, "application/*+json", bodyReader)
-}
-
-// NewPostApiGroupsGroupIdExpensesExpenseIdParticipantsRequest calls the generic PostApiGroupsGroupIdExpensesExpenseIdParticipants builder with application/json body
-func NewPostApiGroupsGroupIdExpensesExpenseIdParticipantsRequest(server string, groupId openapi_types.UUID, expenseId openapi_types.UUID, body PostApiGroupsGroupIdExpensesExpenseIdParticipantsJSONRequestBody) (*http.Request, error) {
-	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-	bodyReader = bytes.NewReader(buf)
-	return NewPostApiGroupsGroupIdExpensesExpenseIdParticipantsRequestWithBody(server, groupId, expenseId, "application/json", bodyReader)
-}
-
-// NewPostApiGroupsGroupIdExpensesExpenseIdParticipantsRequestWithBody generates requests for PostApiGroupsGroupIdExpensesExpenseIdParticipants with any type of body
-func NewPostApiGroupsGroupIdExpensesExpenseIdParticipantsRequestWithBody(server string, groupId openapi_types.UUID, expenseId openapi_types.UUID, contentType string, body io.Reader) (*http.Request, error) {
-	var err error
-
-	var pathParam0 string
-
-	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "groupId", runtime.ParamLocationPath, groupId)
-	if err != nil {
-		return nil, err
-	}
-
-	var pathParam1 string
-
-	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "expenseId", runtime.ParamLocationPath, expenseId)
-	if err != nil {
-		return nil, err
-	}
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/api/groups/%s/expenses/%s/participants", pathParam0, pathParam1)
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("POST", queryURL.String(), body)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", contentType)
-
-	return req, nil
-}
-
-// NewDeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdRequest generates requests for DeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserId
-func NewDeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdRequest(server string, groupId openapi_types.UUID, expenseId openapi_types.UUID, userId openapi_types.UUID) (*http.Request, error) {
-	var err error
-
-	var pathParam0 string
-
-	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "groupId", runtime.ParamLocationPath, groupId)
-	if err != nil {
-		return nil, err
-	}
-
-	var pathParam1 string
-
-	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "expenseId", runtime.ParamLocationPath, expenseId)
-	if err != nil {
-		return nil, err
-	}
-
-	var pathParam2 string
-
-	pathParam2, err = runtime.StyleParamWithLocation("simple", false, "userId", runtime.ParamLocationPath, userId)
-	if err != nil {
-		return nil, err
-	}
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/api/groups/%s/expenses/%s/participants/%s", pathParam0, pathParam1, pathParam2)
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return req, nil
-}
-
-// NewPutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdRequestWithApplicationWildcardPlusJSONBody calls the generic PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserId builder with application/*+json body
-func NewPutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdRequestWithApplicationWildcardPlusJSONBody(server string, groupId openapi_types.UUID, expenseId openapi_types.UUID, userId string, body PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdApplicationWildcardPlusJSONRequestBody) (*http.Request, error) {
-	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-	bodyReader = bytes.NewReader(buf)
-	return NewPutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdRequestWithBody(server, groupId, expenseId, userId, "application/*+json", bodyReader)
-}
-
-// NewPutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdRequest calls the generic PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserId builder with application/json body
-func NewPutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdRequest(server string, groupId openapi_types.UUID, expenseId openapi_types.UUID, userId string, body PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdJSONRequestBody) (*http.Request, error) {
-	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-	bodyReader = bytes.NewReader(buf)
-	return NewPutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdRequestWithBody(server, groupId, expenseId, userId, "application/json", bodyReader)
-}
-
-// NewPutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdRequestWithBody generates requests for PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserId with any type of body
-func NewPutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdRequestWithBody(server string, groupId openapi_types.UUID, expenseId openapi_types.UUID, userId string, contentType string, body io.Reader) (*http.Request, error) {
-	var err error
-
-	var pathParam0 string
-
-	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "groupId", runtime.ParamLocationPath, groupId)
-	if err != nil {
-		return nil, err
-	}
-
-	var pathParam1 string
-
-	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "expenseId", runtime.ParamLocationPath, expenseId)
-	if err != nil {
-		return nil, err
-	}
-
-	var pathParam2 string
-
-	pathParam2, err = runtime.StyleParamWithLocation("simple", false, "userId", runtime.ParamLocationPath, userId)
-	if err != nil {
-		return nil, err
-	}
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/api/groups/%s/expenses/%s/participants/%s", pathParam0, pathParam1, pathParam2)
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("PUT", queryURL.String(), body)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", contentType)
 
 	return req, nil
 }
@@ -2166,6 +2373,71 @@ func NewPostApiUsersRequestWithBody(server string, contentType string, body io.R
 	return req, nil
 }
 
+// NewGetApiUsersFindRequest generates requests for GetApiUsersFind
+func NewGetApiUsersFindRequest(server string, params *GetApiUsersFindParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/users/find")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.Nickname != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "nickname", runtime.ParamLocationQuery, *params.Nickname); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.UserTelegramId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "userTelegramId", runtime.ParamLocationQuery, *params.UserTelegramId); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewGetApiUsersUserIdRequest generates requests for GetApiUsersUserId
 func NewGetApiUsersUserIdRequest(server string, userId openapi_types.UUID) (*http.Request, error) {
 	var err error
@@ -2301,6 +2573,56 @@ func WithBaseURL(baseURL string) ClientOption {
 
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
+	// GetApiExpensesGroupGroupIdWithResponse request
+	GetApiExpensesGroupGroupIdWithResponse(ctx context.Context, groupId openapi_types.UUID, params *GetApiExpensesGroupGroupIdParams, reqEditors ...RequestEditorFn) (*GetApiExpensesGroupGroupIdResponse, error)
+
+	// PostApiExpensesGroupGroupIdWithBodyWithResponse request with any body
+	PostApiExpensesGroupGroupIdWithBodyWithResponse(ctx context.Context, groupId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostApiExpensesGroupGroupIdResponse, error)
+
+	PostApiExpensesGroupGroupIdWithApplicationWildcardPlusJSONBodyWithResponse(ctx context.Context, groupId openapi_types.UUID, body PostApiExpensesGroupGroupIdApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiExpensesGroupGroupIdResponse, error)
+
+	PostApiExpensesGroupGroupIdWithResponse(ctx context.Context, groupId openapi_types.UUID, body PostApiExpensesGroupGroupIdJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiExpensesGroupGroupIdResponse, error)
+
+	// DeleteApiExpensesExpenseIdWithResponse request
+	DeleteApiExpensesExpenseIdWithResponse(ctx context.Context, expenseId openapi_types.UUID, params *DeleteApiExpensesExpenseIdParams, reqEditors ...RequestEditorFn) (*DeleteApiExpensesExpenseIdResponse, error)
+
+	// GetApiExpensesExpenseIdWithResponse request
+	GetApiExpensesExpenseIdWithResponse(ctx context.Context, expenseId openapi_types.UUID, params *GetApiExpensesExpenseIdParams, reqEditors ...RequestEditorFn) (*GetApiExpensesExpenseIdResponse, error)
+
+	// GetApiExpensesExpenseIdParticipantsWithResponse request
+	GetApiExpensesExpenseIdParticipantsWithResponse(ctx context.Context, expenseId openapi_types.UUID, params *GetApiExpensesExpenseIdParticipantsParams, reqEditors ...RequestEditorFn) (*GetApiExpensesExpenseIdParticipantsResponse, error)
+
+	// PostApiExpensesExpenseIdParticipantsWithBodyWithResponse request with any body
+	PostApiExpensesExpenseIdParticipantsWithBodyWithResponse(ctx context.Context, expenseId openapi_types.UUID, params *PostApiExpensesExpenseIdParticipantsParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostApiExpensesExpenseIdParticipantsResponse, error)
+
+	PostApiExpensesExpenseIdParticipantsWithApplicationWildcardPlusJSONBodyWithResponse(ctx context.Context, expenseId openapi_types.UUID, params *PostApiExpensesExpenseIdParticipantsParams, body PostApiExpensesExpenseIdParticipantsApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiExpensesExpenseIdParticipantsResponse, error)
+
+	PostApiExpensesExpenseIdParticipantsWithResponse(ctx context.Context, expenseId openapi_types.UUID, params *PostApiExpensesExpenseIdParticipantsParams, body PostApiExpensesExpenseIdParticipantsJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiExpensesExpenseIdParticipantsResponse, error)
+
+	// PutApiExpensesExpenseIdParticipantsWithBodyWithResponse request with any body
+	PutApiExpensesExpenseIdParticipantsWithBodyWithResponse(ctx context.Context, expenseId openapi_types.UUID, params *PutApiExpensesExpenseIdParticipantsParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PutApiExpensesExpenseIdParticipantsResponse, error)
+
+	PutApiExpensesExpenseIdParticipantsWithApplicationWildcardPlusJSONBodyWithResponse(ctx context.Context, expenseId openapi_types.UUID, params *PutApiExpensesExpenseIdParticipantsParams, body PutApiExpensesExpenseIdParticipantsApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*PutApiExpensesExpenseIdParticipantsResponse, error)
+
+	PutApiExpensesExpenseIdParticipantsWithResponse(ctx context.Context, expenseId openapi_types.UUID, params *PutApiExpensesExpenseIdParticipantsParams, body PutApiExpensesExpenseIdParticipantsJSONRequestBody, reqEditors ...RequestEditorFn) (*PutApiExpensesExpenseIdParticipantsResponse, error)
+
+	// DeleteApiExpensesExpenseIdParticipantsUserIdWithResponse request
+	DeleteApiExpensesExpenseIdParticipantsUserIdWithResponse(ctx context.Context, expenseId openapi_types.UUID, userId openapi_types.UUID, params *DeleteApiExpensesExpenseIdParticipantsUserIdParams, reqEditors ...RequestEditorFn) (*DeleteApiExpensesExpenseIdParticipantsUserIdResponse, error)
+
+	// PutApiExpensesExpenseIdTitleWithBodyWithResponse request with any body
+	PutApiExpensesExpenseIdTitleWithBodyWithResponse(ctx context.Context, expenseId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PutApiExpensesExpenseIdTitleResponse, error)
+
+	PutApiExpensesExpenseIdTitleWithApplicationWildcardPlusJSONBodyWithResponse(ctx context.Context, expenseId openapi_types.UUID, body PutApiExpensesExpenseIdTitleApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*PutApiExpensesExpenseIdTitleResponse, error)
+
+	PutApiExpensesExpenseIdTitleWithResponse(ctx context.Context, expenseId openapi_types.UUID, body PutApiExpensesExpenseIdTitleJSONRequestBody, reqEditors ...RequestEditorFn) (*PutApiExpensesExpenseIdTitleResponse, error)
+
+	// PutApiExpensesExpenseIdTotalAmountWithBodyWithResponse request with any body
+	PutApiExpensesExpenseIdTotalAmountWithBodyWithResponse(ctx context.Context, expenseId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PutApiExpensesExpenseIdTotalAmountResponse, error)
+
+	PutApiExpensesExpenseIdTotalAmountWithApplicationWildcardPlusJSONBodyWithResponse(ctx context.Context, expenseId openapi_types.UUID, body PutApiExpensesExpenseIdTotalAmountApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*PutApiExpensesExpenseIdTotalAmountResponse, error)
+
+	PutApiExpensesExpenseIdTotalAmountWithResponse(ctx context.Context, expenseId openapi_types.UUID, body PutApiExpensesExpenseIdTotalAmountJSONRequestBody, reqEditors ...RequestEditorFn) (*PutApiExpensesExpenseIdTotalAmountResponse, error)
+
 	// GetApiGroupsWithResponse request
 	GetApiGroupsWithResponse(ctx context.Context, params *GetApiGroupsParams, reqEditors ...RequestEditorFn) (*GetApiGroupsResponse, error)
 
@@ -2310,6 +2632,9 @@ type ClientWithResponsesInterface interface {
 	PostApiGroupsWithApplicationWildcardPlusJSONBodyWithResponse(ctx context.Context, body PostApiGroupsApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiGroupsResponse, error)
 
 	PostApiGroupsWithResponse(ctx context.Context, body PostApiGroupsJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiGroupsResponse, error)
+
+	// GetApiGroupsMyWithResponse request
+	GetApiGroupsMyWithResponse(ctx context.Context, params *GetApiGroupsMyParams, reqEditors ...RequestEditorFn) (*GetApiGroupsMyResponse, error)
 
 	// DeleteApiGroupsGroupIdWithResponse request
 	DeleteApiGroupsGroupIdWithResponse(ctx context.Context, groupId openapi_types.UUID, reqEditors ...RequestEditorFn) (*DeleteApiGroupsGroupIdResponse, error)
@@ -2326,52 +2651,6 @@ type ClientWithResponsesInterface interface {
 
 	// GetApiGroupsGroupIdBalanceWithResponse request
 	GetApiGroupsGroupIdBalanceWithResponse(ctx context.Context, groupId openapi_types.UUID, reqEditors ...RequestEditorFn) (*GetApiGroupsGroupIdBalanceResponse, error)
-
-	// GetApiGroupsGroupIdExpensesWithResponse request
-	GetApiGroupsGroupIdExpensesWithResponse(ctx context.Context, groupId openapi_types.UUID, params *GetApiGroupsGroupIdExpensesParams, reqEditors ...RequestEditorFn) (*GetApiGroupsGroupIdExpensesResponse, error)
-
-	// PostApiGroupsGroupIdExpensesWithBodyWithResponse request with any body
-	PostApiGroupsGroupIdExpensesWithBodyWithResponse(ctx context.Context, groupId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostApiGroupsGroupIdExpensesResponse, error)
-
-	PostApiGroupsGroupIdExpensesWithApplicationWildcardPlusJSONBodyWithResponse(ctx context.Context, groupId openapi_types.UUID, body PostApiGroupsGroupIdExpensesApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiGroupsGroupIdExpensesResponse, error)
-
-	PostApiGroupsGroupIdExpensesWithResponse(ctx context.Context, groupId openapi_types.UUID, body PostApiGroupsGroupIdExpensesJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiGroupsGroupIdExpensesResponse, error)
-
-	// GetApiGroupsGroupIdExpensesDraftsWithResponse request
-	GetApiGroupsGroupIdExpensesDraftsWithResponse(ctx context.Context, groupId openapi_types.UUID, reqEditors ...RequestEditorFn) (*GetApiGroupsGroupIdExpensesDraftsResponse, error)
-
-	// DeleteApiGroupsGroupIdExpensesExpenseIdWithResponse request
-	DeleteApiGroupsGroupIdExpensesExpenseIdWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, reqEditors ...RequestEditorFn) (*DeleteApiGroupsGroupIdExpensesExpenseIdResponse, error)
-
-	// GetApiGroupsGroupIdExpensesExpenseIdWithResponse request
-	GetApiGroupsGroupIdExpensesExpenseIdWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, reqEditors ...RequestEditorFn) (*GetApiGroupsGroupIdExpensesExpenseIdResponse, error)
-
-	// PutApiGroupsGroupIdExpensesExpenseIdWithBodyWithResponse request with any body
-	PutApiGroupsGroupIdExpensesExpenseIdWithBodyWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PutApiGroupsGroupIdExpensesExpenseIdResponse, error)
-
-	PutApiGroupsGroupIdExpensesExpenseIdWithApplicationWildcardPlusJSONBodyWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, body PutApiGroupsGroupIdExpensesExpenseIdApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*PutApiGroupsGroupIdExpensesExpenseIdResponse, error)
-
-	PutApiGroupsGroupIdExpensesExpenseIdWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, body PutApiGroupsGroupIdExpensesExpenseIdJSONRequestBody, reqEditors ...RequestEditorFn) (*PutApiGroupsGroupIdExpensesExpenseIdResponse, error)
-
-	// GetApiGroupsGroupIdExpensesExpenseIdParticipantsWithResponse request
-	GetApiGroupsGroupIdExpensesExpenseIdParticipantsWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, reqEditors ...RequestEditorFn) (*GetApiGroupsGroupIdExpensesExpenseIdParticipantsResponse, error)
-
-	// PostApiGroupsGroupIdExpensesExpenseIdParticipantsWithBodyWithResponse request with any body
-	PostApiGroupsGroupIdExpensesExpenseIdParticipantsWithBodyWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostApiGroupsGroupIdExpensesExpenseIdParticipantsResponse, error)
-
-	PostApiGroupsGroupIdExpensesExpenseIdParticipantsWithApplicationWildcardPlusJSONBodyWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, body PostApiGroupsGroupIdExpensesExpenseIdParticipantsApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiGroupsGroupIdExpensesExpenseIdParticipantsResponse, error)
-
-	PostApiGroupsGroupIdExpensesExpenseIdParticipantsWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, body PostApiGroupsGroupIdExpensesExpenseIdParticipantsJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiGroupsGroupIdExpensesExpenseIdParticipantsResponse, error)
-
-	// DeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdWithResponse request
-	DeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, userId openapi_types.UUID, reqEditors ...RequestEditorFn) (*DeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse, error)
-
-	// PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdWithBodyWithResponse request with any body
-	PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdWithBodyWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, userId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse, error)
-
-	PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdWithApplicationWildcardPlusJSONBodyWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, userId string, body PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse, error)
-
-	PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, userId string, body PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdJSONRequestBody, reqEditors ...RequestEditorFn) (*PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse, error)
 
 	// GetApiGroupsGroupIdHistoryWithResponse request
 	GetApiGroupsGroupIdHistoryWithResponse(ctx context.Context, groupId openapi_types.UUID, reqEditors ...RequestEditorFn) (*GetApiGroupsGroupIdHistoryResponse, error)
@@ -2426,6 +2705,9 @@ type ClientWithResponsesInterface interface {
 
 	PostApiUsersWithResponse(ctx context.Context, body PostApiUsersJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiUsersResponse, error)
 
+	// GetApiUsersFindWithResponse request
+	GetApiUsersFindWithResponse(ctx context.Context, params *GetApiUsersFindParams, reqEditors ...RequestEditorFn) (*GetApiUsersFindResponse, error)
+
 	// GetApiUsersUserIdWithResponse request
 	GetApiUsersUserIdWithResponse(ctx context.Context, userId openapi_types.UUID, reqEditors ...RequestEditorFn) (*GetApiUsersUserIdResponse, error)
 
@@ -2437,10 +2719,232 @@ type ClientWithResponsesInterface interface {
 	PutApiUsersUserIdWithResponse(ctx context.Context, userId openapi_types.UUID, body PutApiUsersUserIdJSONRequestBody, reqEditors ...RequestEditorFn) (*PutApiUsersUserIdResponse, error)
 }
 
+type GetApiExpensesGroupGroupIdResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]ExpenseResponseDto
+}
+
+// Status returns HTTPResponse.Status
+func (r GetApiExpensesGroupGroupIdResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetApiExpensesGroupGroupIdResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type PostApiExpensesGroupGroupIdResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *ExpenseResponseDto
+}
+
+// Status returns HTTPResponse.Status
+func (r PostApiExpensesGroupGroupIdResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostApiExpensesGroupGroupIdResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type DeleteApiExpensesExpenseIdResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteApiExpensesExpenseIdResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteApiExpensesExpenseIdResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetApiExpensesExpenseIdResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *ExpenseResponseDto
+}
+
+// Status returns HTTPResponse.Status
+func (r GetApiExpensesExpenseIdResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetApiExpensesExpenseIdResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetApiExpensesExpenseIdParticipantsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]ExpenseShareResponseDto
+}
+
+// Status returns HTTPResponse.Status
+func (r GetApiExpensesExpenseIdParticipantsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetApiExpensesExpenseIdParticipantsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type PostApiExpensesExpenseIdParticipantsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+}
+
+// Status returns HTTPResponse.Status
+func (r PostApiExpensesExpenseIdParticipantsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostApiExpensesExpenseIdParticipantsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type PutApiExpensesExpenseIdParticipantsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+}
+
+// Status returns HTTPResponse.Status
+func (r PutApiExpensesExpenseIdParticipantsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PutApiExpensesExpenseIdParticipantsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type DeleteApiExpensesExpenseIdParticipantsUserIdResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteApiExpensesExpenseIdParticipantsUserIdResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteApiExpensesExpenseIdParticipantsUserIdResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type PutApiExpensesExpenseIdTitleResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON400      *ProblemDetails
+	JSON404      *ProblemDetails
+	JSONDefault  *ProblemDetails
+}
+
+// Status returns HTTPResponse.Status
+func (r PutApiExpensesExpenseIdTitleResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PutApiExpensesExpenseIdTitleResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type PutApiExpensesExpenseIdTotalAmountResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON400      *ProblemDetails
+	JSON404      *ProblemDetails
+	JSONDefault  *ProblemDetails
+}
+
+// Status returns HTTPResponse.Status
+func (r PutApiExpensesExpenseIdTotalAmountResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PutApiExpensesExpenseIdTotalAmountResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 type GetApiGroupsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *[]GroupOverviewResponseDto
+	JSON404      *ProblemDetails
+	JSONDefault  *ProblemDetails
 }
 
 // Status returns HTTPResponse.Status
@@ -2462,7 +2966,9 @@ func (r GetApiGroupsResponse) StatusCode() int {
 type PostApiGroupsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *GroupResponseDto
+	JSON201      *GroupResponseDto
+	JSON400      *ProblemDetails
+	JSONDefault  *ProblemDetails
 }
 
 // Status returns HTTPResponse.Status
@@ -2481,9 +2987,36 @@ func (r PostApiGroupsResponse) StatusCode() int {
 	return 0
 }
 
+type GetApiGroupsMyResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]GroupOverviewResponseDto
+	JSON404      *ProblemDetails
+	JSONDefault  *ProblemDetails
+}
+
+// Status returns HTTPResponse.Status
+func (r GetApiGroupsMyResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetApiGroupsMyResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 type DeleteApiGroupsGroupIdResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
+	JSON400      *ProblemDetails
+	JSON404      *ProblemDetails
+	JSONDefault  *ProblemDetails
 }
 
 // Status returns HTTPResponse.Status
@@ -2506,6 +3039,8 @@ type GetApiGroupsGroupIdResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *GroupResponseDto
+	JSON404      *ProblemDetails
+	JSONDefault  *ProblemDetails
 }
 
 // Status returns HTTPResponse.Status
@@ -2527,6 +3062,9 @@ func (r GetApiGroupsGroupIdResponse) StatusCode() int {
 type PutApiGroupsGroupIdResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
+	JSON400      *ProblemDetails
+	JSON404      *ProblemDetails
+	JSONDefault  *ProblemDetails
 }
 
 // Status returns HTTPResponse.Status
@@ -2549,6 +3087,8 @@ type GetApiGroupsGroupIdBalanceResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *BalanceResponseDto
+	JSON404      *ProblemDetails
+	JSONDefault  *ProblemDetails
 }
 
 // Status returns HTTPResponse.Status
@@ -2567,225 +3107,12 @@ func (r GetApiGroupsGroupIdBalanceResponse) StatusCode() int {
 	return 0
 }
 
-type GetApiGroupsGroupIdExpensesResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-	JSON200      *[]ExpenseResponseDto
-}
-
-// Status returns HTTPResponse.Status
-func (r GetApiGroupsGroupIdExpensesResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r GetApiGroupsGroupIdExpensesResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-type PostApiGroupsGroupIdExpensesResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-	JSON200      *ExpenseResponseDto
-}
-
-// Status returns HTTPResponse.Status
-func (r PostApiGroupsGroupIdExpensesResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r PostApiGroupsGroupIdExpensesResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-type GetApiGroupsGroupIdExpensesDraftsResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-	JSON200      *[]ExpenseResponseDto
-}
-
-// Status returns HTTPResponse.Status
-func (r GetApiGroupsGroupIdExpensesDraftsResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r GetApiGroupsGroupIdExpensesDraftsResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-type DeleteApiGroupsGroupIdExpensesExpenseIdResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-}
-
-// Status returns HTTPResponse.Status
-func (r DeleteApiGroupsGroupIdExpensesExpenseIdResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r DeleteApiGroupsGroupIdExpensesExpenseIdResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-type GetApiGroupsGroupIdExpensesExpenseIdResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-	JSON200      *ExpenseResponseDto
-}
-
-// Status returns HTTPResponse.Status
-func (r GetApiGroupsGroupIdExpensesExpenseIdResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r GetApiGroupsGroupIdExpensesExpenseIdResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-type PutApiGroupsGroupIdExpensesExpenseIdResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-}
-
-// Status returns HTTPResponse.Status
-func (r PutApiGroupsGroupIdExpensesExpenseIdResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r PutApiGroupsGroupIdExpensesExpenseIdResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-type GetApiGroupsGroupIdExpensesExpenseIdParticipantsResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-	JSON200      *[]ExpenseShareResponseDto
-}
-
-// Status returns HTTPResponse.Status
-func (r GetApiGroupsGroupIdExpensesExpenseIdParticipantsResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r GetApiGroupsGroupIdExpensesExpenseIdParticipantsResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-type PostApiGroupsGroupIdExpensesExpenseIdParticipantsResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-}
-
-// Status returns HTTPResponse.Status
-func (r PostApiGroupsGroupIdExpensesExpenseIdParticipantsResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r PostApiGroupsGroupIdExpensesExpenseIdParticipantsResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-type DeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-}
-
-// Status returns HTTPResponse.Status
-func (r DeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r DeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-type PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-}
-
-// Status returns HTTPResponse.Status
-func (r PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
 type GetApiGroupsGroupIdHistoryResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *[]OperationHistoryResponseDto
+	JSON404      *ProblemDetails
+	JSONDefault  *ProblemDetails
 }
 
 // Status returns HTTPResponse.Status
@@ -2808,6 +3135,8 @@ type GetApiGroupsGroupIdPaymentsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *[]PaymentResponseDto
+	JSON404      *ProblemDetails
+	JSONDefault  *ProblemDetails
 }
 
 // Status returns HTTPResponse.Status
@@ -3001,7 +3330,9 @@ func (r GetApiUsersResponse) StatusCode() int {
 type PostApiUsersResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *openapi_types.UUID
+	JSON201      *openapi_types.UUID
+	JSON400      *ProblemDetails
+	JSONDefault  *ProblemDetails
 }
 
 // Status returns HTTPResponse.Status
@@ -3020,10 +3351,34 @@ func (r PostApiUsersResponse) StatusCode() int {
 	return 0
 }
 
+type GetApiUsersFindResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *UserResponseDto
+}
+
+// Status returns HTTPResponse.Status
+func (r GetApiUsersFindResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetApiUsersFindResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 type GetApiUsersUserIdResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *UserResponseDto
+	JSON404      *ProblemDetails
+	JSONDefault  *ProblemDetails
 }
 
 // Status returns HTTPResponse.Status
@@ -3045,6 +3400,9 @@ func (r GetApiUsersUserIdResponse) StatusCode() int {
 type PutApiUsersUserIdResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
+	JSON400      *ProblemDetails
+	JSON404      *ProblemDetails
+	JSONDefault  *ProblemDetails
 }
 
 // Status returns HTTPResponse.Status
@@ -3061,6 +3419,176 @@ func (r PutApiUsersUserIdResponse) StatusCode() int {
 		return r.HTTPResponse.StatusCode
 	}
 	return 0
+}
+
+// GetApiExpensesGroupGroupIdWithResponse request returning *GetApiExpensesGroupGroupIdResponse
+func (c *ClientWithResponses) GetApiExpensesGroupGroupIdWithResponse(ctx context.Context, groupId openapi_types.UUID, params *GetApiExpensesGroupGroupIdParams, reqEditors ...RequestEditorFn) (*GetApiExpensesGroupGroupIdResponse, error) {
+	rsp, err := c.GetApiExpensesGroupGroupId(ctx, groupId, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetApiExpensesGroupGroupIdResponse(rsp)
+}
+
+// PostApiExpensesGroupGroupIdWithBodyWithResponse request with arbitrary body returning *PostApiExpensesGroupGroupIdResponse
+func (c *ClientWithResponses) PostApiExpensesGroupGroupIdWithBodyWithResponse(ctx context.Context, groupId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostApiExpensesGroupGroupIdResponse, error) {
+	rsp, err := c.PostApiExpensesGroupGroupIdWithBody(ctx, groupId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostApiExpensesGroupGroupIdResponse(rsp)
+}
+
+func (c *ClientWithResponses) PostApiExpensesGroupGroupIdWithApplicationWildcardPlusJSONBodyWithResponse(ctx context.Context, groupId openapi_types.UUID, body PostApiExpensesGroupGroupIdApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiExpensesGroupGroupIdResponse, error) {
+	rsp, err := c.PostApiExpensesGroupGroupIdWithApplicationWildcardPlusJSONBody(ctx, groupId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostApiExpensesGroupGroupIdResponse(rsp)
+}
+
+func (c *ClientWithResponses) PostApiExpensesGroupGroupIdWithResponse(ctx context.Context, groupId openapi_types.UUID, body PostApiExpensesGroupGroupIdJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiExpensesGroupGroupIdResponse, error) {
+	rsp, err := c.PostApiExpensesGroupGroupId(ctx, groupId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostApiExpensesGroupGroupIdResponse(rsp)
+}
+
+// DeleteApiExpensesExpenseIdWithResponse request returning *DeleteApiExpensesExpenseIdResponse
+func (c *ClientWithResponses) DeleteApiExpensesExpenseIdWithResponse(ctx context.Context, expenseId openapi_types.UUID, params *DeleteApiExpensesExpenseIdParams, reqEditors ...RequestEditorFn) (*DeleteApiExpensesExpenseIdResponse, error) {
+	rsp, err := c.DeleteApiExpensesExpenseId(ctx, expenseId, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteApiExpensesExpenseIdResponse(rsp)
+}
+
+// GetApiExpensesExpenseIdWithResponse request returning *GetApiExpensesExpenseIdResponse
+func (c *ClientWithResponses) GetApiExpensesExpenseIdWithResponse(ctx context.Context, expenseId openapi_types.UUID, params *GetApiExpensesExpenseIdParams, reqEditors ...RequestEditorFn) (*GetApiExpensesExpenseIdResponse, error) {
+	rsp, err := c.GetApiExpensesExpenseId(ctx, expenseId, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetApiExpensesExpenseIdResponse(rsp)
+}
+
+// GetApiExpensesExpenseIdParticipantsWithResponse request returning *GetApiExpensesExpenseIdParticipantsResponse
+func (c *ClientWithResponses) GetApiExpensesExpenseIdParticipantsWithResponse(ctx context.Context, expenseId openapi_types.UUID, params *GetApiExpensesExpenseIdParticipantsParams, reqEditors ...RequestEditorFn) (*GetApiExpensesExpenseIdParticipantsResponse, error) {
+	rsp, err := c.GetApiExpensesExpenseIdParticipants(ctx, expenseId, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetApiExpensesExpenseIdParticipantsResponse(rsp)
+}
+
+// PostApiExpensesExpenseIdParticipantsWithBodyWithResponse request with arbitrary body returning *PostApiExpensesExpenseIdParticipantsResponse
+func (c *ClientWithResponses) PostApiExpensesExpenseIdParticipantsWithBodyWithResponse(ctx context.Context, expenseId openapi_types.UUID, params *PostApiExpensesExpenseIdParticipantsParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostApiExpensesExpenseIdParticipantsResponse, error) {
+	rsp, err := c.PostApiExpensesExpenseIdParticipantsWithBody(ctx, expenseId, params, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostApiExpensesExpenseIdParticipantsResponse(rsp)
+}
+
+func (c *ClientWithResponses) PostApiExpensesExpenseIdParticipantsWithApplicationWildcardPlusJSONBodyWithResponse(ctx context.Context, expenseId openapi_types.UUID, params *PostApiExpensesExpenseIdParticipantsParams, body PostApiExpensesExpenseIdParticipantsApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiExpensesExpenseIdParticipantsResponse, error) {
+	rsp, err := c.PostApiExpensesExpenseIdParticipantsWithApplicationWildcardPlusJSONBody(ctx, expenseId, params, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostApiExpensesExpenseIdParticipantsResponse(rsp)
+}
+
+func (c *ClientWithResponses) PostApiExpensesExpenseIdParticipantsWithResponse(ctx context.Context, expenseId openapi_types.UUID, params *PostApiExpensesExpenseIdParticipantsParams, body PostApiExpensesExpenseIdParticipantsJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiExpensesExpenseIdParticipantsResponse, error) {
+	rsp, err := c.PostApiExpensesExpenseIdParticipants(ctx, expenseId, params, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostApiExpensesExpenseIdParticipantsResponse(rsp)
+}
+
+// PutApiExpensesExpenseIdParticipantsWithBodyWithResponse request with arbitrary body returning *PutApiExpensesExpenseIdParticipantsResponse
+func (c *ClientWithResponses) PutApiExpensesExpenseIdParticipantsWithBodyWithResponse(ctx context.Context, expenseId openapi_types.UUID, params *PutApiExpensesExpenseIdParticipantsParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PutApiExpensesExpenseIdParticipantsResponse, error) {
+	rsp, err := c.PutApiExpensesExpenseIdParticipantsWithBody(ctx, expenseId, params, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePutApiExpensesExpenseIdParticipantsResponse(rsp)
+}
+
+func (c *ClientWithResponses) PutApiExpensesExpenseIdParticipantsWithApplicationWildcardPlusJSONBodyWithResponse(ctx context.Context, expenseId openapi_types.UUID, params *PutApiExpensesExpenseIdParticipantsParams, body PutApiExpensesExpenseIdParticipantsApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*PutApiExpensesExpenseIdParticipantsResponse, error) {
+	rsp, err := c.PutApiExpensesExpenseIdParticipantsWithApplicationWildcardPlusJSONBody(ctx, expenseId, params, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePutApiExpensesExpenseIdParticipantsResponse(rsp)
+}
+
+func (c *ClientWithResponses) PutApiExpensesExpenseIdParticipantsWithResponse(ctx context.Context, expenseId openapi_types.UUID, params *PutApiExpensesExpenseIdParticipantsParams, body PutApiExpensesExpenseIdParticipantsJSONRequestBody, reqEditors ...RequestEditorFn) (*PutApiExpensesExpenseIdParticipantsResponse, error) {
+	rsp, err := c.PutApiExpensesExpenseIdParticipants(ctx, expenseId, params, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePutApiExpensesExpenseIdParticipantsResponse(rsp)
+}
+
+// DeleteApiExpensesExpenseIdParticipantsUserIdWithResponse request returning *DeleteApiExpensesExpenseIdParticipantsUserIdResponse
+func (c *ClientWithResponses) DeleteApiExpensesExpenseIdParticipantsUserIdWithResponse(ctx context.Context, expenseId openapi_types.UUID, userId openapi_types.UUID, params *DeleteApiExpensesExpenseIdParticipantsUserIdParams, reqEditors ...RequestEditorFn) (*DeleteApiExpensesExpenseIdParticipantsUserIdResponse, error) {
+	rsp, err := c.DeleteApiExpensesExpenseIdParticipantsUserId(ctx, expenseId, userId, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteApiExpensesExpenseIdParticipantsUserIdResponse(rsp)
+}
+
+// PutApiExpensesExpenseIdTitleWithBodyWithResponse request with arbitrary body returning *PutApiExpensesExpenseIdTitleResponse
+func (c *ClientWithResponses) PutApiExpensesExpenseIdTitleWithBodyWithResponse(ctx context.Context, expenseId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PutApiExpensesExpenseIdTitleResponse, error) {
+	rsp, err := c.PutApiExpensesExpenseIdTitleWithBody(ctx, expenseId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePutApiExpensesExpenseIdTitleResponse(rsp)
+}
+
+func (c *ClientWithResponses) PutApiExpensesExpenseIdTitleWithApplicationWildcardPlusJSONBodyWithResponse(ctx context.Context, expenseId openapi_types.UUID, body PutApiExpensesExpenseIdTitleApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*PutApiExpensesExpenseIdTitleResponse, error) {
+	rsp, err := c.PutApiExpensesExpenseIdTitleWithApplicationWildcardPlusJSONBody(ctx, expenseId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePutApiExpensesExpenseIdTitleResponse(rsp)
+}
+
+func (c *ClientWithResponses) PutApiExpensesExpenseIdTitleWithResponse(ctx context.Context, expenseId openapi_types.UUID, body PutApiExpensesExpenseIdTitleJSONRequestBody, reqEditors ...RequestEditorFn) (*PutApiExpensesExpenseIdTitleResponse, error) {
+	rsp, err := c.PutApiExpensesExpenseIdTitle(ctx, expenseId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePutApiExpensesExpenseIdTitleResponse(rsp)
+}
+
+// PutApiExpensesExpenseIdTotalAmountWithBodyWithResponse request with arbitrary body returning *PutApiExpensesExpenseIdTotalAmountResponse
+func (c *ClientWithResponses) PutApiExpensesExpenseIdTotalAmountWithBodyWithResponse(ctx context.Context, expenseId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PutApiExpensesExpenseIdTotalAmountResponse, error) {
+	rsp, err := c.PutApiExpensesExpenseIdTotalAmountWithBody(ctx, expenseId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePutApiExpensesExpenseIdTotalAmountResponse(rsp)
+}
+
+func (c *ClientWithResponses) PutApiExpensesExpenseIdTotalAmountWithApplicationWildcardPlusJSONBodyWithResponse(ctx context.Context, expenseId openapi_types.UUID, body PutApiExpensesExpenseIdTotalAmountApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*PutApiExpensesExpenseIdTotalAmountResponse, error) {
+	rsp, err := c.PutApiExpensesExpenseIdTotalAmountWithApplicationWildcardPlusJSONBody(ctx, expenseId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePutApiExpensesExpenseIdTotalAmountResponse(rsp)
+}
+
+func (c *ClientWithResponses) PutApiExpensesExpenseIdTotalAmountWithResponse(ctx context.Context, expenseId openapi_types.UUID, body PutApiExpensesExpenseIdTotalAmountJSONRequestBody, reqEditors ...RequestEditorFn) (*PutApiExpensesExpenseIdTotalAmountResponse, error) {
+	rsp, err := c.PutApiExpensesExpenseIdTotalAmount(ctx, expenseId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePutApiExpensesExpenseIdTotalAmountResponse(rsp)
 }
 
 // GetApiGroupsWithResponse request returning *GetApiGroupsResponse
@@ -3095,6 +3623,15 @@ func (c *ClientWithResponses) PostApiGroupsWithResponse(ctx context.Context, bod
 		return nil, err
 	}
 	return ParsePostApiGroupsResponse(rsp)
+}
+
+// GetApiGroupsMyWithResponse request returning *GetApiGroupsMyResponse
+func (c *ClientWithResponses) GetApiGroupsMyWithResponse(ctx context.Context, params *GetApiGroupsMyParams, reqEditors ...RequestEditorFn) (*GetApiGroupsMyResponse, error) {
+	rsp, err := c.GetApiGroupsMy(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetApiGroupsMyResponse(rsp)
 }
 
 // DeleteApiGroupsGroupIdWithResponse request returning *DeleteApiGroupsGroupIdResponse
@@ -3147,160 +3684,6 @@ func (c *ClientWithResponses) GetApiGroupsGroupIdBalanceWithResponse(ctx context
 		return nil, err
 	}
 	return ParseGetApiGroupsGroupIdBalanceResponse(rsp)
-}
-
-// GetApiGroupsGroupIdExpensesWithResponse request returning *GetApiGroupsGroupIdExpensesResponse
-func (c *ClientWithResponses) GetApiGroupsGroupIdExpensesWithResponse(ctx context.Context, groupId openapi_types.UUID, params *GetApiGroupsGroupIdExpensesParams, reqEditors ...RequestEditorFn) (*GetApiGroupsGroupIdExpensesResponse, error) {
-	rsp, err := c.GetApiGroupsGroupIdExpenses(ctx, groupId, params, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParseGetApiGroupsGroupIdExpensesResponse(rsp)
-}
-
-// PostApiGroupsGroupIdExpensesWithBodyWithResponse request with arbitrary body returning *PostApiGroupsGroupIdExpensesResponse
-func (c *ClientWithResponses) PostApiGroupsGroupIdExpensesWithBodyWithResponse(ctx context.Context, groupId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostApiGroupsGroupIdExpensesResponse, error) {
-	rsp, err := c.PostApiGroupsGroupIdExpensesWithBody(ctx, groupId, contentType, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParsePostApiGroupsGroupIdExpensesResponse(rsp)
-}
-
-func (c *ClientWithResponses) PostApiGroupsGroupIdExpensesWithApplicationWildcardPlusJSONBodyWithResponse(ctx context.Context, groupId openapi_types.UUID, body PostApiGroupsGroupIdExpensesApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiGroupsGroupIdExpensesResponse, error) {
-	rsp, err := c.PostApiGroupsGroupIdExpensesWithApplicationWildcardPlusJSONBody(ctx, groupId, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParsePostApiGroupsGroupIdExpensesResponse(rsp)
-}
-
-func (c *ClientWithResponses) PostApiGroupsGroupIdExpensesWithResponse(ctx context.Context, groupId openapi_types.UUID, body PostApiGroupsGroupIdExpensesJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiGroupsGroupIdExpensesResponse, error) {
-	rsp, err := c.PostApiGroupsGroupIdExpenses(ctx, groupId, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParsePostApiGroupsGroupIdExpensesResponse(rsp)
-}
-
-// GetApiGroupsGroupIdExpensesDraftsWithResponse request returning *GetApiGroupsGroupIdExpensesDraftsResponse
-func (c *ClientWithResponses) GetApiGroupsGroupIdExpensesDraftsWithResponse(ctx context.Context, groupId openapi_types.UUID, reqEditors ...RequestEditorFn) (*GetApiGroupsGroupIdExpensesDraftsResponse, error) {
-	rsp, err := c.GetApiGroupsGroupIdExpensesDrafts(ctx, groupId, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParseGetApiGroupsGroupIdExpensesDraftsResponse(rsp)
-}
-
-// DeleteApiGroupsGroupIdExpensesExpenseIdWithResponse request returning *DeleteApiGroupsGroupIdExpensesExpenseIdResponse
-func (c *ClientWithResponses) DeleteApiGroupsGroupIdExpensesExpenseIdWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, reqEditors ...RequestEditorFn) (*DeleteApiGroupsGroupIdExpensesExpenseIdResponse, error) {
-	rsp, err := c.DeleteApiGroupsGroupIdExpensesExpenseId(ctx, groupId, expenseId, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParseDeleteApiGroupsGroupIdExpensesExpenseIdResponse(rsp)
-}
-
-// GetApiGroupsGroupIdExpensesExpenseIdWithResponse request returning *GetApiGroupsGroupIdExpensesExpenseIdResponse
-func (c *ClientWithResponses) GetApiGroupsGroupIdExpensesExpenseIdWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, reqEditors ...RequestEditorFn) (*GetApiGroupsGroupIdExpensesExpenseIdResponse, error) {
-	rsp, err := c.GetApiGroupsGroupIdExpensesExpenseId(ctx, groupId, expenseId, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParseGetApiGroupsGroupIdExpensesExpenseIdResponse(rsp)
-}
-
-// PutApiGroupsGroupIdExpensesExpenseIdWithBodyWithResponse request with arbitrary body returning *PutApiGroupsGroupIdExpensesExpenseIdResponse
-func (c *ClientWithResponses) PutApiGroupsGroupIdExpensesExpenseIdWithBodyWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PutApiGroupsGroupIdExpensesExpenseIdResponse, error) {
-	rsp, err := c.PutApiGroupsGroupIdExpensesExpenseIdWithBody(ctx, groupId, expenseId, contentType, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParsePutApiGroupsGroupIdExpensesExpenseIdResponse(rsp)
-}
-
-func (c *ClientWithResponses) PutApiGroupsGroupIdExpensesExpenseIdWithApplicationWildcardPlusJSONBodyWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, body PutApiGroupsGroupIdExpensesExpenseIdApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*PutApiGroupsGroupIdExpensesExpenseIdResponse, error) {
-	rsp, err := c.PutApiGroupsGroupIdExpensesExpenseIdWithApplicationWildcardPlusJSONBody(ctx, groupId, expenseId, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParsePutApiGroupsGroupIdExpensesExpenseIdResponse(rsp)
-}
-
-func (c *ClientWithResponses) PutApiGroupsGroupIdExpensesExpenseIdWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, body PutApiGroupsGroupIdExpensesExpenseIdJSONRequestBody, reqEditors ...RequestEditorFn) (*PutApiGroupsGroupIdExpensesExpenseIdResponse, error) {
-	rsp, err := c.PutApiGroupsGroupIdExpensesExpenseId(ctx, groupId, expenseId, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParsePutApiGroupsGroupIdExpensesExpenseIdResponse(rsp)
-}
-
-// GetApiGroupsGroupIdExpensesExpenseIdParticipantsWithResponse request returning *GetApiGroupsGroupIdExpensesExpenseIdParticipantsResponse
-func (c *ClientWithResponses) GetApiGroupsGroupIdExpensesExpenseIdParticipantsWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, reqEditors ...RequestEditorFn) (*GetApiGroupsGroupIdExpensesExpenseIdParticipantsResponse, error) {
-	rsp, err := c.GetApiGroupsGroupIdExpensesExpenseIdParticipants(ctx, groupId, expenseId, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParseGetApiGroupsGroupIdExpensesExpenseIdParticipantsResponse(rsp)
-}
-
-// PostApiGroupsGroupIdExpensesExpenseIdParticipantsWithBodyWithResponse request with arbitrary body returning *PostApiGroupsGroupIdExpensesExpenseIdParticipantsResponse
-func (c *ClientWithResponses) PostApiGroupsGroupIdExpensesExpenseIdParticipantsWithBodyWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostApiGroupsGroupIdExpensesExpenseIdParticipantsResponse, error) {
-	rsp, err := c.PostApiGroupsGroupIdExpensesExpenseIdParticipantsWithBody(ctx, groupId, expenseId, contentType, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParsePostApiGroupsGroupIdExpensesExpenseIdParticipantsResponse(rsp)
-}
-
-func (c *ClientWithResponses) PostApiGroupsGroupIdExpensesExpenseIdParticipantsWithApplicationWildcardPlusJSONBodyWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, body PostApiGroupsGroupIdExpensesExpenseIdParticipantsApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiGroupsGroupIdExpensesExpenseIdParticipantsResponse, error) {
-	rsp, err := c.PostApiGroupsGroupIdExpensesExpenseIdParticipantsWithApplicationWildcardPlusJSONBody(ctx, groupId, expenseId, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParsePostApiGroupsGroupIdExpensesExpenseIdParticipantsResponse(rsp)
-}
-
-func (c *ClientWithResponses) PostApiGroupsGroupIdExpensesExpenseIdParticipantsWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, body PostApiGroupsGroupIdExpensesExpenseIdParticipantsJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiGroupsGroupIdExpensesExpenseIdParticipantsResponse, error) {
-	rsp, err := c.PostApiGroupsGroupIdExpensesExpenseIdParticipants(ctx, groupId, expenseId, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParsePostApiGroupsGroupIdExpensesExpenseIdParticipantsResponse(rsp)
-}
-
-// DeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdWithResponse request returning *DeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse
-func (c *ClientWithResponses) DeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, userId openapi_types.UUID, reqEditors ...RequestEditorFn) (*DeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse, error) {
-	rsp, err := c.DeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserId(ctx, groupId, expenseId, userId, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParseDeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse(rsp)
-}
-
-// PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdWithBodyWithResponse request with arbitrary body returning *PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse
-func (c *ClientWithResponses) PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdWithBodyWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, userId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse, error) {
-	rsp, err := c.PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdWithBody(ctx, groupId, expenseId, userId, contentType, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParsePutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse(rsp)
-}
-
-func (c *ClientWithResponses) PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdWithApplicationWildcardPlusJSONBodyWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, userId string, body PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse, error) {
-	rsp, err := c.PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdWithApplicationWildcardPlusJSONBody(ctx, groupId, expenseId, userId, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParsePutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse(rsp)
-}
-
-func (c *ClientWithResponses) PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdWithResponse(ctx context.Context, groupId openapi_types.UUID, expenseId openapi_types.UUID, userId string, body PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdJSONRequestBody, reqEditors ...RequestEditorFn) (*PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse, error) {
-	rsp, err := c.PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserId(ctx, groupId, expenseId, userId, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParsePutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse(rsp)
 }
 
 // GetApiGroupsGroupIdHistoryWithResponse request returning *GetApiGroupsGroupIdHistoryResponse
@@ -3482,6 +3865,15 @@ func (c *ClientWithResponses) PostApiUsersWithResponse(ctx context.Context, body
 	return ParsePostApiUsersResponse(rsp)
 }
 
+// GetApiUsersFindWithResponse request returning *GetApiUsersFindResponse
+func (c *ClientWithResponses) GetApiUsersFindWithResponse(ctx context.Context, params *GetApiUsersFindParams, reqEditors ...RequestEditorFn) (*GetApiUsersFindResponse, error) {
+	rsp, err := c.GetApiUsersFind(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetApiUsersFindResponse(rsp)
+}
+
 // GetApiUsersUserIdWithResponse request returning *GetApiUsersUserIdResponse
 func (c *ClientWithResponses) GetApiUsersUserIdWithResponse(ctx context.Context, userId openapi_types.UUID, reqEditors ...RequestEditorFn) (*GetApiUsersUserIdResponse, error) {
 	rsp, err := c.GetApiUsersUserId(ctx, userId, reqEditors...)
@@ -3516,6 +3908,284 @@ func (c *ClientWithResponses) PutApiUsersUserIdWithResponse(ctx context.Context,
 	return ParsePutApiUsersUserIdResponse(rsp)
 }
 
+// ParseGetApiExpensesGroupGroupIdResponse parses an HTTP response from a GetApiExpensesGroupGroupIdWithResponse call
+func ParseGetApiExpensesGroupGroupIdResponse(rsp *http.Response) (*GetApiExpensesGroupGroupIdResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetApiExpensesGroupGroupIdResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []ExpenseResponseDto
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case rsp.StatusCode == 200:
+		// Content-type (text/plain) unsupported
+
+	}
+
+	return response, nil
+}
+
+// ParsePostApiExpensesGroupGroupIdResponse parses an HTTP response from a PostApiExpensesGroupGroupIdWithResponse call
+func ParsePostApiExpensesGroupGroupIdResponse(rsp *http.Response) (*PostApiExpensesGroupGroupIdResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostApiExpensesGroupGroupIdResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ExpenseResponseDto
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case rsp.StatusCode == 200:
+		// Content-type (text/plain) unsupported
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteApiExpensesExpenseIdResponse parses an HTTP response from a DeleteApiExpensesExpenseIdWithResponse call
+func ParseDeleteApiExpensesExpenseIdResponse(rsp *http.Response) (*DeleteApiExpensesExpenseIdResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteApiExpensesExpenseIdResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	return response, nil
+}
+
+// ParseGetApiExpensesExpenseIdResponse parses an HTTP response from a GetApiExpensesExpenseIdWithResponse call
+func ParseGetApiExpensesExpenseIdResponse(rsp *http.Response) (*GetApiExpensesExpenseIdResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetApiExpensesExpenseIdResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ExpenseResponseDto
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case rsp.StatusCode == 200:
+		// Content-type (text/plain) unsupported
+
+	}
+
+	return response, nil
+}
+
+// ParseGetApiExpensesExpenseIdParticipantsResponse parses an HTTP response from a GetApiExpensesExpenseIdParticipantsWithResponse call
+func ParseGetApiExpensesExpenseIdParticipantsResponse(rsp *http.Response) (*GetApiExpensesExpenseIdParticipantsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetApiExpensesExpenseIdParticipantsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []ExpenseShareResponseDto
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case rsp.StatusCode == 200:
+		// Content-type (text/plain) unsupported
+
+	}
+
+	return response, nil
+}
+
+// ParsePostApiExpensesExpenseIdParticipantsResponse parses an HTTP response from a PostApiExpensesExpenseIdParticipantsWithResponse call
+func ParsePostApiExpensesExpenseIdParticipantsResponse(rsp *http.Response) (*PostApiExpensesExpenseIdParticipantsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostApiExpensesExpenseIdParticipantsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	return response, nil
+}
+
+// ParsePutApiExpensesExpenseIdParticipantsResponse parses an HTTP response from a PutApiExpensesExpenseIdParticipantsWithResponse call
+func ParsePutApiExpensesExpenseIdParticipantsResponse(rsp *http.Response) (*PutApiExpensesExpenseIdParticipantsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PutApiExpensesExpenseIdParticipantsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	return response, nil
+}
+
+// ParseDeleteApiExpensesExpenseIdParticipantsUserIdResponse parses an HTTP response from a DeleteApiExpensesExpenseIdParticipantsUserIdWithResponse call
+func ParseDeleteApiExpensesExpenseIdParticipantsUserIdResponse(rsp *http.Response) (*DeleteApiExpensesExpenseIdParticipantsUserIdResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteApiExpensesExpenseIdParticipantsUserIdResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	return response, nil
+}
+
+// ParsePutApiExpensesExpenseIdTitleResponse parses an HTTP response from a PutApiExpensesExpenseIdTitleWithResponse call
+func ParsePutApiExpensesExpenseIdTitleResponse(rsp *http.Response) (*PutApiExpensesExpenseIdTitleResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PutApiExpensesExpenseIdTitleResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	case rsp.StatusCode == 400:
+	// Content-type (text/plain) unsupported
+
+	case rsp.StatusCode == 404:
+	// Content-type (text/plain) unsupported
+
+	case true:
+		// Content-type (text/plain) unsupported
+
+	}
+
+	return response, nil
+}
+
+// ParsePutApiExpensesExpenseIdTotalAmountResponse parses an HTTP response from a PutApiExpensesExpenseIdTotalAmountWithResponse call
+func ParsePutApiExpensesExpenseIdTotalAmountResponse(rsp *http.Response) (*PutApiExpensesExpenseIdTotalAmountResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PutApiExpensesExpenseIdTotalAmountResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	case rsp.StatusCode == 400:
+	// Content-type (text/plain) unsupported
+
+	case rsp.StatusCode == 404:
+	// Content-type (text/plain) unsupported
+
+	case true:
+		// Content-type (text/plain) unsupported
+
+	}
+
+	return response, nil
+}
+
 // ParseGetApiGroupsResponse parses an HTTP response from a GetApiGroupsWithResponse call
 func ParseGetApiGroupsResponse(rsp *http.Response) (*GetApiGroupsResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -3537,7 +4207,27 @@ func ParseGetApiGroupsResponse(rsp *http.Response) (*GetApiGroupsResponse, error
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
 	case rsp.StatusCode == 200:
+	// Content-type (text/plain) unsupported
+
+	case rsp.StatusCode == 404:
+	// Content-type (text/plain) unsupported
+
+	case true:
 		// Content-type (text/plain) unsupported
 
 	}
@@ -3559,14 +4249,83 @@ func ParsePostApiGroupsResponse(rsp *http.Response) (*PostApiGroupsResponse, err
 	}
 
 	switch {
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
 		var dest GroupResponseDto
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	case rsp.StatusCode == 201:
+	// Content-type (text/plain) unsupported
+
+	case rsp.StatusCode == 400:
+	// Content-type (text/plain) unsupported
+
+	case true:
+		// Content-type (text/plain) unsupported
+
+	}
+
+	return response, nil
+}
+
+// ParseGetApiGroupsMyResponse parses an HTTP response from a GetApiGroupsMyWithResponse call
+func ParseGetApiGroupsMyResponse(rsp *http.Response) (*GetApiGroupsMyResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetApiGroupsMyResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []GroupOverviewResponseDto
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
 	case rsp.StatusCode == 200:
+	// Content-type (text/plain) unsupported
+
+	case rsp.StatusCode == 404:
+	// Content-type (text/plain) unsupported
+
+	case true:
 		// Content-type (text/plain) unsupported
 
 	}
@@ -3585,6 +4344,39 @@ func ParseDeleteApiGroupsGroupIdResponse(rsp *http.Response) (*DeleteApiGroupsGr
 	response := &DeleteApiGroupsGroupIdResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	case rsp.StatusCode == 400:
+	// Content-type (text/plain) unsupported
+
+	case rsp.StatusCode == 404:
+	// Content-type (text/plain) unsupported
+
+	case true:
+		// Content-type (text/plain) unsupported
+
 	}
 
 	return response, nil
@@ -3611,7 +4403,27 @@ func ParseGetApiGroupsGroupIdResponse(rsp *http.Response) (*GetApiGroupsGroupIdR
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
 	case rsp.StatusCode == 200:
+	// Content-type (text/plain) unsupported
+
+	case rsp.StatusCode == 404:
+	// Content-type (text/plain) unsupported
+
+	case true:
 		// Content-type (text/plain) unsupported
 
 	}
@@ -3630,6 +4442,39 @@ func ParsePutApiGroupsGroupIdResponse(rsp *http.Response) (*PutApiGroupsGroupIdR
 	response := &PutApiGroupsGroupIdResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	case rsp.StatusCode == 400:
+	// Content-type (text/plain) unsupported
+
+	case rsp.StatusCode == 404:
+	// Content-type (text/plain) unsupported
+
+	case true:
+		// Content-type (text/plain) unsupported
+
 	}
 
 	return response, nil
@@ -3656,234 +4501,29 @@ func ParseGetApiGroupsGroupIdBalanceResponse(rsp *http.Response) (*GetApiGroupsG
 		}
 		response.JSON200 = &dest
 
-	case rsp.StatusCode == 200:
-		// Content-type (text/plain) unsupported
-
-	}
-
-	return response, nil
-}
-
-// ParseGetApiGroupsGroupIdExpensesResponse parses an HTTP response from a GetApiGroupsGroupIdExpensesWithResponse call
-func ParseGetApiGroupsGroupIdExpensesResponse(rsp *http.Response) (*GetApiGroupsGroupIdExpensesResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &GetApiGroupsGroupIdExpensesResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	switch {
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest []ExpenseResponseDto
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ProblemDetails
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
-		response.JSON200 = &dest
+		response.JSON404 = &dest
 
-	case rsp.StatusCode == 200:
-		// Content-type (text/plain) unsupported
-
-	}
-
-	return response, nil
-}
-
-// ParsePostApiGroupsGroupIdExpensesResponse parses an HTTP response from a PostApiGroupsGroupIdExpensesWithResponse call
-func ParsePostApiGroupsGroupIdExpensesResponse(rsp *http.Response) (*PostApiGroupsGroupIdExpensesResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &PostApiGroupsGroupIdExpensesResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	switch {
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest ExpenseResponseDto
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest ProblemDetails
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
-		response.JSON200 = &dest
+		response.JSONDefault = &dest
 
 	case rsp.StatusCode == 200:
+	// Content-type (text/plain) unsupported
+
+	case rsp.StatusCode == 404:
+	// Content-type (text/plain) unsupported
+
+	case true:
 		// Content-type (text/plain) unsupported
 
-	}
-
-	return response, nil
-}
-
-// ParseGetApiGroupsGroupIdExpensesDraftsResponse parses an HTTP response from a GetApiGroupsGroupIdExpensesDraftsWithResponse call
-func ParseGetApiGroupsGroupIdExpensesDraftsResponse(rsp *http.Response) (*GetApiGroupsGroupIdExpensesDraftsResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &GetApiGroupsGroupIdExpensesDraftsResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	switch {
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest []ExpenseResponseDto
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON200 = &dest
-
-	case rsp.StatusCode == 200:
-		// Content-type (text/plain) unsupported
-
-	}
-
-	return response, nil
-}
-
-// ParseDeleteApiGroupsGroupIdExpensesExpenseIdResponse parses an HTTP response from a DeleteApiGroupsGroupIdExpensesExpenseIdWithResponse call
-func ParseDeleteApiGroupsGroupIdExpensesExpenseIdResponse(rsp *http.Response) (*DeleteApiGroupsGroupIdExpensesExpenseIdResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &DeleteApiGroupsGroupIdExpensesExpenseIdResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	return response, nil
-}
-
-// ParseGetApiGroupsGroupIdExpensesExpenseIdResponse parses an HTTP response from a GetApiGroupsGroupIdExpensesExpenseIdWithResponse call
-func ParseGetApiGroupsGroupIdExpensesExpenseIdResponse(rsp *http.Response) (*GetApiGroupsGroupIdExpensesExpenseIdResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &GetApiGroupsGroupIdExpensesExpenseIdResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	switch {
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest ExpenseResponseDto
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON200 = &dest
-
-	case rsp.StatusCode == 200:
-		// Content-type (text/plain) unsupported
-
-	}
-
-	return response, nil
-}
-
-// ParsePutApiGroupsGroupIdExpensesExpenseIdResponse parses an HTTP response from a PutApiGroupsGroupIdExpensesExpenseIdWithResponse call
-func ParsePutApiGroupsGroupIdExpensesExpenseIdResponse(rsp *http.Response) (*PutApiGroupsGroupIdExpensesExpenseIdResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &PutApiGroupsGroupIdExpensesExpenseIdResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	return response, nil
-}
-
-// ParseGetApiGroupsGroupIdExpensesExpenseIdParticipantsResponse parses an HTTP response from a GetApiGroupsGroupIdExpensesExpenseIdParticipantsWithResponse call
-func ParseGetApiGroupsGroupIdExpensesExpenseIdParticipantsResponse(rsp *http.Response) (*GetApiGroupsGroupIdExpensesExpenseIdParticipantsResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &GetApiGroupsGroupIdExpensesExpenseIdParticipantsResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	switch {
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest []ExpenseShareResponseDto
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON200 = &dest
-
-	case rsp.StatusCode == 200:
-		// Content-type (text/plain) unsupported
-
-	}
-
-	return response, nil
-}
-
-// ParsePostApiGroupsGroupIdExpensesExpenseIdParticipantsResponse parses an HTTP response from a PostApiGroupsGroupIdExpensesExpenseIdParticipantsWithResponse call
-func ParsePostApiGroupsGroupIdExpensesExpenseIdParticipantsResponse(rsp *http.Response) (*PostApiGroupsGroupIdExpensesExpenseIdParticipantsResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &PostApiGroupsGroupIdExpensesExpenseIdParticipantsResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	return response, nil
-}
-
-// ParseDeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse parses an HTTP response from a DeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdWithResponse call
-func ParseDeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse(rsp *http.Response) (*DeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &DeleteApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	return response, nil
-}
-
-// ParsePutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse parses an HTTP response from a PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdWithResponse call
-func ParsePutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse(rsp *http.Response) (*PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &PutApiGroupsGroupIdExpensesExpenseIdParticipantsUserIdResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
 	}
 
 	return response, nil
@@ -3910,7 +4550,27 @@ func ParseGetApiGroupsGroupIdHistoryResponse(rsp *http.Response) (*GetApiGroupsG
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
 	case rsp.StatusCode == 200:
+	// Content-type (text/plain) unsupported
+
+	case rsp.StatusCode == 404:
+	// Content-type (text/plain) unsupported
+
+	case true:
 		// Content-type (text/plain) unsupported
 
 	}
@@ -3939,7 +4599,27 @@ func ParseGetApiGroupsGroupIdPaymentsResponse(rsp *http.Response) (*GetApiGroups
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
 	case rsp.StatusCode == 200:
+	// Content-type (text/plain) unsupported
+
+	case rsp.StatusCode == 404:
+	// Content-type (text/plain) unsupported
+
+	case true:
 		// Content-type (text/plain) unsupported
 
 	}
@@ -4141,8 +4821,57 @@ func ParsePostApiUsersResponse(rsp *http.Response) (*PostApiUsersResponse, error
 	}
 
 	switch {
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
 		var dest openapi_types.UUID
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	case rsp.StatusCode == 201:
+	// Content-type (text/plain) unsupported
+
+	case rsp.StatusCode == 400:
+	// Content-type (text/plain) unsupported
+
+	case true:
+		// Content-type (text/plain) unsupported
+
+	}
+
+	return response, nil
+}
+
+// ParseGetApiUsersFindResponse parses an HTTP response from a GetApiUsersFindWithResponse call
+func ParseGetApiUsersFindResponse(rsp *http.Response) (*GetApiUsersFindResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetApiUsersFindResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest UserResponseDto
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4177,7 +4906,27 @@ func ParseGetApiUsersUserIdResponse(rsp *http.Response) (*GetApiUsersUserIdRespo
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
 	case rsp.StatusCode == 200:
+	// Content-type (text/plain) unsupported
+
+	case rsp.StatusCode == 404:
+	// Content-type (text/plain) unsupported
+
+	case true:
 		// Content-type (text/plain) unsupported
 
 	}
@@ -4196,6 +4945,39 @@ func ParsePutApiUsersUserIdResponse(rsp *http.Response) (*PutApiUsersUserIdRespo
 	response := &PutApiUsersUserIdResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest ProblemDetails
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	case rsp.StatusCode == 400:
+	// Content-type (text/plain) unsupported
+
+	case rsp.StatusCode == 404:
+	// Content-type (text/plain) unsupported
+
+	case true:
+		// Content-type (text/plain) unsupported
+
 	}
 
 	return response, nil
