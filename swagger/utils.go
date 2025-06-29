@@ -39,7 +39,7 @@ func GetUserUUIDbyid(api *ClientWithResponses, userID int64, msg tgbotapi.Messag
 
 }
 
-func GetGroupByUseridUtil(api *ClientWithResponses, userID int64, msg tgbotapi.MessageConfig) []GroupOverviewResponseDto {
+func GetGroupByUseridUtil(api *ClientWithResponses, userID int64, msg tgbotapi.MessageConfig, chatID int64) []GroupOverviewResponseDto {
 	reqParams := GetApiGroupsMyParams{
 		UserTelegramId: &userID,
 	}
@@ -51,9 +51,16 @@ func GetGroupByUseridUtil(api *ClientWithResponses, userID int64, msg tgbotapi.M
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-		body, _ := io.ReadAll(resp.Body)
-		fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-		msg.Text = "Не удалось получить ответ от сервера"
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			msg.Text = "Не удалось получить ответ от сервера"
+			return make([]GroupOverviewResponseDto, 0)
+		}
+		errorResponse := ProblemDetails{}
+
+		json.Unmarshal(body, &errorResponse)
+
+		msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
 		return make([]GroupOverviewResponseDto, 0)
 	}
 
@@ -65,7 +72,7 @@ func GetGroupByUseridUtil(api *ClientWithResponses, userID int64, msg tgbotapi.M
 	}
 	return result
 }
-func GetAllExpensesByGroupUtil(api *ClientWithResponses, userID int64, msg tgbotapi.MessageConfig, userChoiceState map[int64]uuid.UUID) []ExpenseResponseDto {
+func GetAllExpensesByGroupUtil(api *ClientWithResponses, userID int64, msg tgbotapi.MessageConfig, userChoiceState map[int64]uuid.UUID, chatID int64) []ExpenseResponseDto {
 	resp, err := api.GetApiExpensesGroupGroupId(context.Background(), userChoiceState[userID], nil)
 	if err != nil {
 		msg.Text = "API недоступно"
@@ -74,9 +81,16 @@ func GetAllExpensesByGroupUtil(api *ClientWithResponses, userID int64, msg tgbot
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-		body, _ := io.ReadAll(resp.Body)
-		fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-		msg.Text = "Не удалось получить ответ от сервера"
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			msg.Text = "Не удалось получить ответ от сервера"
+			return make([]ExpenseResponseDto, 0)
+		}
+		errorResponse := ProblemDetails{}
+
+		json.Unmarshal(body, &errorResponse)
+
+		msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
 		return make([]ExpenseResponseDto, 0)
 	}
 
@@ -88,7 +102,7 @@ func GetAllExpensesByGroupUtil(api *ClientWithResponses, userID int64, msg tgbot
 	}
 	return result
 }
-func GetExpenseByIdUtil(api *ClientWithResponses, userID int64, expenseId uuid.UUID, msg tgbotapi.MessageConfig, userChoiceState map[int64]uuid.UUID) ExpenseResponseDto {
+func GetExpenseByIdUtil(api *ClientWithResponses, userID int64, expenseId uuid.UUID, msg tgbotapi.MessageConfig, userChoiceState map[int64]uuid.UUID, chatID int64) ExpenseResponseDto {
 
 	idGroup := types.UUID(userChoiceState[userID])
 	paramsExpense := GetApiExpensesExpenseIdParams{
@@ -102,9 +116,16 @@ func GetExpenseByIdUtil(api *ClientWithResponses, userID int64, expenseId uuid.U
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-		body, _ := io.ReadAll(resp.Body)
-		fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-		msg.Text = "Не удалось получить ответ от сервера"
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			msg.Text = "Не удалось получить ответ от сервера"
+			return ExpenseResponseDto{}
+		}
+		errorResponse := ProblemDetails{}
+
+		json.Unmarshal(body, &errorResponse)
+
+		msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
 		return ExpenseResponseDto{}
 	}
 	var result ExpenseResponseDto
@@ -116,7 +137,7 @@ func GetExpenseByIdUtil(api *ClientWithResponses, userID int64, expenseId uuid.U
 	return result
 }
 
-func GetPaymentsByGroupIdUtil(api *ClientWithResponses, groupID uuid.UUID, msg tgbotapi.MessageConfig) []PaymentResponseDto {
+func GetPaymentsByGroupIdUtil(api *ClientWithResponses, groupID uuid.UUID, msg tgbotapi.MessageConfig, chatID int64) []PaymentResponseDto {
 
 	resp, err := api.GetApiGroupsGroupIdPayments(context.Background(), groupID)
 	if err != nil {
@@ -126,9 +147,16 @@ func GetPaymentsByGroupIdUtil(api *ClientWithResponses, groupID uuid.UUID, msg t
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-		body, _ := io.ReadAll(resp.Body)
-		fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-		msg.Text = "Не удалось получить ответ от сервера"
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			msg.Text = "Не удалось получить ответ от сервера"
+			return make([]PaymentResponseDto, 0)
+		}
+		errorResponse := ProblemDetails{}
+
+		json.Unmarshal(body, &errorResponse)
+
+		msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
 		return make([]PaymentResponseDto, 0)
 	}
 	var result []PaymentResponseDto

@@ -67,11 +67,15 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 				break
 			}
 			defer resp.Body.Close()
-
+			body, _ := io.ReadAll(resp.Body)
 			if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-				body, _ := io.ReadAll(resp.Body)
-				fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-				msg = tgbotapi.NewMessage(chatID, "Выберите действие:")
+				errorResponse := client.ProblemDetails{}
+
+				json.Unmarshal(body, &errorResponse) // Игнорируем ошибку, так как если не JSON - используем тело как есть
+
+				msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
+				msg.Text += "Выберите действие:"
 				msg.ReplyMarkup = mainMenu
 				bot.Send(msg)
 				break
@@ -79,7 +83,6 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 
 			var result uuid.UUID
 			if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-				fmt.Errorf("failed to decode response: %w", err)
 				msg = tgbotapi.NewMessage(chatID, "Выберите действие:")
 				msg.ReplyMarkup = mainMenu
 				bot.Send(msg)
@@ -121,9 +124,17 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			defer resp.Body.Close()
 
 			if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-				body, _ := io.ReadAll(resp.Body)
-				fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-				msg.Text = "Не удалось получить ответ от сервера"
+				body, err := io.ReadAll(resp.Body)
+				if err != nil {
+					msg.Text = "Не удалось получить ответ от сервера"
+					bot.Send(msg)
+					break
+				}
+				errorResponse := client.ProblemDetails{}
+
+				json.Unmarshal(body, &errorResponse) // Игнорируем ошибку, так как если не JSON - используем тело как есть
+
+				msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
 				bot.Send(msg)
 				break
 			}
@@ -176,7 +187,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 		case "Баланс":
 			msg := tgbotapi.NewMessage(chatID, "")
 
-			result := client.GetGroupByUseridUtil(api, userID, msg)
+			result := client.GetGroupByUseridUtil(api, userID, msg, chatID)
 			if msg.Text != "" {
 				bot.Send(msg)
 				break
@@ -199,7 +210,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			userStates[userID] = "waiting_transfer_group_selection"
 			msg := tgbotapi.NewMessage(chatID, "")
 
-			result := client.GetGroupByUseridUtil(api, userID, msg)
+			result := client.GetGroupByUseridUtil(api, userID, msg, chatID)
 			if msg.Text != "" {
 				bot.Send(msg)
 				break
@@ -223,7 +234,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 
 			msg := tgbotapi.NewMessage(chatID, "")
 
-			result := client.GetGroupByUseridUtil(api, userID, msg)
+			result := client.GetGroupByUseridUtil(api, userID, msg, chatID)
 			if msg.Text != "" {
 				bot.Send(msg)
 				break
@@ -248,7 +259,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 
 			msg := tgbotapi.NewMessage(chatID, "")
 
-			result := client.GetGroupByUseridUtil(api, userID, msg)
+			result := client.GetGroupByUseridUtil(api, userID, msg, chatID)
 			if msg.Text != "" {
 				bot.Send(msg)
 				break
@@ -279,7 +290,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			userStates[userID] = "waiting_group_edit_selection"
 			msg := tgbotapi.NewMessage(chatID, "")
 
-			result := client.GetGroupByUseridUtil(api, userID, msg)
+			result := client.GetGroupByUseridUtil(api, userID, msg, chatID)
 			if msg.Text != "" {
 				bot.Send(msg)
 				break
@@ -302,7 +313,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			userStates[userID] = "waiting_group_delete_selection"
 			msg := tgbotapi.NewMessage(chatID, "")
 
-			result := client.GetGroupByUseridUtil(api, userID, msg)
+			result := client.GetGroupByUseridUtil(api, userID, msg, chatID)
 			if msg.Text != "" {
 				bot.Send(msg)
 				break
@@ -356,7 +367,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			userStates[userID] = "waiting_expense_group_selection"
 			msg := tgbotapi.NewMessage(chatID, "")
 
-			result := client.GetGroupByUseridUtil(api, userID, msg)
+			result := client.GetGroupByUseridUtil(api, userID, msg, chatID)
 			if msg.Text != "" {
 				bot.Send(msg)
 				break
@@ -391,9 +402,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			defer respGroups.Body.Close()
 
 			if respGroups.StatusCode != http.StatusOK && respGroups.StatusCode != http.StatusCreated {
-				body, _ := io.ReadAll(respGroups.Body)
-				fmt.Errorf("unexpected status code: %d, body: %s", respGroups.StatusCode, string(body))
-				msg.Text = "Не удалось получить ответ от сервера"
+				body, err := io.ReadAll(respGroups.Body)
+				if err != nil {
+					msg.Text = "Не удалось получить ответ от сервера"
+					bot.Send(msg)
+					break
+				}
+				errorResponse := client.ProblemDetails{}
+
+				json.Unmarshal(body, &errorResponse)
+
+				msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 				bot.Send(msg)
 				break
 			}
@@ -435,7 +455,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			userStates[userID] = "waiting_expense_selection"
 			msg := tgbotapi.NewMessage(chatID, "")
 
-			result := client.GetAllExpensesByGroupUtil(api, userID, msg, userChoiceState)
+			result := client.GetAllExpensesByGroupUtil(api, userID, msg, userChoiceState, chatID)
 			if msg.Text != "" {
 				bot.Send(msg)
 				break
@@ -477,9 +497,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			defer respGroups.Body.Close()
 
 			if respGroups.StatusCode != http.StatusOK && respGroups.StatusCode != http.StatusCreated {
-				body, _ := io.ReadAll(respGroups.Body)
-				fmt.Errorf("unexpected status code: %d, body: %s", respGroups.StatusCode, string(body))
-				msg.Text = "Не удалось получить ответ от сервера"
+				body, err := io.ReadAll(respGroups.Body)
+				if err != nil {
+					msg.Text = "Не удалось получить ответ от сервера"
+					bot.Send(msg)
+					break
+				}
+				errorResponse := client.ProblemDetails{}
+
+				json.Unmarshal(body, &errorResponse)
+
+				msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 				bot.Send(msg)
 				break
 			}
@@ -515,9 +544,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			defer resp.Body.Close()
 
 			if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-				body, _ := io.ReadAll(resp.Body)
-				fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-				msg.Text = "Не удалось получить ответ от сервера"
+				body, err := io.ReadAll(resp.Body)
+				if err != nil {
+					msg.Text = "Не удалось получить ответ от сервера"
+					bot.Send(msg)
+					break
+				}
+				errorResponse := client.ProblemDetails{}
+
+				json.Unmarshal(body, &errorResponse)
+
+				msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 				bot.Send(msg)
 				break
 			}
@@ -542,7 +580,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			bot.Send(msg)
 		case "Привязанный перевод":
 			msg := tgbotapi.NewMessage(chatID, "")
-			result := client.GetAllExpensesByGroupUtil(api, userID, msg, userChoiceState)
+			result := client.GetAllExpensesByGroupUtil(api, userID, msg, userChoiceState, chatID)
 			if msg.Text != "" {
 				bot.Send(msg)
 				break
@@ -580,9 +618,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			defer respGroups.Body.Close()
 
 			if respGroups.StatusCode != http.StatusOK && respGroups.StatusCode != http.StatusCreated {
-				body, _ := io.ReadAll(respGroups.Body)
-				fmt.Errorf("unexpected status code: %d, body: %s", respGroups.StatusCode, string(body))
-				msg.Text = "Не удалось получить ответ от сервера"
+				body, err := io.ReadAll(respGroups.Body)
+				if err != nil {
+					msg.Text = "Не удалось получить ответ от сервера"
+					bot.Send(msg)
+					break
+				}
+				errorResponse := client.ProblemDetails{}
+
+				json.Unmarshal(body, &errorResponse)
+
+				msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 				bot.Send(msg)
 				break
 			}
@@ -607,7 +654,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			bot.Send(msg)
 		case "Изменить оплату":
 			msg := tgbotapi.NewMessage(chatID, "")
-			result := client.GetPaymentsByGroupIdUtil(api, userChoiceState[userID], msg)
+			result := client.GetPaymentsByGroupIdUtil(api, userChoiceState[userID], msg, chatID)
 			if len(result) == 0 {
 				msg.Text += "У вас нет платежей - создайте!"
 				bot.Send(msg)
@@ -637,7 +684,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			bot.Send(msg)
 		case "Удалить оплату":
 			msg := tgbotapi.NewMessage(chatID, "")
-			result := client.GetPaymentsByGroupIdUtil(api, userChoiceState[userID], msg)
+			result := client.GetPaymentsByGroupIdUtil(api, userChoiceState[userID], msg, chatID)
 
 			msg.Text = "*Платежи:* \n\n"
 
@@ -662,7 +709,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			bot.Send(msg)
 		case "Получить список оплат":
 			msg := tgbotapi.NewMessage(chatID, "")
-			result := client.GetPaymentsByGroupIdUtil(api, userChoiceState[userID], msg)
+			result := client.GetPaymentsByGroupIdUtil(api, userChoiceState[userID], msg, chatID)
 
 			msg.Text = "*Платежи:* \n\n"
 
@@ -707,9 +754,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					defer resp.Body.Close()
 
 					if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-						body, _ := io.ReadAll(resp.Body)
-						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-						msg.Text = "Не удалось получить ответ от сервера"
+						body, err := io.ReadAll(resp.Body)
+						if err != nil {
+							msg.Text = "Не удалось получить ответ от сервера"
+							bot.Send(msg)
+							break
+						}
+						errorResponse := client.ProblemDetails{}
+
+						json.Unmarshal(body, &errorResponse)
+
+						msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 						bot.Send(msg)
 						break
 					}
@@ -748,9 +804,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					defer resp.Body.Close()
 
 					if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-						body, _ := io.ReadAll(resp.Body)
-						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-						msg.Text = "Не удалось получить ответ от сервера"
+						body, err := io.ReadAll(resp.Body)
+						if err != nil {
+							msg.Text = "Не удалось получить ответ от сервера"
+							bot.Send(msg)
+							break
+						}
+						errorResponse := client.ProblemDetails{}
+
+						json.Unmarshal(body, &errorResponse)
+
+						msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 						bot.Send(msg)
 						break
 					}
@@ -798,9 +863,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					defer resp.Body.Close()
 
 					if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-						body, _ := io.ReadAll(resp.Body)
-						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-						msg.Text = "Не удалось получить ответ от сервера"
+						body, err := io.ReadAll(resp.Body)
+						if err != nil {
+							msg.Text = "Не удалось получить ответ от сервера"
+							bot.Send(msg)
+							break
+						}
+						errorResponse := client.ProblemDetails{}
+
+						json.Unmarshal(body, &errorResponse)
+
+						msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 						bot.Send(msg)
 						break
 					}
@@ -845,9 +919,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					defer resp.Body.Close()
 
 					if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-						body, _ := io.ReadAll(resp.Body)
-						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-						msg.Text = "Не удалось получить ответ от сервера"
+						body, err := io.ReadAll(resp.Body)
+						if err != nil {
+							msg.Text = "Не удалось получить ответ от сервера"
+							bot.Send(msg)
+							break
+						}
+						errorResponse := client.ProblemDetails{}
+
+						json.Unmarshal(body, &errorResponse)
+
+						msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 						bot.Send(msg)
 						break
 					}
@@ -882,7 +965,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 						bot.Send(msg)
 						break
 					}
-					result := client.GetExpenseByIdUtil(api, userID, expenseId, msg, userChoiceState)
+					result := client.GetExpenseByIdUtil(api, userID, expenseId, msg, userChoiceState, chatID)
 					if msg.Text != "" {
 						bot.Send(msg)
 						break
@@ -959,9 +1042,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					defer resp.Body.Close()
 
 					if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-						body, _ := io.ReadAll(resp.Body)
-						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-						msg.Text = "Не удалось получить ответ от сервера"
+						body, err := io.ReadAll(resp.Body)
+						if err != nil {
+							msg.Text = "Не удалось получить ответ от сервера"
+							bot.Send(msg)
+							break
+						}
+						errorResponse := client.ProblemDetails{}
+
+						json.Unmarshal(body, &errorResponse)
+
+						msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 						bot.Send(msg)
 						break
 					}
@@ -990,9 +1082,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					defer respGroups.Body.Close()
 
 					if respGroups.StatusCode != http.StatusOK && respGroups.StatusCode != http.StatusCreated {
-						body, _ := io.ReadAll(respGroups.Body)
-						fmt.Errorf("unexpected status code: %d, body: %s", respGroups.StatusCode, string(body))
-						msg.Text = "Не удалось получить ответ от сервера"
+						body, err := io.ReadAll(respGroups.Body)
+						if err != nil {
+							msg.Text = "Не удалось получить ответ от сервера"
+							bot.Send(msg)
+							break
+						}
+						errorResponse := client.ProblemDetails{}
+
+						json.Unmarshal(body, &errorResponse)
+
+						msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 						bot.Send(msg)
 						break
 					}
@@ -1056,9 +1157,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					defer resp.Body.Close()
 
 					if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-						body, _ := io.ReadAll(resp.Body)
-						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-						msg.Text = "Не удалось получить ответ от сервера"
+						body, err := io.ReadAll(resp.Body)
+						if err != nil {
+							msg.Text = "Не удалось получить ответ от сервера"
+							bot.Send(msg)
+							break
+						}
+						errorResponse := client.ProblemDetails{}
+
+						json.Unmarshal(body, &errorResponse)
+
+						msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 						bot.Send(msg)
 						break
 					}
@@ -1087,9 +1197,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					defer resp.Body.Close()
 
 					if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-						body, _ := io.ReadAll(resp.Body)
-						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-						msg.Text = "Не удалось получить ответ от сервера"
+						body, err := io.ReadAll(resp.Body)
+						if err != nil {
+							msg.Text = "Не удалось получить ответ от сервера"
+							bot.Send(msg)
+							break
+						}
+						errorResponse := client.ProblemDetails{}
+
+						json.Unmarshal(body, &errorResponse)
+
+						msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 						bot.Send(msg)
 						break
 					}
@@ -1110,9 +1229,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					defer resp.Body.Close()
 
 					if resp.StatusCode != http.StatusNoContent {
-						body, _ := io.ReadAll(resp.Body)
-						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-						msg.Text = "Не удалось получить ответ от сервера"
+						body, err := io.ReadAll(resp.Body)
+						if err != nil {
+							msg.Text = "Не удалось получить ответ от сервера"
+							bot.Send(msg)
+							break
+						}
+						errorResponse := client.ProblemDetails{}
+
+						json.Unmarshal(body, &errorResponse)
+
+						msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 						bot.Send(msg)
 						break
 					}
@@ -1134,9 +1262,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					defer resp.Body.Close()
 
 					if resp.StatusCode != http.StatusOK {
-						body, _ := io.ReadAll(resp.Body)
-						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-						msg.Text = "Не удалось получить ответ от сервера"
+						body, err := io.ReadAll(resp.Body)
+						if err != nil {
+							msg.Text = "Не удалось получить ответ от сервера"
+							bot.Send(msg)
+							break
+						}
+						errorResponse := client.ProblemDetails{}
+
+						json.Unmarshal(body, &errorResponse)
+
+						msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 						bot.Send(msg)
 						break
 					}
@@ -1172,9 +1309,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					defer resp.Body.Close()
 
 					if resp.StatusCode != http.StatusOK {
-						body, _ := io.ReadAll(resp.Body)
-						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-						msg.Text = "Не удалось получить ответ от сервера"
+						body, err := io.ReadAll(resp.Body)
+						if err != nil {
+							msg.Text = "Не удалось получить ответ от сервера"
+							bot.Send(msg)
+							break
+						}
+						errorResponse := client.ProblemDetails{}
+
+						json.Unmarshal(body, &errorResponse)
+
+						msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 						bot.Send(msg)
 						break
 					}
@@ -1201,9 +1347,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					defer resp.Body.Close()
 
 					if resp.StatusCode != http.StatusOK {
-						body, _ := io.ReadAll(resp.Body)
-						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-						msg.Text = "Не удалось получить ответ от сервера"
+						body, err := io.ReadAll(resp.Body)
+						if err != nil {
+							msg.Text = "Не удалось получить ответ от сервера"
+							bot.Send(msg)
+							break
+						}
+						errorResponse := client.ProblemDetails{}
+
+						json.Unmarshal(body, &errorResponse)
+
+						msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 						bot.Send(msg)
 						break
 					}
@@ -1228,9 +1383,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					defer respGroups.Body.Close()
 
 					if respGroups.StatusCode != http.StatusOK && respGroups.StatusCode != http.StatusCreated {
-						body, _ := io.ReadAll(respGroups.Body)
-						fmt.Errorf("unexpected status code: %d, body: %s", respGroups.StatusCode, string(body))
-						msg.Text = "Не удалось получить ответ от сервера"
+						body, err := io.ReadAll(respGroups.Body)
+						if err != nil {
+							msg.Text = "Не удалось получить ответ от сервера"
+							bot.Send(msg)
+							break
+						}
+						errorResponse := client.ProblemDetails{}
+
+						json.Unmarshal(body, &errorResponse)
+
+						msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 						bot.Send(msg)
 						break
 					}
@@ -1255,9 +1419,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					defer respGroups.Body.Close()
 
 					if respGroups.StatusCode != http.StatusOK && respGroups.StatusCode != http.StatusCreated {
-						body, _ := io.ReadAll(respGroups.Body)
-						fmt.Errorf("unexpected status code: %d, body: %s", respGroups.StatusCode, string(body))
-						msg.Text = "Не удалось получить ответ от сервера"
+						body, err := io.ReadAll(respGroups.Body)
+						if err != nil {
+							msg.Text = "Не удалось получить ответ от сервера"
+							bot.Send(msg)
+							break
+						}
+						errorResponse := client.ProblemDetails{}
+
+						json.Unmarshal(body, &errorResponse)
+
+						msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 						bot.Send(msg)
 						break
 					}
@@ -1299,9 +1472,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					defer respGroups.Body.Close()
 
 					if respGroups.StatusCode != http.StatusOK && respGroups.StatusCode != http.StatusCreated {
-						body, _ := io.ReadAll(respGroups.Body)
-						fmt.Errorf("unexpected status code: %d, body: %s", respGroups.StatusCode, string(body))
-						msg.Text = "Не удалось получить ответ от сервера"
+						body, err := io.ReadAll(respGroups.Body)
+						if err != nil {
+							msg.Text = "Не удалось получить ответ от сервера"
+							bot.Send(msg)
+							break
+						}
+						errorResponse := client.ProblemDetails{}
+
+						json.Unmarshal(body, &errorResponse)
+
+						msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 						bot.Send(msg)
 						break
 					}
@@ -1353,9 +1535,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					defer respGroups.Body.Close()
 
 					if respGroups.StatusCode != http.StatusOK && respGroups.StatusCode != http.StatusCreated {
-						body, _ := io.ReadAll(respGroups.Body)
-						fmt.Errorf("unexpected status code: %d, body: %s", respGroups.StatusCode, string(body))
-						msg.Text = "Не удалось получить ответ от сервера"
+						body, err := io.ReadAll(respGroups.Body)
+						if err != nil {
+							msg.Text = "Не удалось получить ответ от сервера"
+							bot.Send(msg)
+							break
+						}
+						errorResponse := client.ProblemDetails{}
+
+						json.Unmarshal(body, &errorResponse)
+
+						msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 						bot.Send(msg)
 						break
 					}
@@ -1379,7 +1570,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 						bot.Send(msg)
 						break
 					}
-					_ = client.GetExpenseByIdUtil(api, userID, expenseId, msg, userChoiceState)
+					_ = client.GetExpenseByIdUtil(api, userID, expenseId, msg, userChoiceState, chatID)
 					if msg.Text != "" {
 						bot.Send(msg)
 						break
@@ -1441,9 +1632,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					defer resp.Body.Close()
 
 					if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-						body, _ := io.ReadAll(resp.Body)
-						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-						msg.Text = "Не удалось получить ответ от сервера"
+						body, err := io.ReadAll(resp.Body)
+						if err != nil {
+							msg.Text = "Не удалось получить ответ от сервера"
+							bot.Send(msg)
+							break
+						}
+						errorResponse := client.ProblemDetails{}
+
+						json.Unmarshal(body, &errorResponse)
+
+						msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 						bot.Send(msg)
 						break
 					}
@@ -1472,9 +1672,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					defer respGroups.Body.Close()
 
 					if respGroups.StatusCode != http.StatusOK && respGroups.StatusCode != http.StatusCreated {
-						body, _ := io.ReadAll(respGroups.Body)
-						fmt.Errorf("unexpected status code: %d, body: %s", respGroups.StatusCode, string(body))
-						msg.Text = "Не удалось получить ответ от сервера"
+						body, err := io.ReadAll(respGroups.Body)
+						if err != nil {
+							msg.Text = "Не удалось получить ответ от сервера"
+							bot.Send(msg)
+							break
+						}
+						errorResponse := client.ProblemDetails{}
+
+						json.Unmarshal(body, &errorResponse)
+
+						msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 						bot.Send(msg)
 						break
 					}
@@ -1529,9 +1738,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					defer respGroups.Body.Close()
 
 					if respGroups.StatusCode != http.StatusOK && respGroups.StatusCode != http.StatusCreated {
-						body, _ := io.ReadAll(respGroups.Body)
-						fmt.Errorf("unexpected status code: %d, body: %s", respGroups.StatusCode, string(body))
-						msg.Text = "Не удалось получить ответ от сервера"
+						body, err := io.ReadAll(respGroups.Body)
+						if err != nil {
+							msg.Text = "Не удалось получить ответ от сервера"
+							bot.Send(msg)
+							break
+						}
+						errorResponse := client.ProblemDetails{}
+
+						json.Unmarshal(body, &errorResponse)
+
+						msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 						bot.Send(msg)
 						break
 					}
@@ -1566,9 +1784,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					defer resp.Body.Close()
 
 					if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-						body, _ := io.ReadAll(resp.Body)
-						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-						msg.Text = "Не удалось получить ответ от сервера"
+						body, err := io.ReadAll(resp.Body)
+						if err != nil {
+							msg.Text = "Не удалось получить ответ от сервера"
+							bot.Send(msg)
+							break
+						}
+						errorResponse := client.ProblemDetails{}
+
+						json.Unmarshal(body, &errorResponse)
+
+						msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 						bot.Send(msg)
 						break
 					}
@@ -1612,9 +1839,18 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					defer resp.Body.Close()
 
 					if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-						body, _ := io.ReadAll(resp.Body)
-						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
-						msg.Text = "Не удалось получить ответ от сервера"
+						body, err := io.ReadAll(resp.Body)
+						if err != nil {
+							msg.Text = "Не удалось получить ответ от сервера"
+							bot.Send(msg)
+							break
+						}
+						errorResponse := client.ProblemDetails{}
+
+						json.Unmarshal(body, &errorResponse)
+
+						msg = tgbotapi.NewMessage(chatID, fmt.Sprintf("Ошибка: %s\n\n", *errorResponse.Title))
+
 						bot.Send(msg)
 						break
 					}
