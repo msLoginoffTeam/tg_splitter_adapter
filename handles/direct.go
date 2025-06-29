@@ -23,7 +23,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 	mainMenu := tgbotapi.NewReplyKeyboard(
 		tgbotapi.NewKeyboardButtonRow(
 			tgbotapi.NewKeyboardButton("Профиль"),
-			tgbotapi.NewKeyboardButton("Группы пользователя"),
+			tgbotapi.NewKeyboardButton("Группы"),
 		),
 		tgbotapi.NewKeyboardButtonRow(
 			tgbotapi.NewKeyboardButton("Справка о тратах"),
@@ -158,7 +158,6 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			bot.Send(msg)
 
 		case "Баланс":
-			userStates[userID] = "waiting__balance_group_selection"
 			msg := tgbotapi.NewMessage(chatID, "")
 
 			result := client.GetGroupByUseridUtil(api, userID, msg)
@@ -177,7 +176,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 				msg.Text += strconv.Itoa(i+1) + "\\. Название: " + *group.Title + " \nId группы: `" + group.Id.String() + "`\n"
 			}
 			msg.ParseMode = "MarkdownV2"
-
+			userStates[userID] = "waiting_balance_group_selection"
 			bot.Send(msg)
 		case "Трансферы":
 			userStates[userID] = "waiting_transfer_group_selection"
@@ -248,6 +247,89 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			}
 			msg.ParseMode = "MarkdownV2"
 
+			bot.Send(msg)
+		case "Присоединиться к группе":
+			userStates[userID] = "waiting_group_id_join"
+			msg := tgbotapi.NewMessage(chatID, "Напишите название вашей новой группы")
+			bot.Send(msg)
+		case "Создать группу":
+			userStates[userID] = "waiting_group_name_create_selection"
+			msg := tgbotapi.NewMessage(chatID, "Напишите название вашей новой группы")
+			bot.Send(msg)
+		case "Изменить группу":
+			userStates[userID] = "waiting_group_edit_selection"
+			msg := tgbotapi.NewMessage(chatID, "")
+
+			result := client.GetGroupByUseridUtil(api, userID, msg)
+			if msg.Text != "" {
+				bot.Send(msg)
+				break
+			}
+			if len(result) == 0 {
+				msg.Text = "Группы не найдены - создайте!!"
+				break
+			}
+
+			msg.Text = "Выберите группу:\n"
+
+			for i, group := range result {
+				msg.Text += strconv.Itoa(i+1) + "\\. Название: " + *group.Title + " \nId группы: `" + group.Id.String() + "`\n"
+			}
+			msg.ParseMode = "MarkdownV2"
+
+			bot.Send(msg)
+		case "Удалить группу":
+			userStates[userID] = "waiting_group_delete_selection"
+			msg := tgbotapi.NewMessage(chatID, "")
+
+			result := client.GetGroupByUseridUtil(api, userID, msg)
+			if msg.Text != "" {
+				bot.Send(msg)
+				break
+			}
+			if len(result) == 0 {
+				msg.Text = "Группы не найдены - создайте!!"
+				break
+			}
+
+			msg.Text = "Выберите группу:\n"
+
+			for i, group := range result {
+				msg.Text += strconv.Itoa(i+1) + "\\. Название: " + *group.Title + " \nId группы: `" + group.Id.String() + "`\n"
+			}
+			msg.ParseMode = "MarkdownV2"
+
+			bot.Send(msg)
+
+		case "Изменить/Удалить группу":
+			summaryMenu := tgbotapi.NewReplyKeyboard(
+				tgbotapi.NewKeyboardButtonRow(
+					tgbotapi.NewKeyboardButton("Изменить группу"),
+					tgbotapi.NewKeyboardButton("Удалить группу"),
+				),
+				tgbotapi.NewKeyboardButtonRow(
+					tgbotapi.NewKeyboardButton("Вернуться в меню"),
+				),
+			)
+			msg := tgbotapi.NewMessage(chatID, "Выберите действие")
+			msg.ReplyMarkup = summaryMenu
+			bot.Send(msg)
+		case "Группы":
+			summaryMenu := tgbotapi.NewReplyKeyboard(
+				tgbotapi.NewKeyboardButtonRow(
+					tgbotapi.NewKeyboardButton("Группы пользователя"),
+					tgbotapi.NewKeyboardButton("Создать группу"),
+				),
+				tgbotapi.NewKeyboardButtonRow(
+					tgbotapi.NewKeyboardButton("Присоединиться к группе"),
+					tgbotapi.NewKeyboardButton("Изменить/Удалить группу"),
+				),
+				tgbotapi.NewKeyboardButtonRow(
+					tgbotapi.NewKeyboardButton("Вернуться в меню"),
+				),
+			)
+			msg := tgbotapi.NewMessage(chatID, "Выберите действие")
+			msg.ReplyMarkup = summaryMenu
 			bot.Send(msg)
 		case "Траты в группе":
 			userStates[userID] = "waiting_expense_group_selection"
@@ -935,6 +1017,124 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					msg.Text = "Имя успешно изменено"
 					bot.Send(msg)
 
+				case "waiting_group_edit_name_selection":
+					msg := tgbotapi.NewMessage(chatID, "")
+					reqBody := client.UpdateGroupRequestDto{
+						Title: &update.Message.Text,
+					}
+					resp, err := api.PutApiGroupsGroupId(context.Background(), userChoiceState[userID], reqBody)
+					if err != nil {
+						msg.Text = "Не получилось изменить сумму траты"
+						bot.Send(msg)
+						break
+					}
+					defer resp.Body.Close()
+
+					if resp.StatusCode != http.StatusOK {
+						body, _ := io.ReadAll(resp.Body)
+						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
+						msg.Text = "Не удалось получить ответ от сервера"
+						bot.Send(msg)
+						break
+					}
+					msg.Text = "Успешно изменена группа!"
+					msg.ReplyMarkup = mainMenu
+					bot.Send(msg)
+				case "waiting_group_edit_selection":
+					msg := tgbotapi.NewMessage(chatID, "")
+					groupId, err := stringToUUID(update.Message.Text)
+					if err != nil {
+						msg.Text = "Не получилось обработать id"
+						bot.Send(msg)
+						break
+					}
+					userChoiceState[userID] = groupId
+					userStates[userID] = "waiting_group_edit_name_selection"
+					msg.Text = "Выбирите название для группы"
+					bot.Send(msg)
+				case "waiting_group_delete_selection":
+					msg := tgbotapi.NewMessage(chatID, "")
+					groupId, err := stringToUUID(update.Message.Text)
+					if err != nil {
+						msg.Text = "Не получилось обработать id"
+						bot.Send(msg)
+						break
+					}
+					resp, err := api.DeleteApiGroupsGroupId(context.Background(), groupId)
+					if err != nil {
+						msg.Text = "Не получилось изменить сумму траты"
+						bot.Send(msg)
+						break
+					}
+					defer resp.Body.Close()
+
+					if resp.StatusCode != http.StatusOK {
+						body, _ := io.ReadAll(resp.Body)
+						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
+						msg.Text = "Не удалось получить ответ от сервера"
+						bot.Send(msg)
+						break
+					}
+					msg.Text = "Группа удалена!"
+					msg.ReplyMarkup = mainMenu
+					bot.Send(msg)
+				case "waiting_group_id_join":
+					msg := tgbotapi.NewMessage(chatID, "")
+					groupId, err := stringToUUID(update.Message.Text)
+					if err != nil {
+						msg.Text = "Не получилось обработать id"
+						bot.Send(msg)
+						break
+					}
+					reqBody := client.AddGroupUserRequestDto{
+						TelegramId: &userID,
+					}
+					resp, err := api.PostApiGroupsGroupIdUsers(context.Background(), groupId, reqBody)
+					if err != nil {
+						msg.Text = "Не получилось изменить сумму траты"
+						bot.Send(msg)
+						break
+					}
+					defer resp.Body.Close()
+
+					if resp.StatusCode != http.StatusNoContent {
+						body, _ := io.ReadAll(resp.Body)
+						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
+						msg.Text = "Не удалось получить ответ от сервера"
+						bot.Send(msg)
+						break
+					}
+
+					msg.Text = "Вы успешно добавлены в группу!"
+					msg.ReplyMarkup = mainMenu
+					bot.Send(msg)
+
+				case "waiting_group_name_create_selection":
+					msg := tgbotapi.NewMessage(chatID, "")
+					reqBody := client.CreateGroupRequestDto{
+						CreatedByTelegramId: &userID,
+						TelegramChatId:      nil,
+						Title:               &update.Message.Text,
+					}
+					respGroups, err := api.PostApiGroups(context.Background(), reqBody)
+					if err != nil {
+						msg.Text = "API недоступно"
+						bot.Send(msg)
+						break
+					}
+					defer respGroups.Body.Close()
+
+					if respGroups.StatusCode != http.StatusOK && respGroups.StatusCode != http.StatusCreated {
+						body, _ := io.ReadAll(respGroups.Body)
+						fmt.Errorf("unexpected status code: %d, body: %s", respGroups.StatusCode, string(body))
+						msg.Text = "Не удалось получить ответ от сервера"
+						bot.Send(msg)
+						break
+					}
+
+					msg.Text = "Группа успешно создана!"
+					msg.ReplyMarkup = mainMenu
+					bot.Send(msg)
 				case "waiting_payment_to_delete":
 					msg := tgbotapi.NewMessage(chatID, "")
 					paymentId, err := stringToUUID(update.Message.Text)
