@@ -167,6 +167,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			}
 			if len(result) == 0 {
 				msg.Text = "Группы не найдены - создайте!!"
+				bot.Send(msg)
 				break
 			}
 
@@ -189,6 +190,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			}
 			if len(result) == 0 {
 				msg.Text = "Группы не найдены - создайте!!"
+				bot.Send(msg)
 				break
 			}
 
@@ -267,6 +269,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			}
 			if len(result) == 0 {
 				msg.Text = "Группы не найдены - создайте!!"
+				bot.Send(msg)
 				break
 			}
 
@@ -370,6 +373,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			}
 			if len(result) == 0 {
 				msg.Text = "Траты не найдены - создайте!!"
+				bot.Send(msg)
 				break
 			}
 			msg.Text = "Список трат:\n"
@@ -397,6 +401,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			respGroups, err := api.GetApiGroupsGroupId(context.Background(), userChoiceState[userID])
 			if err != nil {
 				msg.Text = "API недоступно"
+				bot.Send(msg)
 				break
 			}
 			defer respGroups.Body.Close()
@@ -474,6 +479,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 			}
 			if len(result) == 0 {
 				msg.Text = "Траты не найдены - создайте!!"
+				bot.Send(msg)
 				break
 			}
 			msg.ParseMode = "MarkdownV2"
@@ -532,6 +538,11 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 		case "Изменить оплату":
 			msg := tgbotapi.NewMessage(chatID, "")
 			result := client.GetPaymentsByGroupIdUtil(api, userChoiceState[userID], msg)
+			if len(result) == 0 {
+				msg.Text += "У вас нет платежей - создайте!"
+				bot.Send(msg)
+				break
+			}
 
 			msg.Text = "Платежи: \n\n"
 
@@ -613,12 +624,14 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					groupId, err := stringToUUID(update.Message.Text)
 					if err != nil {
 						msg.Text = "Не получилось обработать id"
+						bot.Send(msg)
 						break
 					}
 
 					resp, err := api.GetApiGroupsGroupId(context.Background(), groupId)
 					if err != nil {
 						msg.Text = "API недоступно"
+						bot.Send(msg)
 						break
 					}
 					defer resp.Body.Close()
@@ -627,6 +640,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 						body, _ := io.ReadAll(resp.Body)
 						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
 						msg.Text = "Не удалось получить ответ от сервера"
+						bot.Send(msg)
 						break
 					}
 
@@ -634,6 +648,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 						fmt.Errorf("failed to decode response: %w", err)
 						msg.Text = "Не удалось расшифровать ответ"
+						bot.Send(msg)
 						break
 					}
 
@@ -736,12 +751,14 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					groupId, err := stringToUUID(update.Message.Text)
 					if err != nil {
 						msg.Text = "Не получилось обработать id"
+						bot.Send(msg)
 						break
 					}
 
 					resp, err := api.GetApiGroupsGroupId(context.Background(), groupId)
 					if err != nil {
 						msg.Text = "API недоступно"
+						bot.Send(msg)
 						break
 					}
 					defer resp.Body.Close()
@@ -750,6 +767,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 						body, _ := io.ReadAll(resp.Body)
 						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
 						msg.Text = "Не удалось получить ответ от сервера"
+						bot.Send(msg)
 						break
 					}
 
@@ -757,6 +775,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 						fmt.Errorf("failed to decode response: %w", err)
 						msg.Text = "Не удалось расшифровать ответ"
+						bot.Send(msg)
 						break
 					}
 
@@ -884,6 +903,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					respGroups, err := api.GetApiGroupsGroupId(context.Background(), userChoiceState[userID])
 					if err != nil {
 						msg.Text = "API недоступно"
+						bot.Send(msg)
 						break
 					}
 					defer respGroups.Body.Close()
@@ -892,6 +912,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 						body, _ := io.ReadAll(respGroups.Body)
 						fmt.Errorf("unexpected status code: %d, body: %s", respGroups.StatusCode, string(body))
 						msg.Text = "Не удалось получить ответ от сервера"
+						bot.Send(msg)
 						break
 					}
 
@@ -899,6 +920,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					if err := json.NewDecoder(respGroups.Body).Decode(&resultGroups); err != nil {
 						fmt.Errorf("failed to decode response: %w", err)
 						msg.Text = "Не удалось расшифровать ответ"
+						bot.Send(msg)
 						break
 					}
 
@@ -1097,7 +1119,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					}
 					defer resp.Body.Close()
 
-					if resp.StatusCode != http.StatusNoContent {
+					if resp.StatusCode != http.StatusOK {
 						body, _ := io.ReadAll(resp.Body)
 						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
 						msg.Text = "Не удалось получить ответ от сервера"
@@ -1341,12 +1363,14 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					groupId, err := stringToUUID(update.Message.Text)
 					if err != nil {
 						msg.Text = "Не получилось обработать id"
+						bot.Send(msg)
 						break
 					}
 
 					resp, err := api.GetApiGroupsGroupId(context.Background(), groupId)
 					if err != nil {
 						msg.Text = "API недоступно"
+						bot.Send(msg)
 						break
 					}
 					defer resp.Body.Close()
@@ -1355,6 +1379,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 						body, _ := io.ReadAll(resp.Body)
 						fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
 						msg.Text = "Не удалось получить ответ от сервера"
+						bot.Send(msg)
 						break
 					}
 
@@ -1362,6 +1387,7 @@ func HandleDirectMessages(update *tgbotapi.Update, bot *tgbotapi.BotAPI, api *cl
 					if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 						fmt.Errorf("failed to decode response: %w", err)
 						msg.Text = "Не удалось расшифровать ответ"
+						bot.Send(msg)
 						break
 					}
 
