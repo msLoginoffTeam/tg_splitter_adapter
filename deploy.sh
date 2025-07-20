@@ -8,7 +8,6 @@ fi
 
 BACKEND_URL="http://telegram-splitter-app:8080"
 
-# Создаём сеть, если нужно
 docker network inspect my-network >/dev/null 2>&1 || \
   docker network create my-network
 
