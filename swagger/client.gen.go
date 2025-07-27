@@ -1063,7 +1063,6 @@ func NewDeleteApiExpensesExpenseIdRequest(server string, expenseId openapi_types
 	if params != nil {
 		queryValues := queryURL.Query()
 
-		if params.GroupId != nil {
 
 			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "groupId", runtime.ParamLocationQuery, *params.GroupId); err != nil {
 				return nil, err
@@ -1077,7 +1076,6 @@ func NewDeleteApiExpensesExpenseIdRequest(server string, expenseId openapi_types
 				}
 			}
 
-		}
 
 		queryURL.RawQuery = queryValues.Encode()
 	}
